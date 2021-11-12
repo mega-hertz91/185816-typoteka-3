@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Игорь Бабушкин](https://up.htmlacademy.ru/nodejs/3/user/185816).
-* Наставник: `Неизвестно`.
+* Наставник: [Владислав Зубко](https://up.htmlacademy.ru/nodejs/3/user/573447).
 
 ---
 
