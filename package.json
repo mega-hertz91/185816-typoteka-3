@@ -5,8 +5,8 @@
   "main": "./src/service/service.js",
   "dependencies": {},
   "devDependencies": {
-    "eslint": "8.2.0",
-    "eslint-config-htmlacademy": "0.6.0"
+    "eslint": "^8.2.0",
+    "eslint-config-htmlacademy": "^5.0.0"
   },
   "scripts": {
     "test": "npm run eslint",
