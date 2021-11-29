@@ -1,7 +1,8 @@
 'use strict';
 
-const fs = require(`fs`);
+const {writeFile} = require(`fs/promises`);
 const path = require(`path`);
+const chalk = require(`chalk`);
 
 const {
   CATEGORIES,
@@ -39,15 +40,16 @@ const generateArticles = (count) => (
  *
  * @param {array} args
  */
-const init = (args) => {
+const init = async (args) => {
   const [count] = args;
   const countArticles = Number.parseInt(count, 10) || DEFAULT_COUNT;
   const content = JSON.stringify(generateArticles(countArticles));
 
   try {
-    fs.writeFileSync(`${path.dirname(__dirname)}/../${FILE_NAME}`, content, {encoding: `utf-8`});
+    await writeFile(`${path.dirname(__dirname)}/../${FILE_NAME}`, content, {encoding: `utf8`});
+    console.log(chalk.green(`Success ${count ? count : `one`} items`));
   } catch (e) {
-    console.log(e);
+    console.log(chalk.red(e.message));
   }
 };
 

@@ -1,15 +1,17 @@
 'use strict';
 
+const chalk = require(`chalk`);
+
 /**
  * Initialization service
  */
 const init = () => {
-  console.info(`Программа запускает http-сервер и формирует файл с данными для API.`);
-  console.info(`  Гайд: service.js <command>`);
-  console.info(`Команды:
+  console.info(chalk.gray(`Программа запускает http-сервер и формирует файл с данными для API.`));
+  console.info(chalk.gray(`  Гайд: service.js <command>`));
+  console.info(chalk.gray(`Команды:
   --version: выводит номер версии
   --help: печатает этот текст
-  --generate <count> формирует файл mocks.json`);
+  --generate <count> формирует файл mocks.json`));
 };
 
 module.exports = {
