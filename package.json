@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Приложение для быстрого создания персональных блогов",
   "main": "./src/service/service.js",
-  "dependencies": {},
+  "dependencies": {
+    "chalk": "4.0.0"
+  },
   "devDependencies": {
     "eslint": "8.2.0",
     "eslint-config-htmlacademy": "5.0.0"
