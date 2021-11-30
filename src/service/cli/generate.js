@@ -3,14 +3,13 @@
 const {writeFile} = require(`fs/promises`);
 const path = require(`path`);
 const chalk = require(`chalk`);
+const {readingFileByLine} = require(`../../utils`);
 
 const {
-  CATEGORIES,
-  SENTENCES,
-  TITLES,
   FILE_NAME,
   DEFAULT_COUNT,
-  DATES
+  DATES,
+  DEFAULT_ENCODING
 } = require(`../../constants`);
 
 const {
@@ -23,15 +22,18 @@ const {
  * Generate array articles depending on count
  *
  * @param {number} count
+ * @param {array} titles
+ * @param {array} sentences
+ * @param {array} categories
  * @return {array}
  */
-const generateArticles = (count) => (
+const generateArticles = (count, titles, sentences, categories) => (
   new Array(count).fill({}).map(() => ({
-    title: TITLES[getRandomInt(0, TITLES.length - 1)],
-    announce: shuffle(SENTENCES).slice(1, 5).join(` `),
-    description: shuffle(SENTENCES).slice(1, 5).join(` `),
+    title: titles[getRandomInt(0, titles.length - 1)],
+    announce: shuffle(sentences).slice(1, 5).join(` `),
+    description: shuffle(sentences).slice(1, 5).join(` `),
     createDate: DATES[getRandomInt(0, DATES.length - 1)],
-    category: [CATEGORIES[getRandomInt(0, CATEGORIES.length - 1)]],
+    category: [categories[getRandomInt(0, categories.length - 1)]],
   }))
 );
 
@@ -43,11 +45,14 @@ const generateArticles = (count) => (
 const init = async (args) => {
   const [count] = args;
   const countArticles = Number.parseInt(count, 10) || DEFAULT_COUNT;
-  const content = JSON.stringify(generateArticles(countArticles));
 
   try {
-    await writeFile(`${path.dirname(__dirname)}/../${FILE_NAME}`, content, {encoding: `utf8`});
-    console.log(chalk.green(`Success ${count ? count : `one`} items`));
+    const titles = await readingFileByLine(path.join(path.dirname(__dirname), `/../../data/titles.txt`));
+    const sentences = await readingFileByLine(path.join(path.dirname(__dirname), `/../../data/sentences.txt`));
+    const categories = await readingFileByLine(path.join(path.dirname(__dirname), `/../../data/categories.txt`));
+    const content = JSON.stringify(generateArticles(countArticles, titles, sentences, categories));
+    await writeFile(`${path.dirname(__dirname)}/../${FILE_NAME}`, content, {encoding: DEFAULT_ENCODING});
+    console.log(chalk.green(`Create ${count ? count : `one`} items`));
   } catch (e) {
     console.log(chalk.red(e.message));
   }
