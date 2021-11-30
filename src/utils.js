@@ -1,5 +1,7 @@
 'use strict';
 
+const {readFile} = require(`fs/promises`);
+const {DEFAULT_ENCODING} = require(`./constants`);
 
 /**
  * Shuffle items in array
@@ -33,7 +35,22 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+/**
+ * Read file
+ *
+ * @param {string} dirFile
+ */
+
+const readingFileByLine = async (dirFile) => {
+  let content = await readFile(dirFile, {encoding: DEFAULT_ENCODING});
+  content = content.split(`\n`);
+  content.pop();
+
+  return content;
+};
+
 module.exports = {
   shuffle,
-  getRandomInt
+  getRandomInt,
+  readingFileByLine
 };
