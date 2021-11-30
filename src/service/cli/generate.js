@@ -43,7 +43,7 @@ const generateArticles = (count, titles, sentences, categories) => (
  * @param {array} args
  */
 const init = async (args) => {
-  const [count] = args.slice(1);
+  const [count] = args;
   const countArticles = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
   try {
