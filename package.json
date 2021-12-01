@@ -8,12 +8,13 @@
   },
   "devDependencies": {
     "eslint": "8.2.0",
-    "eslint-config-htmlacademy": "5.0.0"
+    "eslint-config-htmlacademy": "5.0.0",
+    "nodemon": "2.0.5"
   },
   "scripts": {
     "test": "npm run eslint",
     "eslint": "eslint --ext .js src/",
-    "start": "node ./src/service/service.js"
+    "start": "node ./src/service/service.js --generate 35 && nodemon ./src/service/service.js --server"
   },
   "repository": {
     "type": "git",

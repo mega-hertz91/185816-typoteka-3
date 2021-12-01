@@ -4,6 +4,11 @@ const DEFAULT_COUNT = 1;
 const FILE_NAME = `mock.json`;
 const DEFAULT_COMMAND = `--help`;
 const DEFAULT_ENCODING = `utf8`;
+const DEFAULT_PORT = 3000;
+const STATUS_SUCCESS = 200;
+const STATUS_NOT_FOUND = 404;
+const HEAD_HTML = {'Content-Type': `text/html; charset=UTF-8`};
+const HEAD_JSON = {'Content-Type': `text/json; charset=UTF-8`};
 
 const DATES = [
   `2021-03-01 01:10:00`,
@@ -27,5 +32,10 @@ module.exports = {
   USER_ARGV_INDEX,
   ExitCode,
   DATES,
-  DEFAULT_ENCODING
+  DEFAULT_ENCODING,
+  DEFAULT_PORT,
+  STATUS_SUCCESS,
+  STATUS_NOT_FOUND,
+  HEAD_JSON,
+  HEAD_HTML
 };
