@@ -16,7 +16,8 @@
   "scripts": {
     "test": "npm run eslint",
     "eslint": "eslint --ext .js src/",
-    "start": "node ./src/service/service.js --generate 35 && nodemon ./src/service/service.js --server"
+    "start": "node ./src/service/service.js --generate 35 && nodemon ./src/service/service.js --server",
+    "dev": "nodemon ./src/express/express.js"
   },
   "repository": {
     "type": "git",
