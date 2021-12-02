@@ -22,6 +22,13 @@ app.disable(`x-powered-by`);
 app.use(express.static(`${__dirname}/${STATIC_DIR}`));
 
 /**
+ * Add app template engine pug
+ */
+app.set(`views`, `${__dirname}/templates`);
+app.set(`view engine`, `pug`);
+
+
+/**
  * Use routes
  */
 app.use(indexRouter);

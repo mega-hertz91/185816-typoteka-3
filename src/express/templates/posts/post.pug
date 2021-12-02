@@ -1,0 +1,48 @@
+extends ../layout
+
+block content
+  section
+    .popup.popup--new-publication.popup--anti
+      .new-publication
+        form(action='#' method='POST')
+          .new-publication__header
+            h1 &Ncy;&ocy;&vcy;&acy;&yacy; &pcy;&ucy;&bcy;&lcy;&icy;&kcy;&acy;&tscy;&icy;&yacy;
+            .new-publication__date-form
+              h3 &Dcy;&acy;&tcy;&acy; &pcy;&ucy;&bcy;&lcy;&icy;&kcy;&acy;&tscy;&icy;&icy;
+              .new-publication__date-form-division
+                .new-publication__date-block
+                  label(for='new-publication-date' aria-label='Календарь')
+                  input#new-publication-date(type='text' name='date' placeholder='2019-03-21')
+            button.new-publication__button.button.button--colored(type='submit') &Ocy;&pcy;&ucy;&bcy;&lcy;&icy;&kcy;&ocy;&vcy;&acy;&tcy;&softcy;
+          a.popup__button.button.button--popup-close(aria-label='Закрыть окно')
+            | &Zcy;&acy;&kcy;&rcy;&ycy;&tcy;&softcy;
+            | &ocy;&kcy;&ncy;&ocy;
+          .new-publication__form.form
+            .form__wrapper.form__wrapper--intro
+              .form__field
+                label
+                  input(type='text' name='title' placeholder='Заголовок' value='Как правильно заводить машину' required='')
+              .form__field.form__field--post-image
+                label
+                  input#image-name-field(type='text' name='photo' value='moya_mashinka.jpg' placeholder='Фотография' readonly='')
+                .form__image-loader.form__image-loader--publication
+                  label
+                    input.visually-hidden(type='file' name='upload')
+                    | &Ocy;&bcy;&zcy;&ocy;&rcy;
+                button.button.button--transparent &Ucy;&dcy;&acy;&lcy;&icy;&tcy;&softcy;
+              .new-publication__category-wrapper
+                .new-publication__checkbox.new-publication__checkbox--auto
+                  input#checkbox-auto(type='checkbox' name='category-1')
+                  label(for='checkbox-auto') &Acy;&vcy;&tcy;&ocy;&mcy;&ocy;&bcy;&icy;&lcy;&icy;
+                a.new-publication__form-link.button.button--transparent(href='#') &Dcy;&ocy;&bcy;&acy;&vcy;&icy;&tcy;&softcy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&yucy;
+            .form__wrapper.form__wrapper--text
+              .form__field.form__field--publication-text
+                label
+                  textarea(rows='5' name='announcement' placeholder='Анонс публикации')
+                    | &Mcy;&acy;&tcy;&iecy;&rcy;&icy;&ncy;&scy;&kcy;&icy;&jcy; &khcy;&ocy;&lcy;&dcy;&icy;&ncy;&gcy; &vcy;&ocy;&zcy;&gcy;&lcy;&acy;&vcy;&icy;&tcy; &gcy;&iecy;&ncy;&dcy;&icy;&rcy;&iecy;&kcy;&tcy;&ocy;&rcy; Google &Scy;&ucy;&ncy;&dcy;&acy;&rcy; &Pcy;&icy;&chcy;&acy;&icy;. &Pcy;&rcy;&icy; &ecy;&tcy;&ocy;&mcy; &bcy;&ocy;&lcy;&softcy;&shcy;&iecy; &pcy;&ocy;&lcy;&ocy;&vcy;&icy;&ncy;&ycy; &gcy;&ocy;&lcy;&ocy;&scy;&ocy;&vcy; &vcy; &kcy;&ocy;&mcy;&pcy;&acy;&ncy;&icy;&icy; &ocy;&scy;&tcy;&acy;&ncy;&iecy;&tcy;&scy;&yacy; &ucy; &Pcy;&iecy;&jcy;&dcy;&zhcy;&acy; &icy; &Bcy;&rcy;&icy;&ncy;&acy;.
+              .form__field.form__field--publication-text
+                label
+                  textarea(rows='10' name='full-text' placeholder='Полный текст публикации')
+                    | &Ocy;&scy;&ncy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&icy; Google &Lcy;&acy;&rcy;&rcy;&icy; &Pcy;&iecy;&jcy;&dcy;&zhcy; &icy; &Scy;&iecy;&rcy;&gcy;&iecy;&jcy; &Bcy;&rcy;&icy;&ncy; &ocy;&tcy;&ocy;&jcy;&dcy;&ucy;&tcy; &ocy;&tcy; &rcy;&ucy;&kcy;&ocy;&vcy;&ocy;&dcy;&scy;&tcy;&vcy;&acy; &mcy;&acy;&tcy;&iecy;&rcy;&icy;&ncy;&scy;&kcy;&icy;&mcy; &khcy;&ocy;&lcy;&dcy;&icy;&ncy;&gcy;&ocy;&mcy; Alphabet, &scy;&kcy;&acy;&zcy;&acy;&ncy;&ocy; &vcy; &scy;&ocy;&ocy;&bcy;&shchcy;&iecy;&ncy;&icy;&icy; &kcy;&ocy;&mcy;&pcy;&acy;&ncy;&icy;&icy;. &Pcy;&iecy;&jcy;&dcy;&zhcy; &zcy;&acy;&ncy;&icy;&mcy;&acy;&lcy; &pcy;&ocy;&scy;&tcy; &gcy;&iecy;&ncy;&dcy;&icy;&rcy;&iecy;&kcy;&tcy;&ocy;&rcy;&acy;, &acy; &Bcy;&rcy;&icy;&ncy; &mdash; &pcy;&rcy;&iecy;&zcy;&icy;&dcy;&iecy;&ncy;&tcy;&acy; Alphabet.
+                    | Alphabet &vcy;&ocy;&zcy;&gcy;&lcy;&acy;&vcy;&icy;&tcy; &gcy;&iecy;&ncy;&dcy;&icy;&rcy;&iecy;&kcy;&tcy;&ocy;&rcy; Google &Scy;&ucy;&ncy;&dcy;&acy;&rcy; &Pcy;&icy;&chcy;&acy;&icy;, &ocy;&ncy; &tcy;&acy;&kcy;&zhcy;&iecy; &pcy;&rcy;&ocy;&dcy;&ocy;&lcy;&zhcy;&icy;&tcy; &rcy;&ucy;&kcy;&ocy;&vcy;&ocy;&dcy;&icy;&tcy;&softcy; Google. &Dcy;&ocy;&lcy;&zhcy;&ncy;&ocy;&scy;&tcy;&softcy; &pcy;&rcy;&iecy;&zcy;&icy;&dcy;&iecy;&ncy;&tcy;&acy; &khcy;&ocy;&lcy;&dcy;&icy;&ncy;&gcy;&acy; &bcy;&ucy;&dcy;&iecy;&tcy; &ucy;&pcy;&rcy;&acy;&zcy;&dcy;&ncy;&iecy;&ncy;&acy;.
+

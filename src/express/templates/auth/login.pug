@@ -1,0 +1,20 @@
+extends ../layout
+
+block content
+  h1.visually-hidden &Rcy;&iecy;&gcy;&icy;&scy;&tcy;&rcy;&acy;&tscy;&icy;&yacy; &pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&yacy;
+  section
+    .popup.popup--registration.popup--anti
+      a.popup__button.button.button--popup-close(aria-label='Закрыть окно')
+        | &Zcy;&acy;&kcy;&rcy;&ycy;&tcy;&softcy;
+        | &ocy;&kcy;&ncy;&ocy;
+      h2.popup__title &Vcy;&ocy;&jcy;&tcy;&icy;
+      .popup__form.form.form--log-in
+        form(action='#' method='get')
+          .form__field
+            label
+              input(type='email' name='email' placeholder='Электронная почта' required='')
+          .form__field
+            label
+              input(type='password' name='password' placeholder='Пароль' required='')
+          p.form__error-message &Ncy;&iecy;&kcy;&ocy;&tcy;&ocy;&rcy;&acy;&yacy; &ocy;&shcy;&icy;&bcy;&kcy;&acy; &pcy;&rcy;&ocy;&icy;&zcy;&ocy;&shcy;&lcy;&acy;, &bcy;&iecy;&dcy;&acy;!
+          button.form__submit-btn.form__submit-btn--log-in.button.button--colored(type='submit') &Vcy;&ocy;&jcy;&tcy;&icy;

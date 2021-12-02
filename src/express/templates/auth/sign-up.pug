@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+  h1.visually-hidden &Rcy;&iecy;&gcy;&icy;&scy;&tcy;&rcy;&acy;&tscy;&icy;&yacy; &pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&yacy;
+  section
+    .popup.popup--registration.popup--anti
+      a.popup__button.button.button--popup-close(aria-label='Закрыть окно')
+        | &Zcy;&acy;&kcy;&rcy;&ycy;&tcy;&softcy;
+        | &ocy;&kcy;&ncy;&ocy;
+      h2.popup__title &Rcy;&iecy;&gcy;&icy;&scy;&tcy;&rcy;&acy;&tscy;&icy;&yacy;
+      .popup__form.popup__form--active.form.form--register
+        form(action='#' method='get')
+          .form__field
+            label
+              input(type='email' name='email' placeholder='Электронная почта' required='')
+          .form__field
+            label
+              input(type='text' name='name' placeholder='Имя' required='')
+          .form__field
+            label
+              input(type='text' name='surname' placeholder='Фамилия')
+          .form__field
+            label
+              input(type='password' name='password' placeholder='Пароль' required='')
+          .form__field
+            label
+              input(type='password' name='repeat-password' placeholder='Повтор пароля' required='')
+          .form__validation-error
+            p.form__error-message &Pcy;&rcy;&icy; &rcy;&iecy;&gcy;&icy;&scy;&tcy;&rcy;&acy;&tscy;&icy;&icy; &pcy;&rcy;&ocy;&icy;&zcy;&ocy;&shcy;&lcy;&icy; &ocy;&shcy;&icy;&bcy;&kcy;&icy;:
+            ul.form__errors
+              li.form__error &Pcy;&acy;&rcy;&ocy;&lcy;&softcy; &ncy;&iecy; &mcy;&ocy;&zhcy;&iecy;&tcy; &scy;&ocy;&scy;&tcy;&ocy;&yacy;&tcy;&softcy; &icy;&zcy; &dcy;&vcy;&ucy;&khcy; &bcy;&ucy;&kcy;&vcy;
+              li.form__error &Fcy;&acy;&mcy;&icy;&lcy;&icy;&yacy; &ncy;&iecy; &dcy;&ocy;&lcy;&zhcy;&ncy;&acy; &bcy;&ycy;&tcy;&softcy; &scy;&mcy;&iecy;&shcy;&ncy;&ocy;&jcy;
+          .form__image-loader
+            a.form__avatar.avatar
+              img(src='../src/express/public/img/icons/smile.svg' alt='аватар пользователя')
+            label
+              input.visually-hidden(type='file' name='upload')
+              | &Zcy;&acy;&gcy;&rcy;&ucy;&zcy;&icy;&tcy;&softcy; &fcy;&ocy;&tcy;&ocy; &pcy;&rcy;&ocy;&fcy;&icy;&lcy;&yacy;
+          button.form__submit-btn.form__submit-btn--register.button.button--colored(type='submit') &Zcy;&acy;&rcy;&iecy;&gcy;&icy;&scy;&tcy;&rcy;&icy;&rcy;&ocy;&vcy;&acy;&tcy;&softcy;&scy;&yacy;
+
