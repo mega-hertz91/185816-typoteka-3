@@ -2,9 +2,9 @@
 
 const {Router} = require(`express`);
 const router = new Router();
-const {getRequestPath} = require(`../utils`);
+const MyController = require(`../controllers/MyController`);
 
-router.get(`/my`, getRequestPath);
-router.get(`/my/comments`, getRequestPath);
+router.get(`/my`, MyController.index);
+router.get(`/my/comments`, MyController.comments);
 
 module.exports = router;

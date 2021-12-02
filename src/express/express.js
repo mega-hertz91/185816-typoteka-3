@@ -1,8 +1,11 @@
 'use strict';
 
+const {
+  DEFAULT_PORT,
+  STATIC_DIR
+} = require(`./constants`);
 const express = require(`express`);
 const app = express();
-const DEFAULT_PORT = 8080;
 
 const indexRouter = require(`./routes/index`);
 const authRouter = require(`./routes/auth`);
@@ -12,6 +15,18 @@ const categoriesRouter = require(`./routes/categories`);
 const searchRouter = require(`./routes/search`);
 
 app.disable(`x-powered-by`);
+
+/**
+ * Add static directory
+ */
+app.use(express.static(`${__dirname}/${STATIC_DIR}`));
+
+/**
+ * Add app template engine pug
+ */
+app.set(`views`, `${__dirname}/templates`);
+app.set(`view engine`, `pug`);
+
 
 /**
  * Use routes
