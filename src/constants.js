@@ -7,8 +7,8 @@ const DEFAULT_ENCODING = `utf8`;
 const DEFAULT_PORT = 3000;
 const STATUS_SUCCESS = 200;
 const STATUS_NOT_FOUND = 404;
-const HEAD_HTML = {'Content-Type': `text/html; charset=UTF-8`};
-const HEAD_JSON = {'Content-Type': `text/json; charset=UTF-8`};
+const STATUS_INTERNAL_ERROR = 500;
+const PREFIX_ROUTER_POSTS = `/posts`;
 
 const DATES = [
   `2021-03-01 01:10:00`,
@@ -36,6 +36,6 @@ module.exports = {
   DEFAULT_PORT,
   STATUS_SUCCESS,
   STATUS_NOT_FOUND,
-  HEAD_JSON,
-  HEAD_HTML
+  STATUS_INTERNAL_ERROR,
+  PREFIX_ROUTER_POSTS
 };
