@@ -5,8 +5,7 @@ const path = require(`path`);
 
 const {
   DEFAULT_ENCODING,
-  STATUS_NOT_FOUND,
-  STATUS_INTERNAL_ERROR
+  serverStatuses
 } = require(`../../constants`);
 
 class PostsController {
@@ -28,12 +27,12 @@ class PostsController {
         res.json(content[req.params.id]);
       } else {
         res
-          .status(STATUS_NOT_FOUND)
+          .status(serverStatuses.STATUS_NOT_FOUND)
           .send(`Post not found`);
       }
     } catch (e) {
       res
-        .status(STATUS_INTERNAL_ERROR)
+        .status(serverStatuses.STATUS_INTERNAL_ERROR)
         .send(`Data not found`);
     }
   }
