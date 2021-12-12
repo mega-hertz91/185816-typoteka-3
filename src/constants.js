@@ -5,13 +5,10 @@ const FILE_NAME = `mock.json`;
 const DEFAULT_COMMAND = `--help`;
 const DEFAULT_ENCODING = `utf8`;
 const DEFAULT_PORT = 3000;
-const STATUS_SUCCESS = 200;
-const STATUS_NOT_FOUND = 404;
-const STATUS_INTERNAL_ERROR = 500;
-const serverStatuses = {
-  STATUS_SUCCESS: 200,
-  STATUS_NOT_FOUND: 404,
-  STATUS_INTERNAL_ERROR: 500
+const ResponseStatus = {
+  SUCCESS: 200,
+  NOT_FOUND: 404,
+  INTERNAL_ERROR: 500
 };
 const PREFIX_ROUTER_POSTS = `/posts`;
 
@@ -40,5 +37,5 @@ module.exports = {
   DEFAULT_ENCODING,
   DEFAULT_PORT,
   PREFIX_ROUTER_POSTS,
-  serverStatuses
+  ResponseStatus
 };
