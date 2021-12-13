@@ -7,8 +7,7 @@ const {
 const {nanoid} = require(`nanoid`);
 
 class Article {
-
-  static create(req) {
+  create(req) {
     const article = {
       id: nanoid(),
       title: req.body.title,
@@ -22,7 +21,7 @@ class Article {
     return article;
   }
 
-  static delete(req) {
+  delete(req) {
     let content = req.app.locals.posts;
     const article = findById(content, req.params.articleId);
     if (article.attributes) {
@@ -33,7 +32,7 @@ class Article {
     }
   }
 
-  static update(req) {
+  update(req) {
     let content = req.app.locals.posts;
     let article = findById(content, req.params.articleId);
     if (article.attributes) {
@@ -49,4 +48,4 @@ class Article {
   }
 }
 
-module.exports = Article;
+module.exports = new Article();

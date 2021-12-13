@@ -9,6 +9,7 @@ const {
 } = require(`../../utils`);
 
 const Article = require(`../models/article`);
+const Comment = require(`../models/comment`);
 
 class PostsController {
   getAll(req, res) {
@@ -81,6 +82,51 @@ class PostsController {
           .status(ResponseStatus.NOT_FOUND)
           .send(`Article not found`);
       }
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
+    }
+  }
+
+  getCommentsById(req, res) {
+    try {
+      let content = req.app.locals.posts;
+      const article = findById(content, req.params.articleId);
+
+      if (article.attributes) {
+        res.json(article.attributes.comments);
+      } else {
+        res
+          .status(ResponseStatus.NOT_FOUND)
+          .send(`Comments not found`);
+      }
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
+    }
+  }
+
+  createCommentById(req, res) {
+    try {
+      const comment = Comment.create(req);
+      res
+        .status(ResponseStatus.SUCCESS_CREATE)
+        .send(comment);
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
+    }
+  }
+
+  deleteCommentById(req, res) {
+    try {
+      const comment = Comment.delete(req);
+      res
+        .status(ResponseStatus.SUCCESS_CREATE)
+        .send(comment);
     } catch (e) {
       res
         .status(ResponseStatus.INTERNAL_ERROR)
