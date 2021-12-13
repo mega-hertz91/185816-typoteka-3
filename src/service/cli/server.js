@@ -3,7 +3,6 @@
 const express = require(`express`);
 const app = express();
 const bodyParser = require(`body-parser`);
-const postsRouter = require(`../routes/posts`);
 const articlesRouter = require(`../routes/articles`);
 const posts = require(`../data/posts`);
 
@@ -26,11 +25,18 @@ module.exports = {
     app.use(bodyParser.json());
 
     /**
+     * Delete system headers
+     */
+    app.disable(`x-powered-by`);
+
+    /**
      * set mock data
      */
     app.locals.posts = await posts();
 
-    app.use(Entity.POSTS, postsRouter);
+    /**
+     * Add routers
+     */
     app.use(`${Prefix.API}${Entity.ARTICLES}`, articlesRouter);
 
     app.listen(port, () => {

@@ -8,5 +8,6 @@ router.get(`/`, ArticlesController.getAll);
 router.get(`/:articleId`, ArticlesController.getById);
 router.post(`/`, ArticlesController.create);
 router.delete(`/:articleId`, ArticlesController.delete);
+router.put(`/:articleId`, ArticlesController.update);
 
 module.exports = router;

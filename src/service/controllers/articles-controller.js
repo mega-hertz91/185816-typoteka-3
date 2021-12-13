@@ -5,14 +5,13 @@ const {
 } = require(`../../constants`);
 
 const {
-  findById,
-  getNowDate
+  findById
 } = require(`../../utils`);
 
-const {nanoid} = require(`nanoid`);
+const Article = require(`../models/article`);
 
 class PostsController {
-  async getAll(req, res) {
+  getAll(req, res) {
     try {
       const articles = req.app.locals.posts;
       res.send(articles);
@@ -23,7 +22,7 @@ class PostsController {
     }
   }
 
-  async getById(req, res) {
+  getById(req, res) {
     try {
       let content = req.app.locals.posts;
       const article = findById(content, req.params.articleId);
@@ -33,7 +32,7 @@ class PostsController {
       } else {
         res
           .status(ResponseStatus.NOT_FOUND)
-          .send(`Post not found`);
+          .send(`Article not found`);
       }
     } catch (e) {
       res
@@ -42,28 +41,50 @@ class PostsController {
     }
   }
 
-  async create(req, res) {
-    const article = req.body;
-    article.createDate = getNowDate();
-    article.id = nanoid();
-    req.app.locals.posts.push(article);
-    res.send(article);
-  }
-
-  async update(req, res) {
-    res.send(`update`);
-  }
-
-  async delete(req, res) {
-    let content = req.app.locals.posts;
-    const article = findById(content, req.params.articleId);
-    if (article.attributes) {
-      req.app.locals.posts.splice(article.index, 1);
-      res.send(article.attributes);
-    } else {
+  create(req, res) {
+    try {
+      const article = Article.create(req);
       res
-        .status(ResponseStatus.NOT_FOUND)
-        .send(`Article not found`);
+        .status(ResponseStatus.SUCCESS_CREATE)
+        .send(article);
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
+    }
+  }
+
+  update(req, res) {
+    try {
+      const article = Article.update(req);
+      if (article) {
+        res.send(article);
+      } else {
+        res
+          .status(ResponseStatus.NOT_FOUND)
+          .send(`Article not found`);
+      }
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
+    }
+  }
+
+  delete(req, res) {
+    try {
+      const article = Article.delete(req);
+      if (article) {
+        res.send(article);
+      } else {
+        res
+          .status(ResponseStatus.NOT_FOUND)
+          .send(`Article not found`);
+      }
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
     }
   }
 }

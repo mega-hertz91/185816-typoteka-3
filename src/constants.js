@@ -7,6 +7,7 @@ const DEFAULT_ENCODING = `utf8`;
 const DEFAULT_PORT = 3000;
 const ResponseStatus = {
   SUCCESS: 200,
+  SUCCESS_CREATE: 201,
   NOT_FOUND: 404,
   INTERNAL_ERROR: 500
 };
