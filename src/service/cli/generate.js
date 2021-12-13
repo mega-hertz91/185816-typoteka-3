@@ -28,7 +28,7 @@ const {nanoid} = require(`nanoid`);
  * @param {array} categories
  * @return {array}
  */
-const generateArticles = (count, titles, sentences, categories) => (
+const generateArticles = (count, titles, sentences, categories, comments) => (
   new Array(count).fill({}).map(() => ({
     id: nanoid(),
     title: titles[getRandomInt(0, titles.length - 1)],
@@ -36,6 +36,7 @@ const generateArticles = (count, titles, sentences, categories) => (
     description: shuffle(sentences).slice(1, 5).join(` `),
     createDate: DATES[getRandomInt(0, DATES.length - 1)],
     category: [categories[getRandomInt(0, categories.length - 1)]],
+    comments: [comments[getRandomInt(0, comments.length - 1)]],
   }))
 );
 
@@ -52,7 +53,8 @@ const init = async (args) => {
     const titles = await readingFileByLine(path.join(path.dirname(__dirname), `/../../data/titles.txt`));
     const sentences = await readingFileByLine(path.join(path.dirname(__dirname), `/../../data/sentences.txt`));
     const categories = await readingFileByLine(path.join(path.dirname(__dirname), `/../../data/categories.txt`));
-    const content = JSON.stringify(generateArticles(countArticles, titles, sentences, categories));
+    const comments = await readingFileByLine(path.join(path.dirname(__dirname), `/../../data/comments.txt`));
+    const content = JSON.stringify(generateArticles(countArticles, titles, sentences, categories, comments));
     await writeFile(`${path.dirname(__dirname)}/../${FILE_NAME}`, content, {encoding: DEFAULT_ENCODING});
     console.log(chalk.green(`Create ${count ? count : `one`} items`));
   } catch (e) {
