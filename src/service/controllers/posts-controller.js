@@ -19,9 +19,13 @@ class PostsController {
   async getById(req, res) {
     try {
       let content = await req.app.locals.posts;
-      console.log(content);
-      if (content[req.params.id]) {
-        res.json(content[req.params.id]);
+
+      const index = content.filter((elem) => {
+        return elem.id === req.params.id;
+      });
+
+      if (index[0]) {
+        res.json(index[0]);
       } else {
         res
           .status(ResponseStatus.NOT_FOUND)

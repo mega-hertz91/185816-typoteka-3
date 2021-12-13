@@ -4,11 +4,13 @@ const express = require(`express`);
 const app = express();
 const bodyParser = require(`body-parser`);
 const postsRouter = require(`../routes/posts`);
+const articlesRouter = require(`../routes/articles`);
 const posts = require(`../data/posts`);
 
 const {
   DEFAULT_PORT,
-  PREFIX_ROUTER_POSTS
+  Prefix,
+  Entity
 } = require(`../../constants`);
 
 
@@ -28,7 +30,8 @@ module.exports = {
      */
     app.locals.posts = await posts();
 
-    app.use(PREFIX_ROUTER_POSTS, postsRouter);
+    app.use(Entity.POSTS, postsRouter);
+    app.use(`${Prefix.API}${Entity.ARTICLES}`, articlesRouter);
 
     app.listen(port, () => {
       console.log(`Server started localhost:${port}`);

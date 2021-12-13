@@ -10,7 +10,15 @@ const ResponseStatus = {
   NOT_FOUND: 404,
   INTERNAL_ERROR: 500
 };
-const PREFIX_ROUTER_POSTS = `/posts`;
+
+const Entity = {
+  POSTS: `/posts`,
+  ARTICLES: `/articles`
+};
+
+const Prefix = {
+  API: `/api`
+};
 
 const DATES = [
   `2021-03-01 01:10:00`,
@@ -36,6 +44,7 @@ module.exports = {
   DATES,
   DEFAULT_ENCODING,
   DEFAULT_PORT,
-  PREFIX_ROUTER_POSTS,
+  Prefix,
+  Entity,
   ResponseStatus
 };

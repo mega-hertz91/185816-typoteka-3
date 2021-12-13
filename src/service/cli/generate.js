@@ -1,10 +1,5 @@
 'use strict';
 
-const {writeFile} = require(`fs/promises`);
-const path = require(`path`);
-const chalk = require(`chalk`);
-const {readingFileByLine} = require(`../../utils`);
-
 const {
   FILE_NAME,
   DEFAULT_COUNT,
@@ -16,6 +11,12 @@ const {
   getRandomInt,
   shuffle
 } = require(`../../utils`);
+
+const {writeFile} = require(`fs/promises`);
+const path = require(`path`);
+const chalk = require(`chalk`);
+const {readingFileByLine} = require(`../../utils`);
+const {nanoid} = require(`nanoid`);
 
 
 /**
@@ -29,6 +30,7 @@ const {
  */
 const generateArticles = (count, titles, sentences, categories) => (
   new Array(count).fill({}).map(() => ({
+    id: nanoid(),
     title: titles[getRandomInt(0, titles.length - 1)],
     announce: shuffle(sentences).slice(1, 5).join(` `),
     description: shuffle(sentences).slice(1, 5).join(` `),
