@@ -9,15 +9,14 @@ const {
 
 const {
   getRandomInt,
-  shuffle
+  shuffle,
+  readingFileByLine
 } = require(`../../utils`);
 
 const {writeFile} = require(`fs/promises`);
 const path = require(`path`);
 const chalk = require(`chalk`);
-const {readingFileByLine} = require(`../../utils`);
 const {nanoid} = require(`nanoid`);
-
 
 /**
  * Generate array articles depending on count
@@ -28,6 +27,7 @@ const {nanoid} = require(`nanoid`);
  * @param {array} categories
  * @return {array}
  */
+
 const generateArticles = (count, titles, sentences, categories, comments) => (
   new Array(count).fill({}).map(() => ({
     id: nanoid(),

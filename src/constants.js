@@ -14,7 +14,9 @@ const ResponseStatus = {
 
 const Entity = {
   POSTS: `/posts`,
-  ARTICLES: `/articles`
+  ARTICLES: `/articles`,
+  SEARCH: `/search`,
+  CATEGORIES: `/categories`
 };
 
 const Prefix = {

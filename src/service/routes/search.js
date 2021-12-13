@@ -5,3 +5,5 @@ const router = new Router();
 const SearchController = require(`../controllers/search-controller`);
 
 router.get(`/`, SearchController.index);
+
+module.exports = router;
