@@ -54,13 +54,13 @@ if (popup) {
   }
 }
 
-// меняет высоту поля textarea в блоке comments в зависимости от количества введенных в него строк.
+// меняет высоту поля textarea в блоке comments.txt в зависимости от количества введенных в него строк.
 
-// let comments = document.querySelector('.post__comments');
+// let comments.txt = document.querySelector('.post__comments');
 // let publication = document.querySelector('.new-publication');
 // let textarea = null;
 
-// if (comments || publication) {
+// if (comments.txt || publication) {
 //   textarea = document.querySelectorAll('textarea');
 // }
 const map = (typeof Map === 'function') ? new Map() : (function () {

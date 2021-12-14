@@ -49,8 +49,43 @@ const readingFileByLine = async (dirFile) => {
   return content;
 };
 
+/**
+ * Filtered by id
+ *
+ * @param {array} items
+ * @param {string} id
+ */
+
+const findById = (items, id) => {
+  let i;
+  const item = items.filter((elem, index) => {
+    if (elem.id === id) {
+      i = index;
+      return elem;
+    } else {
+      return false;
+    }
+  });
+
+  return {
+    index: i,
+    attributes: item.shift()
+  };
+};
+
+/**
+ * Get date now
+ */
+const getNowDate = () => {
+  const date = new Date(Date.now());
+  return date.toLocaleDateString(`ru`);
+};
+
+
 module.exports = {
   shuffle,
   getRandomInt,
-  readingFileByLine
+  readingFileByLine,
+  findById,
+  getNowDate
 };

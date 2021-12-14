@@ -3,7 +3,7 @@
 const chalk = require(`chalk`);
 
 /**
- * Initialization service
+ * Initialization data-services
  */
 const init = () => {
   console.info(chalk.gray(`Программа запускает http-сервер и формирует файл с данными для API.`));

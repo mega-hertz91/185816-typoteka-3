@@ -5,10 +5,23 @@ const FILE_NAME = `mock.json`;
 const DEFAULT_COMMAND = `--help`;
 const DEFAULT_ENCODING = `utf8`;
 const DEFAULT_PORT = 3000;
-const STATUS_SUCCESS = 200;
-const STATUS_NOT_FOUND = 404;
-const STATUS_INTERNAL_ERROR = 500;
-const PREFIX_ROUTER_POSTS = `/posts`;
+const ResponseStatus = {
+  SUCCESS: 200,
+  SUCCESS_CREATE: 201,
+  NOT_FOUND: 404,
+  INTERNAL_ERROR: 500
+};
+
+const Entity = {
+  POSTS: `/posts`,
+  ARTICLES: `/articles`,
+  SEARCH: `/search`,
+  CATEGORIES: `/categories`
+};
+
+const Prefix = {
+  API: `/api`
+};
 
 const DATES = [
   `2021-03-01 01:10:00`,
@@ -34,8 +47,7 @@ module.exports = {
   DATES,
   DEFAULT_ENCODING,
   DEFAULT_PORT,
-  STATUS_SUCCESS,
-  STATUS_NOT_FOUND,
-  STATUS_INTERNAL_ERROR,
-  PREFIX_ROUTER_POSTS
+  Prefix,
+  Entity,
+  ResponseStatus
 };

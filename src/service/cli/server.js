@@ -3,29 +3,42 @@
 const express = require(`express`);
 const app = express();
 const bodyParser = require(`body-parser`);
-const postsRouter = require(`../routes/posts`);
+const apiRoutes = require(`../api/index`);
 
 const {
   DEFAULT_PORT,
-  PREFIX_ROUTER_POSTS
+  Prefix
 } = require(`../../constants`);
 
 
 module.exports = {
   name: `--server`,
-  run(args) {
-    const port = args.shift() || DEFAULT_PORT;
+  async run(args) {
+    try {
+      const port = await args.shift() || DEFAULT_PORT;
 
-    /**
-     * Use middleware json and url encoder
-     */
-    app.use(bodyParser.urlencoded({extended: false}));
-    app.use(bodyParser.json());
+      /**
+       * Use middleware json and url encoder
+       */
+      app.use(bodyParser.urlencoded({extended: false}));
+      app.use(bodyParser.json());
 
-    app.use(PREFIX_ROUTER_POSTS, postsRouter);
+      /**
+       * Delete system headers
+       */
+      app.disable(`x-powered-by`);
 
-    app.listen(port, () => {
-      console.log(`Server started localhost:${port}`);
-    });
+      /**
+       * Add routers
+       */
+      app.use(Prefix.API, apiRoutes);
+
+      app.listen(port, () => {
+        console.log(`Server started localhost:${port}`);
+      });
+    } catch (e) {
+      console.log(e);
+      process.exit();
+    }
   }
 };

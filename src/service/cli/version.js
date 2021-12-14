@@ -4,7 +4,7 @@ const packageJsonFile = require(`../../../package.json`);
 const chalk = require(`chalk`);
 
 /**
- * Initialization service
+ * Initialization data-services
  */
 const init = () => {
   const version = packageJsonFile.version;
