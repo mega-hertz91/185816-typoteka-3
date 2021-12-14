@@ -2,14 +2,14 @@
 
 const {
   ResponseStatus
-} = require(`../../constants`);
+} = require(`../../../constants`);
 
 const {
   findById
-} = require(`../../utils`);
+} = require(`../../../utils`);
 
-const Article = require(`../models/article`);
-const Comment = require(`../models/comment`);
+const Article = require(`../data-services/article`);
+const Comment = require(`../data-services/comment`);
 
 class PostsController {
   getAll(req, res) {

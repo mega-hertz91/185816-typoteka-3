@@ -41,7 +41,7 @@ const generateArticles = (count, titles, sentences, categories, comments) => (
 );
 
 /**
- * Initialization service
+ * Initialization data-services
  *
  * @param {array} args
  */

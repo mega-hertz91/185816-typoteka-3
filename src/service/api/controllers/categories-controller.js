@@ -2,7 +2,7 @@
 
 const {
   ResponseStatus
-} = require(`../../constants`);
+} = require(`../../../constants`);
 
 class CategoriesController {
   getAll(req, res) {
