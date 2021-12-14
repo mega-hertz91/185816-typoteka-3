@@ -13,8 +13,8 @@ const getPosts = async () => {
     return data;
   } else {
     data = await readFile(path.join(path.dirname(__filename), `../../../mock.json`), {encoding: DEFAULT_ENCODING});
-    const content = data.slice();
-    return JSON.parse(content);
+    data = JSON.parse(data.slice());
+    return data;
   }
 };
 

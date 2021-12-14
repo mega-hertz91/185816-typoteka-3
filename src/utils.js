@@ -67,8 +67,6 @@ const findById = (items, id) => {
     }
   });
 
-  console.log(i);
-
   return {
     index: i,
     attributes: item.shift()

@@ -5,7 +5,7 @@ const router = new Router();
 const ArticlesController = require(`../controllers/articles-controller`);
 
 
-module.exports = (app, posts) => {
+module.exports = (app) => {
   app.use(`/articles`, router);
 
   /**

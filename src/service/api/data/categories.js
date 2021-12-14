@@ -10,6 +10,8 @@ let data = [];
 
 const getCategories = async () => {
   if (data.length > 0) {
+    return data;
+  } else {
     data = await readingFileByLine(path.join(path.dirname(__filename), `../../../../data/categories.txt`));
     data = data.map((item) => {
       return {
@@ -17,8 +19,6 @@ const getCategories = async () => {
         name: item
       };
     });
-    return data;
-  } else {
     return data;
   }
 };

@@ -3,11 +3,12 @@
 const {
   ResponseStatus
 } = require(`../../../constants`);
+const Category = require(`../data-services/category`);
 
 class CategoriesController {
-  getAll(req, res) {
+  async getAll(req, res) {
     try {
-      const categories = req.app.locals.categories;
+      const categories = await Category.getAll();
       res.send(categories);
     } catch (e) {
       res

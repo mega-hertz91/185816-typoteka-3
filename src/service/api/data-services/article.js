@@ -5,42 +5,57 @@ const {
   getNowDate
 } = require(`../../../utils`);
 const {nanoid} = require(`nanoid`);
+const articlesMock = require(`../data/posts`);
 
 class Article {
-  create(req) {
+  constructor() {
+    this._articles = articlesMock;
+  }
+
+  async getAll() {
+    return await this._articles();
+  }
+
+  async getById(id) {
+    const articles = await this._articles();
+    return findById(articles, id);
+  }
+
+  async create(attributes) {
     const article = {
       id: nanoid(),
-      title: req.body.title,
-      description: req.body.description,
-      announce: req.body.announce,
+      title: attributes.title,
+      description: attributes.description,
+      announce: attributes.announce,
       createDate: getNowDate()
     };
 
-    req.app.locals.posts.push(article);
+    const articles = await this._articles();
+    articles.push(article);
 
     return article;
   }
 
-  delete(req) {
-    let content = req.app.locals.posts;
-    const article = findById(content, req.params.articleId);
+  async delete(id) {
+    const articles = await this._articles();
+    const article = findById(articles, id);
     if (article.attributes) {
-      req.app.locals.posts.splice(article.index, 1);
+      articles.splice(article.index, 1);
       return article;
     } else {
       return false;
     }
   }
 
-  update(req) {
-    let content = req.app.locals.posts;
-    let article = findById(content, req.params.articleId);
+  async update(attributes, id) {
+    let article = await findById(this._articles(), id);
     if (article.attributes) {
-      article.attributes.title = req.body.title ? req.body.title : article.attributes.title;
-      article.attributes.description = req.body.description ? req.body.description : article.attributes.description;
-      article.attributes.announce = req.body.announce ? req.body.announce : article.attributes.announce;
+      article.attributes.title = attributes.title ? attributes.title : article.attributes.title;
+      article.attributes.description = attributes.description ? attributes.description : article.attributes.description;
+      article.attributes.announce = attributes.announce ? attributes.announce : article.attributes.announce;
 
-      content.splice(article.index, 1, article.attributes);
+      const articles = await this._articles();
+      articles.splice(article.index, 1, article.attributes);
       return article;
     } else {
       return false;

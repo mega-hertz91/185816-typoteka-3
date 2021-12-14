@@ -4,17 +4,13 @@ const {
   ResponseStatus
 } = require(`../../../constants`);
 
-const {
-  findById
-} = require(`../../../utils`);
-
 const Article = require(`../data-services/article`);
 const Comment = require(`../data-services/comment`);
 
 class PostsController {
-  getAll(req, res) {
+  async getAll(req, res) {
     try {
-      const articles = req.app.locals.posts;
+      const articles = await Article.getAll();
       res.send(articles);
     } catch (e) {
       res
@@ -23,10 +19,9 @@ class PostsController {
     }
   }
 
-  getById(req, res) {
+  async getById(req, res) {
     try {
-      let content = req.app.locals.posts;
-      const article = findById(content, req.params.articleId);
+      const article = await Article.getById(req.params.articleId);
 
       if (article.attributes) {
         res.json(article.attributes);
@@ -42,9 +37,9 @@ class PostsController {
     }
   }
 
-  create(req, res) {
+  async create(req, res) {
     try {
-      const article = Article.create(req);
+      const article = await Article.create(req.body);
       res
         .status(ResponseStatus.SUCCESS_CREATE)
         .send(article);
@@ -55,9 +50,9 @@ class PostsController {
     }
   }
 
-  update(req, res) {
+  async update(req, res) {
     try {
-      const article = Article.update(req);
+      const article = await Article.update(req.body, req.params.articleId);
       if (article) {
         res.send(article);
       } else {
@@ -72,9 +67,9 @@ class PostsController {
     }
   }
 
-  delete(req, res) {
+  async delete(req, res) {
     try {
-      const article = Article.delete(req);
+      const article = await Article.delete(req.params.articleId);
       if (article) {
         res.send(article);
       } else {
@@ -89,10 +84,9 @@ class PostsController {
     }
   }
 
-  getCommentsById(req, res) {
+  async getCommentsById(req, res) {
     try {
-      let content = req.app.locals.posts;
-      const article = findById(content, req.params.articleId);
+      const article = await Article.getById(req.params.articleId);
 
       if (article.attributes) {
         res.json(article.attributes.comments);
@@ -108,9 +102,9 @@ class PostsController {
     }
   }
 
-  createCommentById(req, res) {
+  async createCommentById(req, res) {
     try {
-      const comment = Comment.create(req);
+      const comment = await Comment.create(req.params.articleId, req.body);
       res
         .status(ResponseStatus.SUCCESS_CREATE)
         .send(comment);
@@ -121,9 +115,9 @@ class PostsController {
     }
   }
 
-  deleteCommentById(req, res) {
+  async deleteCommentById(req, res) {
     try {
-      const comment = Comment.delete(req);
+      const comment = await Comment.delete(req.params.articleId, req.params.commentId);
       res
         .status(ResponseStatus.SUCCESS_CREATE)
         .send(comment);

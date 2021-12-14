@@ -6,7 +6,8 @@ const bodyParser = require(`body-parser`);
 const apiRoutes = require(`../api/index`);
 
 const {
-  DEFAULT_PORT
+  DEFAULT_PORT,
+  Prefix
 } = require(`../../constants`);
 
 
@@ -30,7 +31,7 @@ module.exports = {
       /**
        * Add routers
        */
-      app.use(`/api`, apiRoutes);
+      app.use(Prefix.API, apiRoutes);
 
       app.listen(port, () => {
         console.log(`Server started localhost:${port}`);

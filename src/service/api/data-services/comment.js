@@ -5,34 +5,37 @@ const {
   getNowDate
 } = require(`../../../utils`);
 const {nanoid} = require(`nanoid`);
+const articlesMock = require(`../data/posts`);
 
 class Comment {
-  create(req) {
-    let content = req.app.locals.posts;
-    const article = findById(content, req.params.articleId);
+  constructor() {
+    this._articles = articlesMock;
+  }
+
+  async create(id, attributes) {
+    let articles = await this._articles();
+    const article = findById(articles, id);
 
     const comment = {
       id: nanoid(),
-      titleArticle: req.body.titleArticle,
-      avatar: req.body.avatar,
-      author: req.body.author,
-      text: req.body.text,
+      title: attributes.title,
+      avatar: attributes.avatar,
+      author: attributes.author,
+      text: attributes.text,
       createDate: getNowDate()
     };
 
-    req.app.locals.posts[article.index].comments.push(comment);
+    articles[article.index].comments.push(comment);
 
     return comment;
   }
 
-  delete(req) {
-    let content = req.app.locals.posts;
-    const article = findById(content, req.params.articleId);
-    console.log(article);
-    const comment = findById(article.attributes.comments, req.params.commentId);
-    console.log(req.app.locals.posts[article.index].comments);
+  async delete(articleId, commentId) {
+    let articles = await this._articles();
+    const article = findById(articles, articleId);
+    const comment = findById(article.attributes.comments, commentId);
 
-    req.app.locals.posts[article.index].comments.splice(comment.index, 1);
+    articles[article.index].comments.splice(comment.index, 1);
 
     return comment;
   }
