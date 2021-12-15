@@ -1,4 +1,5 @@
 'use strict';
+
 const {
   ResponseStatus
 } = require(`../../constants`);
@@ -18,7 +19,7 @@ const createAPI = () => {
 
 const app = createAPI();
 
-describe(`API returns offer based on search query`, () => {
+describe(`API returns articles based on search query`, () => {
   let response;
 
   beforeAll(async () => {
@@ -30,8 +31,8 @@ describe(`API returns offer based on search query`, () => {
   });
 
   test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
-  test(`1 offer found`, () => expect(response.body.length).toBe(1));
-  test(`Offer has correct id`, () => expect(response.body[0].id).toBe(`u4P6tgLb4t-Y3Aoe18fIh`));
+  test(`1 article found`, () => expect(response.body.length).toBe(1));
+  test(`Article has correct id`, () => expect(response.body[0].id).toBe(`u4P6tgLb4t-Y3Aoe18fIh`));
 });
 
 test(`API returns code 404 if nothing is found`,
