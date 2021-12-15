@@ -14,10 +14,13 @@
   "devDependencies": {
     "eslint": "8.2.0",
     "eslint-config-htmlacademy": "5.0.0",
-    "nodemon": "2.0.5"
+    "jest": "27.4.5",
+    "nodemon": "2.0.5",
+    "supertest": "6.1.6"
   },
   "scripts": {
-    "test": "npm run eslint",
+    "test": "npm run eslint && npm run jest",
+    "jest": "jest",
     "eslint": "eslint --ext .js src/",
     "start": "node ./src/service/service.js --generate 35 && nodemon ./src/service/service.js --server",
     "dev": "nodemon ./src/express/express.js"
