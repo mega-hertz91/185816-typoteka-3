@@ -9,7 +9,8 @@ const ResponseStatus = {
   SUCCESS: 200,
   SUCCESS_CREATE: 201,
   NOT_FOUND: 404,
-  INTERNAL_ERROR: 500
+  INTERNAL_ERROR: 500,
+  BAD_REQUEST: 400
 };
 
 const Entity = {

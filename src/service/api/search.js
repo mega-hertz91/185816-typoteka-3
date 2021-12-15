@@ -5,13 +5,15 @@ const {
 } = require(`../../constants`);
 const {Router} = require(`express`);
 const router = new Router();
+const checkQuery = require(`../middlewares/check-query-search`);
 
 module.exports = (app, Search) => {
   app.use(`/search`, router);
 
-  router.get(`/`, (req, res) => {
+  router.get(`/`, checkQuery, (req, res) => {
     try {
-      const articles = Search.getAll();
+      const articles = Search.getAll(req.query.query);
+
       if (articles.length > 0) {
         res.send(articles);
       } else {
