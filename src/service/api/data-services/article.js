@@ -5,23 +5,22 @@ const {
   getNowDate
 } = require(`../../../utils`);
 const {nanoid} = require(`nanoid`);
-const articlesMock = require(`../data/posts`);
 
 class Article {
-  constructor() {
-    this._articles = articlesMock;
+  constructor(articles) {
+    this._articles = articles;
   }
 
-  async getAll() {
-    return await this._articles();
+  getAll() {
+    return this._articles;
   }
 
-  async getById(id) {
-    const articles = await this._articles();
+  getById(id) {
+    const articles = this._articles;
     return findById(articles, id);
   }
 
-  async create(attributes) {
+  create(attributes) {
     const article = {
       id: nanoid(),
       title: attributes.title,
@@ -30,14 +29,14 @@ class Article {
       createDate: getNowDate()
     };
 
-    const articles = await this._articles();
+    const articles = this._articles;
     articles.push(article);
 
     return article;
   }
 
-  async delete(id) {
-    const articles = await this._articles();
+  delete(id) {
+    const articles = this._articles;
     const article = findById(articles, id);
     if (article.attributes) {
       articles.splice(article.index, 1);
@@ -47,14 +46,14 @@ class Article {
     }
   }
 
-  async update(attributes, id) {
-    let article = await findById(this._articles(), id);
+  update(attributes, id) {
+    let article = findById(this._articles, id);
     if (article.attributes) {
       article.attributes.title = attributes.title ? attributes.title : article.attributes.title;
       article.attributes.description = attributes.description ? attributes.description : article.attributes.description;
       article.attributes.announce = attributes.announce ? attributes.announce : article.attributes.announce;
 
-      const articles = await this._articles();
+      const articles = this._articles;
       articles.splice(article.index, 1, article.attributes);
       return article;
     } else {
@@ -63,4 +62,4 @@ class Article {
   }
 }
 
-module.exports = new Article();
+module.exports = Article;

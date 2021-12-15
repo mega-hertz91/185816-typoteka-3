@@ -5,11 +5,10 @@ const {
   getNowDate
 } = require(`../../../utils`);
 const {nanoid} = require(`nanoid`);
-const articlesMock = require(`../data/posts`);
 
 class Comment {
-  constructor() {
-    this._articles = articlesMock;
+  constructor(articles) {
+    this._articles = articles;
   }
 
   async create(id, attributes) {
@@ -41,4 +40,4 @@ class Comment {
   }
 }
 
-module.exports = new Comment();
+module.exports = Comment;
