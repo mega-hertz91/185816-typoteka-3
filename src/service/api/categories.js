@@ -2,7 +2,7 @@
 
 const {
   ResponseStatus
-} = require(`../../../constants`);
+} = require(`../../constants`);
 const {Router} = require(`express`);
 const router = new Router();
 

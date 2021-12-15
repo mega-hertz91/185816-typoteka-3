@@ -2,18 +2,18 @@
 
 const {Router} = require(`express`);
 const app = new Router();
-const articlesRouter = require(`./routes/articles`);
-const searchRouter = require(`./routes/search`);
-const categoriesRouter = require(`./routes/categories`);
+const articlesRouter = require(`./articles`);
+const searchRouter = require(`./search`);
+const categoriesRouter = require(`./categories`);
 
 /**
  * Include services
  */
-const ArticleService = require(`./data-services/article`);
-const CommentService = require(`./data-services/comment`);
-const CategoryService = require(`./data-services/category`);
-const posts = require(`./data/posts`);
-const categories = require(`./data/categories`);
+const ArticleService = require(`../data-services/article`);
+const CommentService = require(`../data-services/comment`);
+const CategoryService = require(`../data-services/category`);
+const posts = require(`../data/posts`);
+const categories = require(`../data/categories`);
 
 (async () => {
   /**

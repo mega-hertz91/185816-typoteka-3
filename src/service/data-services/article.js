@@ -3,7 +3,7 @@
 const {
   findById,
   getNowDate
-} = require(`../../../utils`);
+} = require(`../../utils`);
 const {nanoid} = require(`nanoid`);
 
 class Article {
