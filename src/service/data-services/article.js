@@ -6,7 +6,7 @@ const {
 } = require(`../../utils`);
 const {nanoid} = require(`nanoid`);
 
-class Article {
+class ArticleService {
   constructor(articles) {
     this._articles = articles;
   }
@@ -62,4 +62,4 @@ class Article {
   }
 }
 
-module.exports = Article;
+module.exports = ArticleService;

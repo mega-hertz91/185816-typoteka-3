@@ -12,6 +12,7 @@ const categoriesRouter = require(`./categories`);
 const ArticleService = require(`../data-services/article`);
 const CommentService = require(`../data-services/comment`);
 const CategoryService = require(`../data-services/category`);
+const SeachService = require(`../data-services/search`);
 const posts = require(`../data/posts`);
 const categories = require(`../data/categories`);
 
@@ -26,7 +27,7 @@ const categories = require(`../data/categories`);
    * Inject routes API
    */
   articlesRouter(app, new ArticleService(articlesMock), new CommentService(articlesMock));
-  searchRouter(app, new ArticleService(articlesMock));
+  searchRouter(app, new SeachService(articlesMock));
   categoriesRouter(app, new CategoryService(categoriesMock));
 })();
 
