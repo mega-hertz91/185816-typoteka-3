@@ -5,12 +5,12 @@ const {
 } = require(`../../constants`);
 const {Router} = require(`express`);
 const router = new Router();
-const checkQuery = require(`../middlewares/check-query-search`);
+const checkQueryMiddleware = require(`../middlewares/check-query-search`);
 
 module.exports = (app, Search) => {
   app.use(`/search`, router);
 
-  router.get(`/`, checkQuery, (req, res) => {
+  router.get(`/`, checkQueryMiddleware, (req, res) => {
     try {
       const articles = Search.getAll(req.query.query);
 

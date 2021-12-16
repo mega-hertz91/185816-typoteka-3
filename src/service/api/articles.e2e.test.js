@@ -17,9 +17,12 @@ const createAPI = () => {
   return app;
 };
 
-const app = createAPI();
-
+/**
+ * Testing get all
+ */
 describe(`API returns articles list`, () => {
+  const app = createAPI();
+
   let response;
 
   beforeAll(async () => {
@@ -29,22 +32,133 @@ describe(`API returns articles list`, () => {
 
   test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
   test(`1 article found`, () => expect(response.body.length).toBe(1));
-  test(`Article has correct id`, () => expect(response.body[0].id).toBe(`u4P6tgLb4t-Y3Aoe18fIh`));
+  test(`Article has correct id`, () => expect(response.body[0].id).toBe(`W1FLyUKWnoUsfm8nUxRjj`));
 });
 
+/**
+ * Testing get by id
+ */
 describe(`API returns article by id`, () => {
+  const app = createAPI();
+
   let response;
 
   beforeAll(async () => {
     response = await request(app)
-      .get(`/articles/u4P6tgLb4t-Y3Aoe18fIh`)
+      .get(`/articles/W1FLyUKWnoUsfm8nUxRjj`)
   });
 
   test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
 });
 
-test(`API returns code 404 if not found category`,
-  () => request(app)
-    .get(`/categories/MsDDjTD-Ac1CHeVZJqAh6`)
+
+/**
+ * Testing get by id
+ */
+test(`API refuses to delete non-existent comment`, () => {
+  const app = createAPI();
+
+  return request(app)
+    .get(`/articles/MsDDjTD-Ac1CHeVZJqAh6`)
     .expect(ResponseStatus.NOT_FOUND)
+});
+
+/**
+ * Testing create new article
+ */
+describe(`API create article`, () => {
+  const app = createAPI();
+  let response;
+
+  const newArticle = {
+    title: "My article",
+    description: "This is my new article"
+  };
+
+  beforeAll(async () => {
+    response = await request(app)
+      .post(`/articles`)
+      .send(newArticle)
+  });
+
+  test(`Status code 201`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS_CREATE));
+});
+
+
+test(`API returns code 400 bad request`, () => {
+    const app = createAPI();
+
+    return request(app)
+      .post(`/articles`)
+      .send({})
+      .expect(ResponseStatus.BAD_REQUEST)
+  }
 );
+
+/**
+ * Testing delete article by id
+ */
+describe(`API delete article`, () => {
+  const app = createAPI();
+
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .delete(`/articles/W1FLyUKWnoUsfm8nUxRjj`)
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
+});
+
+test(`API returns code 404 if not found article`, () => {
+    const app = createAPI();
+
+    return request(app)
+      .get(`/articles/MsDDjTD-Ac1CHeVZJqAh6`)
+      .expect(ResponseStatus.NOT_FOUND)
+  }
+);
+
+/**
+ * Update article by id
+ */
+describe(`API delete article`, () => {
+  const app = createAPI();
+
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .put(`/articles/W1FLyUKWnoUsfm8nUxRjj`)
+      .send({
+        title: "New title for article"
+      })
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.NOT_FOUND));
+});
+
+
+test(`API returns code 400 bad request`, () => {
+    const app = createAPI();
+
+    return request(app)
+      .put(`/articles/W1FLyUKWnoUsfm8nUxRjj`)
+      .send({})
+      .expect(ResponseStatus.BAD_REQUEST)
+  }
+);
+
+test(`API returns code 404 if not found article`, () => {
+    const app = createAPI();
+
+    return request(app)
+      .get(`/articles/MsDDjTD-Ac1CHeVZJqAh6`)
+      .expect(ResponseStatus.NOT_FOUND)
+  }
+);
+
+/**
+ * Testing get all comments by article id
+ */

@@ -4,6 +4,7 @@ const {
   ResponseStatus
 } = require(`../../constants`);
 const {Router} = require(`express`);
+const validateRequestMIddleware = require(`../middlewares/validate-request-body`);
 
 
 module.exports = (app, Article, Comment) => {
@@ -42,7 +43,7 @@ module.exports = (app, Article, Comment) => {
     }
   });
 
-  router.post(`/`, (req, res) => {
+  router.post(`/`, validateRequestMIddleware, (req, res) => {
     try {
       const article = Article.create(req.body);
       res
@@ -78,7 +79,7 @@ module.exports = (app, Article, Comment) => {
   /**
    * Update article by ID
    */
-  router.put(`/:articleId`, (req, res) => {
+  router.put(`/:articleId`, validateRequestMIddleware, (req, res) => {
     try {
       const article = Article.update(req.body, req.params.articleId);
       if (article) {
