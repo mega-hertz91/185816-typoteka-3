@@ -24,6 +24,11 @@ const Prefix = {
   API: `/api`
 };
 
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`
+};
+
 const DATES = [
   `2021-03-01 01:10:00`,
   `2021-03-21 01:11:00`,
@@ -50,5 +55,6 @@ module.exports = {
   DEFAULT_PORT,
   Prefix,
   Entity,
-  ResponseStatus
+  ResponseStatus,
+  Env
 };
