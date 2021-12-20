@@ -26,7 +26,7 @@ describe(`API returns articles based on search query`, () => {
     response = await request(app)
       .get(`/search`)
       .query({
-        query: `Самый лучший музыкальный альбом этого год`
+        query: `Как`
       });
   });
 
@@ -41,7 +41,7 @@ test(`API returns code 404 if nothing is found`, () => {
     return request(app)
       .get(`/search`)
       .query({
-        query: `Продам свою душу`
+        query: `Not found`
       })
       .expect(ResponseStatus.NOT_FOUND)
   }

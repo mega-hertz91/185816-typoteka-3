@@ -18,6 +18,90 @@ const createAPI = () => {
 };
 
 /**
+ * Testing get all comments by article id
+ */
+
+describe(`API get all comments by article id`, () => {
+  const app = createAPI();
+
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .get(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments`)
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
+});
+
+test(`API returns code 404 if not found comments by article`, () => {
+    const app = createAPI();
+
+    return request(app)
+      .get(`/articles/MsDDjTD-Ac1CHeVZJqAh6/comments`)
+      .expect(ResponseStatus.NOT_FOUND)
+  }
+);
+
+/**
+ * Testing create comments by article id
+ */
+
+describe(`API create comment by article id`, () => {
+  const app = createAPI();
+
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .post(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments`)
+      .send({
+        title: "new article",
+        author: "ibabushkin",
+        text: "new my comment"
+      })
+  });
+
+  test(`Status code 201`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS_CREATE));
+});
+
+test(`API returns code 400 bad request in create comment`, () => {
+    const app = createAPI();
+
+    return request(app)
+      .post(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments`)
+      .send({})
+      .expect(ResponseStatus.BAD_REQUEST)
+  }
+);
+
+/**
+ * Testing delete comment by article id
+ */
+
+describe(`API delete comment by article id`, () => {
+  const app = createAPI();
+
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .delete(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments/b9OI6FfegJXfnHP0fefJk`)
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
+});
+
+test(`API returns code 404 not found comment`, () => {
+    const app = createAPI();
+
+    return request(app)
+      .delete(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments/b9OI6FfegJXfnHP0fefJR`)
+      .expect(ResponseStatus.NOT_FOUND)
+  }
+);
+
+/**
  * Testing get all
  */
 describe(`API returns articles list`, () => {
@@ -159,6 +243,4 @@ test(`API returns code 404 if not found article`, () => {
   }
 );
 
-/**
- * Testing get all comments by article id
- */
+

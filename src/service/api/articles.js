@@ -4,7 +4,7 @@ const {
   ResponseStatus
 } = require(`../../constants`);
 const {Router} = require(`express`);
-const validateRequestMIddleware = require(`../middlewares/validate-request-body`);
+const validateRequestMiddleware = require(`../middlewares/validate-request-body`);
 
 
 module.exports = (app, Article, Comment) => {
@@ -43,7 +43,7 @@ module.exports = (app, Article, Comment) => {
     }
   });
 
-  router.post(`/`, validateRequestMIddleware, (req, res) => {
+  router.post(`/`, validateRequestMiddleware, (req, res) => {
     try {
       const article = Article.create(req.body);
       res
@@ -79,7 +79,7 @@ module.exports = (app, Article, Comment) => {
   /**
    * Update article by ID
    */
-  router.put(`/:articleId`, validateRequestMIddleware, (req, res) => {
+  router.put(`/:articleId`, validateRequestMiddleware, (req, res) => {
     try {
       const article = Article.update(req.body, req.params.articleId);
       if (article) {
@@ -104,7 +104,7 @@ module.exports = (app, Article, Comment) => {
       const article = Article.getById(req.params.articleId);
 
       if (article.attributes) {
-        res.json(article.attributes.comments);
+        res.send(article.attributes.comments);
       } else {
         res
           .status(ResponseStatus.NOT_FOUND)
@@ -120,7 +120,7 @@ module.exports = (app, Article, Comment) => {
   /**
    * Create comment by article ID
    */
-  router.post(`/:articleId/comments`, (req, res) => {
+  router.post(`/:articleId/comments`, validateRequestMiddleware, (req, res) => {
     try {
       const comment = Comment.create(req.params.articleId, req.body);
       res
@@ -139,9 +139,15 @@ module.exports = (app, Article, Comment) => {
   router.delete(`/:articleId/comments/:commentId`, (req, res) => {
     try {
       const comment = Comment.delete(req.params.articleId, req.params.commentId);
-      res
-        .status(ResponseStatus.SUCCESS_CREATE)
-        .send(comment);
+      if (comment.attributes) {
+        res
+          .status(ResponseStatus.SUCCESS)
+          .send(comment.attributes);
+      } else {
+        res
+          .status(ResponseStatus.NOT_FOUND)
+          .send(`Comment not found`);
+      }
     } catch (e) {
       res
         .status(ResponseStatus.INTERNAL_ERROR)
