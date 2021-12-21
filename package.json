@@ -6,20 +6,27 @@
   "dependencies": {
     "body-parser": "1.19.0",
     "chalk": "4.0.0",
+    "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "express": "4.17.1",
     "nanoid": "3.1.30",
+    "pino": "7.5.1",
     "pug": "3.0.2"
   },
   "devDependencies": {
     "eslint": "8.2.0",
     "eslint-config-htmlacademy": "5.0.0",
-    "nodemon": "2.0.5"
+    "jest": "27.4.5",
+    "nodemon": "2.0.5",
+    "pino-pretty": "7.3.0",
+    "supertest": "6.1.6"
   },
   "scripts": {
-    "test": "npm run eslint",
+    "test": "npm run eslint && npm run jest",
+    "jest": "jest",
     "eslint": "eslint --ext .js src/",
-    "start": "node ./src/service/service.js --generate 35 && nodemon ./src/service/service.js --server",
+    "start": "cross-env NODE_ENV=production node ./src/service/service.js --server",
+    "start::debug": "cross-env NODE_ENV=development nodemon ./src/service/service.js --server",
     "dev": "nodemon ./src/express/express.js"
   },
   "repository": {

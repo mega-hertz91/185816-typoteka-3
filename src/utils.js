@@ -74,7 +74,8 @@ const findById = (items, id) => {
 };
 
 /**
- * Get date now
+ *
+ * @return {string}
  */
 const getNowDate = () => {
   const date = new Date(Date.now());

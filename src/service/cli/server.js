@@ -1,14 +1,16 @@
 'use strict';
 
-const express = require(`express`);
-const app = express();
-const bodyParser = require(`body-parser`);
-const apiRoutes = require(`../api/index`);
-
 const {
   DEFAULT_PORT,
   Prefix
 } = require(`../../constants`);
+
+const express = require(`express`);
+const app = express();
+const bodyParser = require(`body-parser`);
+const apiRoutes = require(`../api/index`);
+const {getLogger} = require(`../lib/logger`);
+const logger = getLogger({name: `api`});
 
 
 module.exports = {
@@ -29,15 +31,34 @@ module.exports = {
       app.disable(`x-powered-by`);
 
       /**
+       * Add middlewares
+       */
+      app.use((err, _req, _res, _next) => {
+        logger.error(`An error occurred on processing request: ${err.message}`);
+      });
+
+      app.use((req, res, next) => {
+        logger.debug(`Request on route ${req.url}`);
+        res.on(`finish`, () => {
+          logger.info(`Response status code ${res.statusCode}`);
+        });
+        next();
+      });
+
+      /**
        * Add routers
        */
       app.use(Prefix.API, apiRoutes);
 
-      app.listen(port, () => {
-        console.log(`Server started localhost:${port}`);
+      app.listen(port, (e) => {
+        if (e) {
+          return logger.err(`An error occurred on server creation: ${e.message}`);
+        }
+
+        return logger.info(`Server started localhost:${port}`);
       });
     } catch (e) {
-      console.log(e);
+      logger.error(`An error occurred: ${e.message}`);
       process.exit();
     }
   }

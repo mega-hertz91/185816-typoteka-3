@@ -2,26 +2,32 @@
 
 const {
   ResponseStatus
-} = require(`../../../constants`);
+} = require(`../../constants`);
+const {Router} = require(`express`);
+const validateRequestMiddleware = require(`../middlewares/validate-request-body`);
 
-const Article = require(`../data-services/article`);
-const Comment = require(`../data-services/comment`);
 
-class PostsController {
-  async getAll(req, res) {
+module.exports = (app, Article, Comment) => {
+  const router = new Router();
+  app.use(`/articles`, router);
+
+  /**
+   * CRUD routes
+   */
+  router.get(`/`, (req, res) => {
     try {
-      const articles = await Article.getAll();
+      const articles = Article.getAll();
       res.send(articles);
     } catch (e) {
       res
         .status(ResponseStatus.INTERNAL_ERROR)
         .send(e.message);
     }
-  }
+  });
 
-  async getById(req, res) {
+  router.get(`/:articleId`, (req, res) => {
     try {
-      const article = await Article.getById(req.params.articleId);
+      const article = Article.getById(req.params.articleId);
 
       if (article.attributes) {
         res.json(article.attributes);
@@ -35,11 +41,11 @@ class PostsController {
         .status(ResponseStatus.INTERNAL_ERROR)
         .send(e.message);
     }
-  }
+  });
 
-  async create(req, res) {
+  router.post(`/`, validateRequestMiddleware, (req, res) => {
     try {
-      const article = await Article.create(req.body);
+      const article = Article.create(req.body);
       res
         .status(ResponseStatus.SUCCESS_CREATE)
         .send(article);
@@ -48,11 +54,14 @@ class PostsController {
         .status(ResponseStatus.INTERNAL_ERROR)
         .send(e.message);
     }
-  }
+  });
 
-  async update(req, res) {
+  /**
+   * Delete article by ID
+   */
+  router.delete(`/:articleId`, (req, res) => {
     try {
-      const article = await Article.update(req.body, req.params.articleId);
+      const article = Article.delete(req.params.articleId);
       if (article) {
         res.send(article);
       } else {
@@ -65,11 +74,14 @@ class PostsController {
         .status(ResponseStatus.INTERNAL_ERROR)
         .send(e.message);
     }
-  }
+  });
 
-  async delete(req, res) {
+  /**
+   * Update article by ID
+   */
+  router.put(`/:articleId`, validateRequestMiddleware, (req, res) => {
     try {
-      const article = await Article.delete(req.params.articleId);
+      const article = Article.update(req.body, req.params.articleId);
       if (article) {
         res.send(article);
       } else {
@@ -82,14 +94,17 @@ class PostsController {
         .status(ResponseStatus.INTERNAL_ERROR)
         .send(e.message);
     }
-  }
+  });
 
-  async getCommentsById(req, res) {
+  /**
+   * Get all comment by article ID
+   */
+  router.get(`/:articleId/comments`, (req, res) => {
     try {
-      const article = await Article.getById(req.params.articleId);
+      const article = Article.getById(req.params.articleId);
 
       if (article.attributes) {
-        res.json(article.attributes.comments);
+        res.send(article.attributes.comments);
       } else {
         res
           .status(ResponseStatus.NOT_FOUND)
@@ -100,11 +115,14 @@ class PostsController {
         .status(ResponseStatus.INTERNAL_ERROR)
         .send(e.message);
     }
-  }
+  });
 
-  async createCommentById(req, res) {
+  /**
+   * Create comment by article ID
+   */
+  router.post(`/:articleId/comments`, validateRequestMiddleware, (req, res) => {
     try {
-      const comment = await Comment.create(req.params.articleId, req.body);
+      const comment = Comment.create(req.params.articleId, req.body);
       res
         .status(ResponseStatus.SUCCESS_CREATE)
         .send(comment);
@@ -113,20 +131,27 @@ class PostsController {
         .status(ResponseStatus.INTERNAL_ERROR)
         .send(e.message);
     }
-  }
+  });
 
-  async deleteCommentById(req, res) {
+  /**
+   * Delete comment by ID in article ID
+   */
+  router.delete(`/:articleId/comments/:commentId`, (req, res) => {
     try {
-      const comment = await Comment.delete(req.params.articleId, req.params.commentId);
-      res
-        .status(ResponseStatus.SUCCESS_CREATE)
-        .send(comment);
+      const comment = Comment.delete(req.params.articleId, req.params.commentId);
+      if (comment.attributes) {
+        res
+          .status(ResponseStatus.SUCCESS)
+          .send(comment.attributes);
+      } else {
+        res
+          .status(ResponseStatus.NOT_FOUND)
+          .send(`Comment not found`);
+      }
     } catch (e) {
       res
         .status(ResponseStatus.INTERNAL_ERROR)
         .send(e.message);
     }
-  }
-}
-
-module.exports = new PostsController();
+  });
+};

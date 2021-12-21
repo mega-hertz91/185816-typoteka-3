@@ -9,7 +9,8 @@ const ResponseStatus = {
   SUCCESS: 200,
   SUCCESS_CREATE: 201,
   NOT_FOUND: 404,
-  INTERNAL_ERROR: 500
+  INTERNAL_ERROR: 500,
+  BAD_REQUEST: 400
 };
 
 const Entity = {
@@ -21,6 +22,11 @@ const Entity = {
 
 const Prefix = {
   API: `/api`
+};
+
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`
 };
 
 const DATES = [
@@ -49,5 +55,6 @@ module.exports = {
   DEFAULT_PORT,
   Prefix,
   Entity,
-  ResponseStatus
+  ResponseStatus,
+  Env
 };
