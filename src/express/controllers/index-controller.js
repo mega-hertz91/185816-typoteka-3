@@ -1,8 +1,12 @@
 'use strict';
 
+const api = require(`../api`);
+
 class IndexController {
-  index(req, res) {
-    res.render(`index/main`);
+  async index(req, res) {
+    const articles = await api.getAPI().getArticles();
+
+    res.render(`index/main`, {articles});
   }
 }
 
