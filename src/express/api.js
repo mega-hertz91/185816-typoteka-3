@@ -19,15 +19,15 @@ class API {
     return response.data;
   }
 
-  getArticles() {
+  async getArticles() {
     return this._load(`/articles`);
   }
 
-  getArticleById(id) {
+  async getArticleById(id) {
     return this._load(`/articles/${id}`);
   }
 
-  getCategories() {
+  async getCategories() {
     return this._load(`/categories`);
   }
 

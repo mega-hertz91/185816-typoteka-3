@@ -13,6 +13,7 @@ const myRouter = require(`./routes/my`);
 const articlesRouter = require(`./routes/articles`);
 const categoriesRouter = require(`./routes/categories`);
 const searchRouter = require(`./routes/search`);
+const notFoundRouter = require(`./routes/not-found`);
 
 app.disable(`x-powered-by`);
 
@@ -37,6 +38,7 @@ app.use(myRouter);
 app.use(articlesRouter);
 app.use(categoriesRouter);
 app.use(searchRouter);
+app.use(notFoundRouter);
 
 app.listen(DEFAULT_PORT, () => {
   console.log(`Server listen localhost:${DEFAULT_PORT}`);
