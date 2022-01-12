@@ -22,6 +22,18 @@ class API {
   getArticles() {
     return this._load(`/articles`);
   }
+
+  getArticleById(id) {
+    return this._load(`/articles/${id}`);
+  }
+
+  getCategories() {
+    return this._load(`/categories`);
+  }
+
+  search(query) {
+    return this._load(`/search/`, {params: {query}});
+  }
 }
 
 const defaultAPI = new API(defaultUrl, TIMEOUT);

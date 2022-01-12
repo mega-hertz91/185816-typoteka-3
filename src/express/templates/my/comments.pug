@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  section.main-page__publication.publication
+    h1.publication__title &Kcy;&ocy;&mcy;&mcy;&iecy;&ncy;&tcy;&acy;&rcy;&icy;&icy;
+    ul.publication__list
+      each comment in comments
+        li.publication__list-item
+          .publication__header
+            img.publication__list-image(src='/img/avatar-small-2.png' width='20' height='20' alt='Аватар пользователя')
+            b.publication__list-name &Acy;&lcy;&iecy;&kcy;&scy;&acy;&ncy;&dcy;&rcy; &Pcy;&iecy;&tcy;&rcy;&ocy;&vcy;
+            time.publication__item-time(datetime='#{comment.date}') #{comment.date}
+          a.publication__item-text(href='#') #{comment.title}
+          p.publication__text-strong #{comment.text}
+          button.publication__button.button.button--close-item(type='button')
+            span.visually-hidden &Zcy;&acy;&kcy;&rcy;&ycy;&tcy;&softcy; &scy;&tcy;&rcy;&ocy;&kcy;&ucy; &scy;&pcy;&icy;&scy;&kcy;&acy;
+

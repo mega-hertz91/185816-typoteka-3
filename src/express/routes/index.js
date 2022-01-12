@@ -2,8 +2,12 @@
 
 const {Router} = require(`express`);
 const router = new Router();
-const IndexController = require(`../controllers/index-controller`);
+const api = require(`../api`);
 
-router.get(`/`, IndexController.index);
+router.get(`/`, async (req, res) => {
+  const articles = await api.getAPI().getArticles();
+
+  res.render(`index/main`, {articles});
+});
 
 module.exports = router;
