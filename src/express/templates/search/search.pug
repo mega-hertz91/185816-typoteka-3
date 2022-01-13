@@ -5,8 +5,16 @@ block content
     .search-page__wrapper
       h1 &Pcy;&ocy;&icy;&scy;&kcy;
       .search.search-page__form
-        form(action='#' method='get')
+        form(action='/search' method='get')
           label
-            input(type='text' name='query' placeholder='Что ищем?')
+            input(type='text' name='query' placeholder='Что ищем?' value=query)
           button.search__button.button.button--transparent(type='submit') &Ncy;&acy;&jcy;&tcy;&icy;
+
+      section.main-page__publication.publication
+        if result
+          ul.publication__list
+            each item in result
+              li #{item.title}
+        else
+          p Результатов по вашему запросу нет :-(
 
