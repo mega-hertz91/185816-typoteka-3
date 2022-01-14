@@ -1,10 +1,13 @@
 'use strict';
 
 const DEFAULT_PORT = 8080;
-const STATIC_DIR = `public`;
+const Dir = {
+  PUBLIC: `public`,
+  UPLOAD: `upload`
+};
 
 module.exports = {
   DEFAULT_PORT,
-  STATIC_DIR
+  Dir
 };
 

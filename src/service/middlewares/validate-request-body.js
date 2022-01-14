@@ -7,10 +7,11 @@ const {
 module.exports = (req, res, next) => {
   const attributes = Object.values(req.body);
   if (attributes.length === 0) {
+    console.log(attributes);
     res
       .status(ResponseStatus.BAD_REQUEST)
       .send(`Bad request`);
+  } else {
+    next();
   }
-
-  next();
 };

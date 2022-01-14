@@ -102,10 +102,13 @@ block content
           h3.preview__name
             a.preview__name-link(href='#') #{article.title}
           p.preview__text #{article.announce}
-          a.preview__comment(href='#')
-            | &Kcy;&ocy;&mcy;&mcy;&iecy;&ncy;&tcy;&acy;&rcy;&icy;&icy;
-            span.preview__cloud
-            b.preview__comment-count #{article.comments.length}
+          if article.comments
+            a.preview__comment(href='#')
+              | &Kcy;&ocy;&mcy;&mcy;&iecy;&ncy;&tcy;&acy;&rcy;&icy;&icy;
+              span.preview__cloud
+              b.preview__comment-count #{article.comments.length}
+
+
   .preview__toggle-wrapper
     ul.preview__pagination.pagination
       li

@@ -4,7 +4,7 @@ block content
   section
     .popup.popup--new-publication.popup--anti
       .new-publication
-        form(action='#' method='POST')
+        form(action='/articles/add' method='POST' enctype='multipart/form-data')
           .new-publication__header
             h1 Новая публикация
             .new-publication__date-form
@@ -32,13 +32,16 @@ block content
                 button.button.button--transparent Удалить
               .new-publication__category-wrapper
                 .new-publication__checkbox.new-publication__checkbox--auto
-                  input#checkbox-auto(type='checkbox' name='category-1')
+                  input#checkbox-auto(type='checkbox' name='categories[]' value='Автомобили')
                   label(for='checkbox-auto') Автомобили
+                .new-publication__checkbox.new-publication__checkbox--auto
+                  input#checkbox-music(type='checkbox' name='categories[]' value='Музыка')
+                  label(for='checkbox-music') Музыка
                 a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
             .form__wrapper.form__wrapper--text
               .form__field.form__field--publication-text
                 label
-                  textarea(rows='5' name='announcement' placeholder='Анонс публикации')
+                  textarea(rows='5' name='announce' placeholder='Анонс публикации')
               .form__field.form__field--publication-text
                 label
-                  textarea(rows='10' name='full-text' placeholder='Полный текст публикации')
+                  textarea(rows='10' name='description' placeholder='Полный текст публикации')
