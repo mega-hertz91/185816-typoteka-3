@@ -7,14 +7,7 @@ const {
 const express = require(`express`);
 const app = express();
 const path = require(`path`);
-
-const indexRouter = require(`./routes/index`);
-const authRouter = require(`./routes/auth`);
-const myRouter = require(`./routes/my`);
-const articlesRouter = require(`./routes/articles`);
-const categoriesRouter = require(`./routes/categories`);
-const searchRouter = require(`./routes/search`);
-const notFoundRouter = require(`./routes/not-found`);
+const mainRouter = require(`./routes/index`);
 
 app.disable(`x-powered-by`);
 
@@ -36,15 +29,9 @@ app.set(`view engine`, `pug`);
  */
 
 /**
- * Use routes
+ * Inject router
  */
-app.use(indexRouter);
-app.use(authRouter);
-app.use(myRouter);
-app.use(articlesRouter);
-app.use(categoriesRouter);
-app.use(searchRouter);
-app.use(notFoundRouter);
+app.use(mainRouter);
 
 app.listen(DEFAULT_PORT, () => {
   console.log(`Server listen localhost:${DEFAULT_PORT}`);

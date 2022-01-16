@@ -1,13 +1,21 @@
 'use strict';
 
 const {Router} = require(`express`);
-const router = new Router();
-const api = require(`../api`);
+const app = new Router();
+const homeRouter = require(`./home`);
+const myRouter = require(`./my`);
+const categoriesRouter = require(`./categories`);
+const articlesRouter = require(`./articles`);
+const authRouter = require(`./auth`);
+const searchRouter = require(`./search`);
 
-router.get(`/`, async (req, res) => {
-  const articles = await api.getAPI().getArticles();
+(async () => {
+  homeRouter(app);
+  myRouter(app);
+  categoriesRouter(app);
+  articlesRouter(app);
+  authRouter(app);
+  searchRouter(app);
+})();
 
-  res.render(`index/main`, {articles});
-});
-
-module.exports = router;
+module.exports = app;

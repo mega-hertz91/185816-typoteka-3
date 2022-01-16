@@ -15,31 +15,26 @@ class API {
     });
   }
 
-  async _load(url, options) {
-    const response = await this._http.request({url, ...options});
-    return response.data;
-  }
-
-  async getArticles() {
+  getArticles() {
     return this._load(`/articles`);
   }
 
-  async getArticleById(id) {
+  getArticleById(id) {
     return this._load(`/articles/${id}`);
   }
 
-  async getCategories() {
+  getCategories() {
     return this._load(`/categories`);
   }
 
-  async createArticle(data) {
+  createArticle(data) {
     return this._load(`/articles`, {
       method: Method.POST,
       data
     });
   }
 
-  async updateArticle(data) {
+  updateArticle(data) {
     return this._load(`/articles`, {
       method: Method.PUT,
       data
@@ -48,6 +43,11 @@ class API {
 
   search(query) {
     return this._load(`/search?query=${query}`);
+  }
+
+  async _load(url, options) {
+    const response = await this._http.request({url, ...options});
+    return response.data;
   }
 }
 
