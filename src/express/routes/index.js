@@ -1,9 +1,21 @@
 'use strict';
 
 const {Router} = require(`express`);
-const router = new Router();
-const IndexController = require(`../controllers/index-controller`);
+const app = new Router();
+const homeRouter = require(`./home`);
+const myRouter = require(`./my`);
+const categoriesRouter = require(`./categories`);
+const articlesRouter = require(`./articles`);
+const authRouter = require(`./auth`);
+const searchRouter = require(`./search`);
 
-router.get(`/`, IndexController.index);
+(async () => {
+  homeRouter(app);
+  myRouter(app);
+  categoriesRouter(app);
+  articlesRouter(app);
+  authRouter(app);
+  searchRouter(app);
+})();
 
-module.exports = router;
+module.exports = app;

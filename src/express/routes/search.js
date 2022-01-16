@@ -1,9 +1,34 @@
 'use strict';
 
 const {Router} = require(`express`);
-const router = new Router();
-const SearchController = require(`../controllers/search-controller`);
+const api = require(`../api`).getAPI();
 
-router.get(`/search`, SearchController.index);
+module.exports = (app) => {
+  const router = new Router();
+  app.use(`/search`, router);
 
-module.exports = router;
+  router.get(`/`, async (req, res) => {
+    const {query} = req.query;
+
+    try {
+      if (query) {
+        const result = await api.search(encodeURI(req.query.query));
+
+        res.render(`search/search`, {
+          query,
+          result
+        });
+      } else {
+        res.render(`search/search`, {
+          query: `Запрос пуст`,
+          result: false
+        });
+      }
+    } catch (e) {
+      res.render(`search/search`, {
+        query,
+        result: false
+      });
+    }
+  });
+};

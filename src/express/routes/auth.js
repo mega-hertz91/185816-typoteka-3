@@ -1,10 +1,15 @@
 'use strict';
 
 const {Router} = require(`express`);
-const router = new Router();
-const AuthController = require(`../controllers/auth-controller`);
 
-router.get(`/register`, AuthController.signUp);
-router.get(`/login`, AuthController.login);
+module.exports = (app) => {
+  const router = new Router();
+  app.use(`/`, router);
 
-module.exports = router;
+  router.get(`/register`, (req, res) => {
+    res.render(`auth/login`);
+  });
+  router.get(`/login`, (req, res) => {
+    res.render(`auth/sign-up`);
+  });
+};

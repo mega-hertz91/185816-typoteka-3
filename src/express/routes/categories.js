@@ -1,9 +1,11 @@
 'use strict';
 
 const {Router} = require(`express`);
-const router = new Router();
 const {getRequestPath} = require(`../utils`);
 
-router.get(`/categories`, getRequestPath);
+module.exports = (app) => {
+  const router = new Router();
+  app.use(`/categories`, router);
 
-module.exports = router;
+  router.get(`/`, getRequestPath);
+};

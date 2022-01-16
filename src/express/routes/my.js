@@ -1,10 +1,31 @@
 'use strict';
 
 const {Router} = require(`express`);
-const router = new Router();
-const MyController = require(`../controllers/my-controller`);
+const api = require(`../api`);
 
-router.get(`/my`, MyController.index);
-router.get(`/my/comments`, MyController.comments);
+module.exports = (app) => {
+  const router = new Router();
 
-module.exports = router;
+  app.use(`/my`, router);
+
+  router.get(`/`, async (req, res) => {
+    const articles = await api.getAPI().getArticles();
+
+    res.render(`my/my`, {articles});
+  });
+
+  router.get(`/comments`, async (req, res) => {
+    const articles = await api.getAPI().getArticles();
+    const comments = articles.map((item) => {
+      return item.comments.map((commentItem) => {
+        return {
+          title: item.title,
+          date: item.createDate,
+          text: commentItem.text
+        };
+      });
+    });
+
+    res.render(`my/comments`, {comments: comments.shift()});
+  });
+};

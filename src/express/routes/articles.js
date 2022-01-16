@@ -1,12 +1,53 @@
 'use strict';
 
 const {Router} = require(`express`);
-const router = new Router();
-const {getRequestPath} = require(`../utils`);
+const {
+  getRequestPath,
+  ensureArray
+} = require(`../utils`);
+const api = require(`../api`).getAPI();
+const multer = require(`multer`);
+const {storage} = require(`../services/multer`);
+const upload = multer({storage});
 
-router.get(`/articles/:id`, getRequestPath);
-router.get(`/articles/add`, getRequestPath);
-router.get(`/articles/edit/:id`, getRequestPath);
-router.get(`/articles/category/:id`, getRequestPath);
+module.exports = (app) => {
+  const router = new Router();
+  app.use(`/articles`, router);
 
-module.exports = router;
+  router.get(`/add`, async (req, res) => {
+    res.render(`articles/add`);
+  });
+
+  router.post(`/add`, upload.single(`upload`), async (req, res) => {
+    const {body, file} = req;
+    const data = {
+      title: body.title,
+      announce: body.announce,
+      description: body.description,
+      background: file ? file.filename : ``,
+      categories: ensureArray(body.categories)
+    };
+
+    try {
+      await api.createArticle(data);
+      res.redirect(`/my`);
+    } catch (e) {
+      res.redirect(`back`);
+    }
+  });
+
+  router.get(`/:id`, async (req, res) => {
+    res.send(`articles id`);
+  });
+
+  router.get(`/edit/:id`, async (req, res) => {
+    try {
+      const article = await api.getArticleById(req.params.id);
+      res.render(`articles/edit`, {article});
+    } catch (e) {
+      res.redirect(`/404`);
+    }
+  });
+
+  router.get(`/category/:id`, getRequestPath);
+};

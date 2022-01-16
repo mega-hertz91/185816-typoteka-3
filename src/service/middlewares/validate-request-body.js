@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
     res
       .status(ResponseStatus.BAD_REQUEST)
       .send(`Bad request`);
+  } else {
+    next();
   }
-
-  next();
 };

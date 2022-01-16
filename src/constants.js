@@ -13,6 +13,13 @@ const ResponseStatus = {
   BAD_REQUEST: 400
 };
 
+const Method = {
+  POST: `POST`,
+  GET: `GET`,
+  DELETE: `DELETE`,
+  PUT: `PUT`
+};
+
 const Entity = {
   POSTS: `/posts`,
   ARTICLES: `/articles`,
@@ -56,5 +63,6 @@ module.exports = {
   Prefix,
   Entity,
   ResponseStatus,
-  Env
+  Env,
+  Method
 };

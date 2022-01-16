@@ -26,6 +26,8 @@ class ArticleService {
       title: attributes.title,
       description: attributes.description,
       announce: attributes.announce,
+      background: attributes.background ? attributes.background : ``,
+      category: attributes.categories,
       createDate: getNowDate()
     };
 

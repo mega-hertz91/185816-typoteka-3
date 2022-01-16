@@ -14,6 +14,20 @@ module.exports = (app, Article, Comment) => {
   /**
    * CRUD routes
    */
+
+  router.post(`/`, validateRequestMiddleware, (req, res) => {
+    try {
+      const article = Article.create(req.body);
+      res
+        .status(ResponseStatus.SUCCESS_CREATE)
+        .send(article);
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
+    }
+  });
+
   router.get(`/`, (req, res) => {
     try {
       const articles = Article.getAll();
@@ -36,19 +50,6 @@ module.exports = (app, Article, Comment) => {
           .status(ResponseStatus.NOT_FOUND)
           .send(`Article not found`);
       }
-    } catch (e) {
-      res
-        .status(ResponseStatus.INTERNAL_ERROR)
-        .send(e.message);
-    }
-  });
-
-  router.post(`/`, validateRequestMiddleware, (req, res) => {
-    try {
-      const article = Article.create(req.body);
-      res
-        .status(ResponseStatus.SUCCESS_CREATE)
-        .send(article);
     } catch (e) {
       res
         .status(ResponseStatus.INTERNAL_ERROR)
