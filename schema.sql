@@ -42,7 +42,9 @@ CREATE TABLE publications
   announce    TEXT NOT NULL,
   description TEXT NOT NULL,
   public_date DATE DEFAULT ('now'),
-  preview     TEXT NOT NULL
+  preview     TEXT NOT NULL,
+  user_id     INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE comments
