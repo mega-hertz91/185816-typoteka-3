@@ -55,22 +55,13 @@ CREATE TABLE comments
   FOREIGN KEY (publication_id) REFERENCES publications (id)
 );
 
-CREATE TABLE publication_comments
-(
-  id SERIAL PRIMARY KEY,
-  publication_id INTEGER NOT NULL,
-  comment_id INTEGER NOT NULL,
-  FOREIGN KEY (publication_id) REFERENCES publications(id),
-  FOREIGN KEY (comment_id) REFERENCES comments(id)
-);
-
 CREATE TABLE publication_categories
 (
   id SERIAL PRIMARY KEY,
   publication_id INTEGER NOT NULL,
-  comment_id INTEGER NOT NULL,
+  category_id INTEGER NOT NULL,
   FOREIGN KEY (publication_id) REFERENCES publications(id),
-  FOREIGN KEY (comment_id) REFERENCES comments(id)
+  FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
 CREATE INDEX ON publications(title);
