@@ -42,7 +42,9 @@ CREATE TABLE publications
   announce    TEXT NOT NULL,
   description TEXT NOT NULL,
   public_date DATE DEFAULT ('now'),
-  preview     TEXT NOT NULL
+  preview     TEXT NOT NULL,
+  user_id     INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE comments
@@ -55,22 +57,13 @@ CREATE TABLE comments
   FOREIGN KEY (publication_id) REFERENCES publications (id)
 );
 
-CREATE TABLE publication_comments
-(
-  id SERIAL PRIMARY KEY,
-  publication_id INTEGER NOT NULL,
-  comment_id INTEGER NOT NULL,
-  FOREIGN KEY (publication_id) REFERENCES publications(id),
-  FOREIGN KEY (comment_id) REFERENCES comments(id)
-);
-
 CREATE TABLE publication_categories
 (
   id SERIAL PRIMARY KEY,
   publication_id INTEGER NOT NULL,
-  comment_id INTEGER NOT NULL,
+  category_id INTEGER NOT NULL,
   FOREIGN KEY (publication_id) REFERENCES publications(id),
-  FOREIGN KEY (comment_id) REFERENCES comments(id)
+  FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
 CREATE INDEX ON publications(title);
