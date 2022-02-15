@@ -11,6 +11,7 @@ const bodyParser = require(`body-parser`);
 const apiRoutes = require(`../api/index`);
 const {getLogger} = require(`../lib/logger`);
 const logger = getLogger({name: `api`});
+const sequelize = require(`../lib/sequelize`);
 
 
 module.exports = {
@@ -18,6 +19,8 @@ module.exports = {
   async run(args) {
     try {
       const port = await args.shift() || DEFAULT_PORT;
+      logger.info(`Trying to connect to database...`);
+      await sequelize.authenticate();
 
       /**
        * Use middleware json and url encoder
@@ -55,7 +58,8 @@ module.exports = {
           return logger.err(`An error occurred on server creation: ${e.message}`);
         }
 
-        return logger.info(`Server started localhost:${port}`);
+        logger.info(`Server started localhost:${port}`);
+        return logger.info(`Connection to database established`);
       });
     } catch (e) {
       logger.error(`An error occurred: ${e.message}`);
