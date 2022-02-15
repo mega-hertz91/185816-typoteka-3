@@ -11,7 +11,7 @@ const logger = pino({
   name: `base-logger`,
   level: process.env.LOG_LEVEL || defaultLogLevel,
   prettyPrint: isDevMode
-}, isDevMode ? process.stdout : pino.destination(LOG_FILE));
+}, isDevMode ? process.stdout : pino.destination({dest: LOG_FILE, sync: false}));
 
 module.exports = {
   logger,
