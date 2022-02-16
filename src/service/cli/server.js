@@ -21,6 +21,7 @@ module.exports = {
       const port = await args.shift() || DEFAULT_PORT;
       logger.info(`Trying to connect to database...`);
       await sequelize.authenticate();
+      await sequelize.sync({force: true});
 
       /**
        * Use middleware json and url encoder
