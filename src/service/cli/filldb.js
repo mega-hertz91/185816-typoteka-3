@@ -17,7 +17,7 @@ const chalk = require(`chalk`);
 
 const sequelize = require(`../lib/sequelize`);
 const defineModels = require(`../models/index`);
-const Aliase = require(`../models/alias`);
+const Alias = require(`../models/alias`);
 const {getLogger} = require(`../lib/logger`);
 const logger = getLogger({name: `cli`});
 
@@ -28,18 +28,20 @@ const logger = getLogger({name: `cli`});
  * @param {array} titles
  * @param {array} sentences
  * @param {array} categories
- * @param users
+ * @param {array} users
+ * @param {array} comments
  * @return {array}
  */
 
-const generateArticles = (count, titles, sentences, categories, users) => (
-  new Array(count * MULTIPLIER).fill({}).map(() => ({
+const generateArticles = (count, titles, sentences, categories, users, comments) => (
+  new Array(count).fill({}).map(() => ({
     title: titles[getRandomInt(0, titles.length - 1)],
     announce: shuffle(sentences).slice(1, 5).join(` `),
     description: shuffle(sentences).slice(1, 5).join(` `),
     createDate: DATES[getRandomInt(0, DATES.length - 1)],
     userId: getRandomInt(1, users.length - 1),
-    // category: [categories[getRandomInt(0, categories.length - 1)]],
+    // categories: [categories[getRandomInt(0, categories.length - 1)]],
+    comments: [{userId: getRandomInt(1, users.length - 1), message: comments[getRandomInt(0, comments.length - 1)]}],
   }))
 );
 
@@ -51,14 +53,6 @@ const generateUsers = (count, roles, names, emails) => {
     avatar: `avatar-1.png`,
     password: `password`,
     roleId: getRandomInt(1, roles.length - 1),
-  }));
-};
-
-const generateComments = (count, users, publications, comments) => {
-  return new Array(count * MULTIPLIER).fill({}).map(() => ({
-    userId: getRandomInt(1, users.length - 1),
-    publicationId: getRandomInt(1, publications.length - 1),
-    message: comments[getRandomInt(0, comments.length - 1)]
   }));
 };
 
@@ -84,41 +78,35 @@ const init = async (args) => {
     const emails = await readingFileByLine(path.join(path.dirname(__dirname), `/../../data/emails.txt`));
 
     const users = generateUsers(countItems, roles, names, emails);
-    const articles = generateArticles(countItems, titles, sentences, categories, users);
-    const commentItems = generateComments(countItems, users,articles, comments);
+    const articles = generateArticles(countItems, titles, sentences, categories, users, comments);
 
 
     logger.info(`Trying to connect to database...`);
     await sequelize.authenticate();
     await sequelize.sync({force: true});
 
-    const rolesCreate = Role.bulkCreate(
+    await Role.bulkCreate(
         roles.map((role) => ({name: role}))
     );
 
-    const categoriesCreate = Category.bulkCreate(
+    await Category.bulkCreate(
         categories.map((category) => ({name: category}))
     );
 
-    const usersCreate = User.bulkCreate(
+    await User.bulkCreate(
         users
     );
 
-    const publicationsCreate = Publication.bulkCreate(
-        articles
-    );
+    const articlePromises = articles.map(async (article) => {
+      await Publication.create(article, {include: Alias.COMMENTS});
+    });
 
-    const commentsCreate = Comment.bulkCreate(
-        commentItems
-    );
+    await Promise.all(articlePromises);
 
-    const promises = [rolesCreate, categoriesCreate, usersCreate, publicationsCreate, commentsCreate];
-
-    await Promise.all(promises);
 
     console.log(chalk.green(`Create ${count ? count : `one`} items`));
   } catch (e) {
-    console.log(chalk.red(e.message));
+    console.error(e);
   }
 };
 
