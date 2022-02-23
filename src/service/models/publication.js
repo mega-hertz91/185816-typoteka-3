@@ -19,7 +19,7 @@ const define = (sequelize) => Publication.init({
   },
   preview: {
     type: DataTypes.TEXT,
-    allowNull: false
+    allowNull: true
   },
   userId: {
     type: DataTypes.INTEGER,

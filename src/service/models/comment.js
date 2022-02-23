@@ -7,11 +7,11 @@ class Comment extends Model {
 
 const define = (sequelize) => Comment.init({
   userId: {
-    type: DataTypes.INEGER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   publicationId: {
-    type: DataTypes.INEGER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   message: {

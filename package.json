@@ -33,7 +33,7 @@
     "start": "cross-env NODE_ENV=production node -r dotenv/config ./src/service/service.js --server",
     "start::debug": "cross-env NODE_ENV=development nodemon -r dotenv/config ./src/service/service.js --server",
     "dev": "nodemon ./src/express/express.js",
-    "generate": "cross-env NODE_ENV=development node -r dotenv/config ./src/service/service.js --generate 10"
+    "filldb": "cross-env NODE_ENV=development node -r dotenv/config ./src/service/service.js --filldb"
   },
   "repository": {
     "type": "git",

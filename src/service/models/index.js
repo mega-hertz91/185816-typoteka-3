@@ -1,12 +1,12 @@
 'use strict';
 
+const {Model} = require(`sequelize`);
 const Alias = require(`./alias`);
 const defineRole = require(`./role`);
 const defineUser = require(`./user`);
 const defineCategory = require(`./categiry`);
 const definePublication = require(`./publication`);
 const defineComment = require(`./comment`);
-const definePublicationCategories = require(`./publication-categories`);
 
 const define = (sequelize) => {
   /**
@@ -17,7 +17,15 @@ const define = (sequelize) => {
   const User = defineUser(sequelize);
   const Publication = definePublication(sequelize);
   const Comment = defineComment(sequelize);
-  const PublicationCategories = definePublicationCategories(sequelize);
+
+  class PublicationCategories extends Model {
+  }
+
+  PublicationCategories.init({}, {
+    sequelize,
+    modelName: `PublicationCategories`,
+    tableName: `publication_categories`
+  });
 
   /**
    * Init relationships
@@ -43,7 +51,7 @@ const define = (sequelize) => {
     foreignKey: `userId`,
   });
 
-  Publication.hasMany(Publication, {
+  Publication.hasMany(Comment, {
     as: Alias.COMMENTS,
     foreignKey: `publicationId`,
     onDelete: `cascade`
@@ -54,16 +62,16 @@ const define = (sequelize) => {
   });
 
   Category.belongsToMany(Publication, {
-    through: `publicationCategories`,
+    through: PublicationCategories,
     as: Alias.PUBLICATIONS
   });
 
   Publication.belongsToMany(Category, {
-    through: `publicationCategory`,
+    through: PublicationCategories,
     as: Alias.CATEGORIES
   });
 
-  return {Category, Role, User, Publication, Comment, PublicationCategories};
+  return {Category, Role, User, Publication, Comment};
 };
 
 module.exports = define;

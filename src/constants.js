@@ -13,6 +13,8 @@ const ResponseStatus = {
   BAD_REQUEST: 400
 };
 
+const MULTIPLIER = 10;
+
 const Method = {
   POST: `POST`,
   GET: `GET`,
@@ -64,5 +66,6 @@ module.exports = {
   Entity,
   ResponseStatus,
   Env,
-  Method
+  Method,
+  MULTIPLIER
 };
