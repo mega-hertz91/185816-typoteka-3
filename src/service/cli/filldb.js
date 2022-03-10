@@ -2,8 +2,7 @@
 
 const {
   DEFAULT_COUNT,
-  DATES,
-  MULTIPLIER
+  DATES
 } = require(`../../constants`);
 
 const {
@@ -40,7 +39,6 @@ const generateArticles = (count, titles, sentences, categories, users, comments)
     description: shuffle(sentences).slice(1, 5).join(` `),
     createDate: DATES[getRandomInt(0, DATES.length - 1)],
     userId: getRandomInt(1, users.length - 1),
-    // categories: [categories[getRandomInt(0, categories.length - 1)]],
     comments: [{userId: getRandomInt(1, users.length - 1), message: comments[getRandomInt(0, comments.length - 1)]}],
   }))
 );
@@ -66,7 +64,7 @@ const init = async (args) => {
   const [count] = args;
   const countItems = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
-  const {Category, Publication, User, Role, Comment} = defineModels(sequelize);
+  const {Category, Publication, User, Role} = defineModels(sequelize);
 
   try {
     const titles = await readingFileByLine(path.join(path.dirname(__dirname), `/../../data/titles.txt`));
