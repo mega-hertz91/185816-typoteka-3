@@ -16,8 +16,9 @@ module.exports = (app, PublicationDataService) => {
    * @return {Array}
    */
   router.get(`/`, async (req, res) => {
+    const {categories, comments} = req.query;
     try {
-      const items = await PublicationDataService.getAll();
+      const items = await PublicationDataService.getAll({categories, comments});
 
       res.send(items);
     } catch (e) {

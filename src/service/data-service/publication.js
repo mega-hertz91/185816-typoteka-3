@@ -1,15 +1,30 @@
 'use strict';
 
+const aliases = require(`../models/alias`);
+
 class PublicationService {
   constructor(sequelize) {
     this._Publication = sequelize.models.Publication;
   }
 
   /**
+   * @param {object} extension
    * @return {Promise}
    */
-  getAll() {
-    return this._Publication.findAll();
+  getAll(extension) {
+    const includes = [];
+
+    if (extension.comments) {
+      includes.push(aliases.COMMENTS);
+    }
+
+    if (extension.categories) {
+      includes.push(aliases.CATEGORIES);
+    }
+
+    return this._Publication.findAll({
+      include: includes
+    });
   }
 
   /**

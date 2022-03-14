@@ -10,6 +10,7 @@ module.exports = (app) => {
 
   router.get(`/`, async (req, res) => {
     const articles = await api.getAPI().getArticles();
+    console.log(articles);
 
     res.render(`index/main`, {articles});
   });

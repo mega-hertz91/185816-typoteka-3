@@ -16,11 +16,16 @@ class API {
   }
 
   getArticles() {
-    return this._load(`/articles`);
+    return this._load(`/publications`, {
+      params: {
+        comments: true,
+        categories: true
+      }
+    });
   }
 
   getArticleById(id) {
-    return this._load(`/articles/${id}`);
+    return this._load(`/publications/${id}`);
   }
 
   getCategories() {
@@ -28,14 +33,14 @@ class API {
   }
 
   createArticle(data) {
-    return this._load(`/articles`, {
+    return this._load(`/publications`, {
       method: Method.POST,
       data
     });
   }
 
   updateArticle(data) {
-    return this._load(`/articles`, {
+    return this._load(`/publications`, {
       method: Method.PUT,
       data
     });
