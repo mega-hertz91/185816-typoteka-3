@@ -1,5 +1,7 @@
 'use strict';
 
+const {Op} = require(`sequelize`);
+
 class SearchDataService {
   constructor(sequelize) {
     this._Publication = sequelize.models.Publication;
@@ -11,7 +13,11 @@ class SearchDataService {
    */
   search(title) {
     return this._Publication.findAll({
-      where: {title}
+      where: {
+        title: {
+          [Op.like]: `%${title}%`
+        }
+      }
     });
   }
 }

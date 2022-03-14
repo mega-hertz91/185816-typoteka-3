@@ -6,7 +6,7 @@ const {
 const {Router} = require(`express`);
 
 
-module.exports = (app, PublicationService) => {
+module.exports = (app, PublicationDataService) => {
   const router = new Router();
   app.use(`/publications`, router);
 
@@ -17,7 +17,7 @@ module.exports = (app, PublicationService) => {
    */
   router.get(`/`, async (req, res) => {
     try {
-      const items = await PublicationService.getAll();
+      const items = await PublicationDataService.getAll();
 
       res.send(items);
     } catch (e) {
@@ -34,7 +34,7 @@ module.exports = (app, PublicationService) => {
    */
   router.get(`/:id`, async (req, res) => {
     try {
-      const item = await PublicationService.getById(req.params.id);
+      const item = await PublicationDataService.getById(req.params.id);
       if (item) {
         res.send(item);
       } else {
@@ -55,7 +55,7 @@ module.exports = (app, PublicationService) => {
    */
   router.post(`/`, async (req, res) => {
     try {
-      const item = await PublicationService.create(req.body);
+      const item = await PublicationDataService.create(req.body);
 
       res
         .status(ResponseStatus.SUCCESS_CREATE)
@@ -74,7 +74,7 @@ module.exports = (app, PublicationService) => {
 
   router.put(`/:id`, async (req, res) => {
     try {
-      await PublicationService.update(req.params.id, req.body);
+      await PublicationDataService.update(req.params.id, req.body);
 
       console.log({success: true});
 
@@ -88,7 +88,7 @@ module.exports = (app, PublicationService) => {
 
   router.delete(`/:id`, async (req, res) => {
     try {
-      await PublicationService.drop(req.params.id);
+      await PublicationDataService.drop(req.params.id);
 
       res.send({success: true});
     } catch (e) {

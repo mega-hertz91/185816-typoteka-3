@@ -4,18 +4,18 @@ const {
   ResponseStatus
 } = require(`../../constants`);
 const {Router} = require(`express`);
-const router = new Router();
 const checkQueryMiddleware = require(`../middlewares/check-query-search`);
 
-module.exports = (app, Search) => {
+module.exports = (app, SearchDataService) => {
+  const router = new Router();
   app.use(`/search`, router);
 
-  router.get(`/`, checkQueryMiddleware, (req, res) => {
+  router.get(`/`, checkQueryMiddleware, async (req, res) => {
     try {
-      const articles = Search.getAll(req.query.query);
+      const items = await SearchDataService.search(req.query.query);
 
-      if (articles.length > 0) {
-        res.send(articles);
+      if (items) {
+        res.send(items);
       } else {
         res
           .status(ResponseStatus.NOT_FOUND)
