@@ -23,6 +23,7 @@ class PublicationService {
   /**
    * {title, announce, description, preview, userId}
    * @param {object} data
+   * @return {Promise}
    */
   create(data) {
     return this._Publication.create(data);
