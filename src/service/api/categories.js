@@ -4,21 +4,21 @@ const {
   ResponseStatus
 } = require(`../../constants`);
 const {Router} = require(`express`);
-const router = new Router();
 
-module.exports = (app, Category) => {
+module.exports = (app, CategoryDataService) => {
+  const router = new Router();
   app.use(`/categories`, router);
 
-  router.get(`/`, (req, res) => {
+  router.get(`/`, async (req, res) => {
     try {
-      const categories = Category.getAll();
+      const categories = await CategoryDataService.getAll();
 
-      if (categories.length > 0) {
+      if (categories) {
         res.send(categories);
       } else {
         res
           .status(ResponseStatus.NOT_FOUND)
-          .send(`Articles not found`);
+          .send(`Categories not found`);
       }
     } catch (e) {
       res
@@ -27,11 +27,11 @@ module.exports = (app, Category) => {
     }
   });
 
-  router.get(`/:categoryId`, (req, res) => {
+  router.get(`/:categoryId`, async (req, res) => {
     try {
-      const category = Category.getById(req.params.categoryId);
-      if (category.attributes) {
-        res.send(category.attributes);
+      const category = await CategoryDataService.getById(req.params.categoryId);
+      if (category) {
+        res.send(category);
       } else {
         res
           .status(ResponseStatus.NOT_FOUND)

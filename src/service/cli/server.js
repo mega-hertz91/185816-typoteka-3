@@ -12,15 +12,21 @@ const apiRoutes = require(`../api/index`);
 const {getLogger} = require(`../lib/logger`);
 const logger = getLogger({name: `api`});
 const sequelize = require(`../lib/sequelize`);
+const defineModels = require(`../models/index`);
 
+/**
+ * Initialize models
+ */
 
 module.exports = {
   name: `--server`,
   async run(args) {
     try {
       const port = await args.shift() || DEFAULT_PORT;
+      defineModels(sequelize);
       logger.info(`Trying to connect to database...`);
       await sequelize.authenticate();
+      await sequelize.sync();
 
       /**
        * Use middleware json and url encoder

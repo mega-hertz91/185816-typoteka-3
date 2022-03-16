@@ -2,33 +2,42 @@
 
 const {Router} = require(`express`);
 const app = new Router();
-const articlesRouter = require(`./articles`);
+
+/**
+ * Include routers
+ */
+const publicationsRouter = require(`./publications`);
 const searchRouter = require(`./search`);
 const categoriesRouter = require(`./categories`);
+const commentsRouter = require(`./comments`);
 
 /**
  * Include services
  */
-const ArticleService = require(`../data-services/article`);
-const CommentService = require(`../data-services/comment`);
-const CategoryService = require(`../data-services/category`);
-const SearchService = require(`../data-services/search`);
-const posts = require(`../data/posts`);
-const categories = require(`../data/categories`);
+const PublicationDataService = require(`../data-service/publication`);
+const CategoryDataService = require(`../data-service/category`);
+const SearchDataService = require(`../data-service/search`);
+const CommentDataService = require(`../data-service/comment`);
+
+/**
+ * Include models
+ */
+const sequelize = require(`../lib/sequelize`);
+const defineModels = require(`../models/index`);
 
 (async () => {
   /**
-   * add mock data
+   * Defined models
    */
-  const articlesMock = await posts();
-  const categoriesMock = await categories();
+  defineModels(sequelize);
 
   /**
    * Inject routes API
    */
-  articlesRouter(app, new ArticleService(articlesMock), new CommentService(articlesMock));
-  searchRouter(app, new SearchService(articlesMock));
-  categoriesRouter(app, new CategoryService(categoriesMock));
+  publicationsRouter(app, new PublicationDataService(sequelize));
+  searchRouter(app, new SearchDataService(sequelize));
+  categoriesRouter(app, new CategoryDataService(sequelize));
+  commentsRouter(app, new CommentDataService(sequelize));
 })();
 
 module.exports = app;
