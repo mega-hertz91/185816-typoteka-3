@@ -24,7 +24,8 @@ module.exports = (app) => {
       title: body.title,
       announce: body.announce,
       description: body.description,
-      background: file ? file.filename : ``,
+      preview: file ? file.filename : ``,
+      userId: 3,
       categories: ensureArray(body.categories)
     };
 
@@ -44,6 +45,27 @@ module.exports = (app) => {
     try {
       const article = await api.getArticleById(req.params.id);
       res.render(`articles/edit`, {article});
+    } catch (e) {
+      res.redirect(`/404`);
+    }
+  });
+
+  router.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
+    const {body, file} = req;
+    console.log(req.body);
+
+    const data = {
+      title: body.title,
+      announce: body.announce,
+      description: body.description,
+      preview: file ? file.filename : ``,
+      userId: 3,
+      categories: ensureArray(body.categories)
+    };
+
+    try {
+      await api.updateArticle(req.params.id, data);
+      res.redirect(`/articles/edit/${req.params.id}`);
     } catch (e) {
       res.redirect(`/404`);
     }

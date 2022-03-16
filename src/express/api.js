@@ -39,8 +39,8 @@ class API {
     });
   }
 
-  updateArticle(data) {
-    return this._load(`/publications`, {
+  updateArticle(id, data) {
+    return this._load(`/publications/${id}`, {
       method: Method.PUT,
       data
     });
