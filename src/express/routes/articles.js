@@ -52,7 +52,6 @@ module.exports = (app) => {
 
   router.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
     const {body, file} = req;
-    console.log(req.body);
 
     const data = {
       title: body.title,
