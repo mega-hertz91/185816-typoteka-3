@@ -16,9 +16,16 @@ module.exports = (app, PublicationDataService) => {
    * @return {Array}
    */
   router.get(`/`, async (req, res) => {
-    const {categories, comments} = req.query;
+    const {categories, comments, offset, limit} = req.query;
+
+    let items;
+
     try {
-      const items = await PublicationDataService.getAll({categories, comments});
+      if (limit || offset) {
+        items = await PublicationDataService.findPage({limit, offset});
+      } else {
+        items = await PublicationDataService.getAll({categories, comments});
+      }
 
       res.send(items);
     } catch (e) {
