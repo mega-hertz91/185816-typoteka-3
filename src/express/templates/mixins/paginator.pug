@@ -32,7 +32,7 @@ mixin pagination(page, totalPages, width, prefix)
           a.pagination__button.button.button--backwards.button--disabled(href=`#` aria-label='Страница назад') &Ncy;&acy;&zcy;&acy;&dcy;
       while i++ < end
         li.pagination__item.pagination__item--active
-          a(class={active: i === page} href=`${prefix}page=${i}`)= i
+          a(class=i === page ? 'button--disabled':'' href=i !== page ? `${prefix}page=${i}`:'#' style=i === page ? 'pointer-events: none': '')= i
       if end < totalPages
         li
           a.pagination__button.button.button--forward(href=`${prefix}page=${page + 1}` aria-label='Страница вперед') &Vcy;&pcy;&iecy;&rcy;&iecy;&dcy;
