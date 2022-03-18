@@ -15,11 +15,12 @@ class API {
     });
   }
 
-  getArticles() {
+  async getArticles({limit, offset}) {
+    console.log(limit, offset);
     return this._load(`/publications`, {
       params: {
-        comments: true,
-        categories: true
+        limit,
+        offset
       }
     });
   }

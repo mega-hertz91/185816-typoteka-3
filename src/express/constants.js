@@ -6,8 +6,11 @@ const Dir = {
   UPLOAD: `upload`
 };
 
+const PUBLICATIONS_PER_PAGE = 8;
+
 module.exports = {
   DEFAULT_PORT,
-  Dir
+  Dir,
+  PUBLICATIONS_PER_PAGE
 };
 

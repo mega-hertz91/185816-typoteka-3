@@ -1,6 +1,6 @@
 'use strict';
 
-const aliases = require(`../models/alias`);
+const Aliases = require(`../models/alias`);
 
 class PublicationService {
   constructor(sequelize) {
@@ -15,11 +15,11 @@ class PublicationService {
     const includes = [];
 
     if (extension.comments) {
-      includes.push(aliases.COMMENTS);
+      includes.push(Aliases.COMMENTS);
     }
 
     if (extension.categories) {
-      includes.push(aliases.CATEGORIES);
+      includes.push(Aliases.CATEGORIES);
     }
 
     return this._Publication.findAll({
@@ -64,6 +64,25 @@ class PublicationService {
     return this._Publication.destroy({
       where: {id}
     });
+  }
+
+  /**
+   * @param {int} limit
+   * @param {int} offset
+   * @return {Promise}
+   */
+  async findPage({limit, offset}) {
+    const {count, rows} = await this._Publication.findAndCountAll({
+      limit,
+      offset,
+      include: [Aliases.CATEGORIES, Aliases.COMMENTS],
+      order: [
+        [`createdAt`, `DESC`]
+      ],
+      distinct: true
+    });
+
+    return {count, publications: rows};
   }
 }
 
