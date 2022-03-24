@@ -4,29 +4,17 @@ const {
 } = require(`../../constants`);
 const express = require(`express`);
 const request = require(`supertest`);
+const sequelize = require(`../lib/sequelize`);
+const define = require(`../models/index`);
 
-const category = require(`./categories`);
-const CategoryService = require(`../data-services/category`);
-
-const categories = [
-  {
-    "id": "ofh9lnBJkk12eIoSfYHFC",
-    "name": "Деревья"
-  },
-  {
-    "id": "W0z3LpvbIK2s4dQzjHGKG",
-    "name": "За жизнь"
-  },
-  {
-    "id": "MsDDjTD-Ac1CHeVZJqAh6",
-    "name": "Без рамки"
-  }
-];
+const categoriesRouter = require(`./categories`);
+const CategoryService = require(`../data-service/category`);
 
 const createAPI = () => {
+  define(sequelize);
   const app = express();
   app.use(express.json());
-  category(app, new CategoryService(categories));
+  categoriesRouter(app, new CategoryService(sequelize));
   return app;
 };
 
@@ -40,8 +28,8 @@ describe(`API returns categories list`, () => {
       .get(`/categories`)
   });
 
-  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
-  test(`Offer has correct id`, () => expect(response.body[0].id).toBe(`ofh9lnBJkk12eIoSfYHFC`));
+
+  test(`Return all categories status 200`, async () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
 });
 
 describe(`API returns category by id`, () => {
@@ -49,14 +37,22 @@ describe(`API returns category by id`, () => {
 
   beforeAll(async () => {
     response = await request(app)
-      .get(`/categories/MsDDjTD-Ac1CHeVZJqAh6`)
+      .get(`/categories/2`)
   });
 
-  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
+
+  test(`Return category by ID status 200`, async () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
+  test(`Checked name category`, async () => expect(JSON.parse(response.text).name !== undefined).toBe(true));
 });
 
-test(`API returns code 404 if not found category`,
-  () => request(app)
-    .get(`/categories/MsDDjTD-Ac1CHeVZJqAh623`)
-    .expect(ResponseStatus.NOT_FOUND)
-);
+describe(`API request undefined category`, () => {
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .get(`/categories/1234`)
+  });
+
+
+  test(`Return status 404`, async () => expect(response.statusCode).toBe(ResponseStatus.NOT_FOUND));
+});

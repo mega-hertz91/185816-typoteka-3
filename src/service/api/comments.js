@@ -5,6 +5,9 @@ const {
 } = require(`../../constants`);
 const {Router} = require(`express`);
 
+const validateMiddleware = require(`../middlewares/validated-entitties`);
+const categorySchema = require(`../validators/comment`);
+
 module.exports = (app, CommentDataService) => {
   const router = new Router();
   app.use(`/comments`, router);
@@ -19,6 +22,11 @@ module.exports = (app, CommentDataService) => {
         .status(ResponseStatus.INTERNAL_ERROR)
         .send(e.message);
     }
+  });
+
+  router.post(`/`, validateMiddleware(categorySchema), async (req, res) => {
+    res
+      .send(`success`);
   });
 
   router.get(`/:commentId`, async (req, res) => {
