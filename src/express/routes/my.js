@@ -9,13 +9,15 @@ module.exports = (app) => {
   app.use(`/my`, router);
 
   router.get(`/`, async (req, res) => {
-    const articles = await api.getAPI().getArticles();
+    const articles = await api.getAPI().getArticles({limit: null, offset: null});
 
     res.render(`my/my`, {articles});
   });
 
   router.get(`/comments`, async (req, res) => {
-    const articles = await api.getAPI().getArticles();
+    const limit = 1;
+    const offset = 8;
+    const articles = await api.getAPI().getArticles({limit, offset});
     const comments = articles.map((item) => {
       return item.comments.map((commentItem) => {
         return {

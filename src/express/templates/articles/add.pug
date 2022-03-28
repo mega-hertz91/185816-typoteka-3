@@ -21,7 +21,7 @@ block content
             .form__wrapper.form__wrapper--intro
               .form__field
                 label
-                  input(type='text' name='title' placeholder='Заголовок' value='' required='')
+                  input(type='text' name='title' placeholder='Заголовок' value=article.title ? article.title:'')
               .form__field.form__field--post-image
                 label
                   input#image-name-field(type='text' name='photo' value='moya_mashinka.jpg' placeholder='Фотография' readonly='')
@@ -41,7 +41,10 @@ block content
             .form__wrapper.form__wrapper--text
               .form__field.form__field--publication-text
                 label
-                  textarea(rows='5' name='announce' placeholder='Анонс публикации')
+                  textarea(rows='5' name='announce' placeholder='Анонс публикации') #{article.announce ? article.announce:''}
               .form__field.form__field--publication-text
                 label
-                  textarea(rows='10' name='description' placeholder='Полный текст публикации')
+                  textarea(rows='10' name='description' placeholder='Полный текст публикации') #{article.description ? article.description:''}
+          ul
+            each msg in errorMessages
+              li #{msg}

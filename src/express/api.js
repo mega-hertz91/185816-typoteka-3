@@ -16,12 +16,15 @@ class API {
   }
 
   async getArticles({limit, offset}) {
-    console.log(limit, offset);
-    return this._load(`/publications`, {
-      params: {
+    let options = {};
+    if (limit || offset) {
+      options = {
         limit,
         offset
-      }
+      };
+    }
+    return this._load(`/publications`, {
+      params: options
     });
   }
 

@@ -10,6 +10,7 @@ const testDB = require(`../lib/test-db`);
 
 const publicationsRouter = require(`./publications`);
 const PublicationService = require(`../data-service/publication`);
+const CommentService = require(`../data-service/comment`);
 
 const categories = [`Автомобили`];
 
@@ -19,7 +20,7 @@ const createAPI = async () => {
 
   const sequelize = new Sequelize(`sqlite::memory:`, {logging: false});
   await testDB(sequelize, {categories});
-  publicationsRouter(app, new PublicationService(sequelize));
+  publicationsRouter(app, new PublicationService(sequelize), new CommentService(sequelize));
   return app;
 };
 
