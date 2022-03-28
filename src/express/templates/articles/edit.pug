@@ -4,7 +4,7 @@ block content
   section
     .popup.popup--new-publication.popup--anti
       .new-publication
-        form(action=`/articles/edit/${article.id}` method='post' enctype='multipart/form-data')
+        form(action=`` method='post' enctype='multipart/form-data')
           .new-publication__header
             h1 Редактирование публикации
             .new-publication__date-form
@@ -32,8 +32,11 @@ block content
                 button.button.button--transparent Удалить
               .new-publication__category-wrapper
                 .new-publication__checkbox.new-publication__checkbox--auto
-                  input#checkbox-auto(type='checkbox' name='category-1')
+                  input#checkbox-auto(type='checkbox' name='categories[]' value='2')
                   label(for='checkbox-auto') Автомобили
+                .new-publication__checkbox.new-publication__checkbox--auto
+                  input#checkbox-delivery(type='checkbox' name='categories[]' value='1')
+                  label(for='checkbox-delivery') Доставка
                 a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
             .form__wrapper.form__wrapper--text
               .form__field.form__field--publication-text
@@ -43,3 +46,7 @@ block content
               .form__field.form__field--publication-text
                 label
                   textarea(rows='10' name='description' placeholder='Полный текст публикации') #{article.description}
+          if errorMessages
+            ul
+              each msg in errorMessages
+                li #{msg}

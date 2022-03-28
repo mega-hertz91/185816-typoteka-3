@@ -66,7 +66,7 @@ module.exports = (app) => {
       await api.updateArticle(req.params.id, data);
       res.redirect(`/articles/edit/${req.params.id}`);
     } catch (e) {
-      res.redirect(`/404`);
+      res.render(`articles/edit`, {errorMessages: e.response.data.message, article: req.body});
     }
   });
 

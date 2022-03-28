@@ -20,7 +20,7 @@ const schema = Joi.object({
     'string.min': ErrorMessage.TITLE_MIN,
     'string.max': ErrorMessage.TITLE_MAX
   }),
-  announce: Joi.string().min(10).max(300).required().messages({
+  announce: Joi.string().min(10).max(150).required().messages({
     'string.min': ErrorMessage.ANNOUNCE_MIN,
     'string.max': ErrorMessage.ANNOUNCE_MAX
   }),
@@ -28,7 +28,7 @@ const schema = Joi.object({
     'string.min': ErrorMessage.DESCRIPTION_MIN,
     'string.max': ErrorMessage.DESCRIPTION_MAX
   }),
-  preview: Joi.string(),
+  preview: Joi.string().allow(null, ``),
   userId: Joi.number()
 });
 
