@@ -4,40 +4,44 @@ const {
 } = require(`../../constants`);
 const express = require(`express`);
 const request = require(`supertest`);
-const sequelize = require(`../lib/sequelize`);
-const define = require(`../models/index`);
+const Sequelize = require(`sequelize`);
+const testDB = require(`../lib/test-db`);
 
 const categoriesRouter = require(`./categories`);
 const CategoryService = require(`../data-service/category`);
 
-const createAPI = () => {
-  define(sequelize);
+const categories = [`Автомобили`];
+
+const createAPI = async () => {
   const app = express();
   app.use(express.json());
+
+  const sequelize = new Sequelize(`sqlite::memory:`, {logging: false});
+  await testDB(sequelize, {categories});
   categoriesRouter(app, new CategoryService(sequelize));
   return app;
 };
-
-const app = createAPI();
 
 describe(`API returns categories list`, () => {
   let response;
 
   beforeAll(async () => {
+    const app = await createAPI();
     response = await request(app)
       .get(`/categories`)
   });
 
 
-  test(`Return all categories status 200`, async () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
+  test(`Return all categories status 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
 });
 
 describe(`API returns category by id`, () => {
   let response;
 
   beforeAll(async () => {
+    const app = await createAPI();
     response = await request(app)
-      .get(`/categories/2`)
+      .get(`/categories/1`)
   });
 
 
@@ -49,6 +53,7 @@ describe(`API request undefined category`, () => {
   let response;
 
   beforeAll(async () => {
+    const app = await createAPI();
     response = await request(app)
       .get(`/categories/1234`)
   });

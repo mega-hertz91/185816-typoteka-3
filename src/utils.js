@@ -1,7 +1,10 @@
 'use strict';
 
+const {
+  DEFAULT_ENCODING,
+  DATES
+} = require(`./constants`);
 const {readFile} = require(`fs/promises`);
-const {DEFAULT_ENCODING} = require(`./constants`);
 
 /**
  * Shuffle items in array
@@ -82,11 +85,54 @@ const getNowDate = () => {
   return date.toLocaleDateString(`ru`);
 };
 
+/**
+ * Generate array articles depending on count
+ *
+ * @param {number} count
+ * @param {array} titles
+ * @param {array} sentences
+ * @param {array} categories
+ * @param {array} users
+ * @param {array} comments
+ * @return {array}
+ */
+const generateArticles = (count, titles, sentences, categories, users, comments) => (
+  new Array(count).fill({}).map(() => ({
+    title: titles[getRandomInt(0, titles.length - 1)],
+    announce: shuffle(sentences).slice(1, 5).join(` `),
+    description: shuffle(sentences).slice(1, 5).join(` `),
+    createDate: DATES[getRandomInt(0, DATES.length - 1)],
+    userId: getRandomInt(1, users.length - 1),
+    comments: [{userId: getRandomInt(1, users.length - 1), message: comments[getRandomInt(0, comments.length - 1)]}],
+  }))
+);
+
+/**
+ * Generate array users depending on count
+ *
+ * @param {int} count
+ * @param {array} roles
+ * @param {array} names
+ * @param {array} emails
+ * @return {array}
+ */
+const generateUsers = (count, roles, names, emails) => {
+  return new Array(count).fill({}).map((item, index) => ({
+    firstName: names[getRandomInt(0, names.length - 1)],
+    lastName: names[getRandomInt(0, names.length - 1)],
+    email: names[getRandomInt(0, emails.length - 1)] + index,
+    avatar: `avatar-1.png`,
+    password: `password`,
+    roleId: getRandomInt(1, roles.length - 1),
+  }));
+};
 
 module.exports = {
   shuffle,
   getRandomInt,
   readingFileByLine,
   findById,
-  getNowDate
+  getNowDate,
+  generateArticles,
+  generateUsers
 };
