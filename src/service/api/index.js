@@ -34,7 +34,7 @@ const defineModels = require(`../models/index`);
   /**
    * Inject routes API
    */
-  publicationsRouter(app, new PublicationDataService(sequelize));
+  publicationsRouter(app, new PublicationDataService(sequelize), new CommentDataService(sequelize));
   searchRouter(app, new SearchDataService(sequelize));
   categoriesRouter(app, new CategoryDataService(sequelize));
   commentsRouter(app, new CommentDataService(sequelize));

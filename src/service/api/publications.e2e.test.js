@@ -1,246 +1,104 @@
 'use strict';
+
 const {
   ResponseStatus
 } = require(`../../constants`);
 const express = require(`express`);
 const request = require(`supertest`);
+const Sequelize = require(`sequelize`);
+const testDB = require(`../lib/test-db`);
 
-const articles = require(`./articles`);
-const ArticleService = require(`../data-services/article`);
-const CommentService = require(`../data-services/comment`);
+const publicationsRouter = require(`./publications`);
+const PublicationService = require(`../data-service/publication`);
+const CommentService = require(`../data-service/comment`);
 
-const createAPI = () => {
+const categories = [`Автомобили`];
+
+const createAPI = async () => {
   const app = express();
-  const articlesMock = require(`../../mock.json`);
   app.use(express.json());
-  articles(app, new ArticleService(articlesMock), new CommentService(articlesMock));
+
+  const sequelize = new Sequelize(`sqlite::memory:`, {logging: false});
+  await testDB(sequelize, {categories});
+  publicationsRouter(app, new PublicationService(sequelize), new CommentService(sequelize));
   return app;
 };
 
-/**
- * Testing get all comments by article id
- */
-
-describe(`API get all comments by article id`, () => {
-  const app = createAPI();
-
+describe(`API returns publications list`, () => {
   let response;
 
   beforeAll(async () => {
+    const app = await createAPI();
     response = await request(app)
-      .get(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments`)
+      .get(`/publications`)
   });
 
-  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
+
+  test(`Return all publications status 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
 });
 
-test(`API returns code 404 if not found comments by article`, () => {
-    const app = createAPI();
-
-    return request(app)
-      .get(`/articles/MsDDjTD-Ac1CHeVZJqAh6/comments`)
-      .expect(ResponseStatus.NOT_FOUND)
-  }
-);
-
-/**
- * Testing create comments by article id
- */
-
-describe(`API create comment by article id`, () => {
-  const app = createAPI();
-
+describe(`API returns publication by id`, () => {
   let response;
 
   beforeAll(async () => {
+    const app = await createAPI();
     response = await request(app)
-      .post(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments`)
+      .get(`/publications/1`)
+  });
+
+
+  test(`Return publication by id status 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
+});
+
+describe(`API returns not found publication by id`, () => {
+  let response;
+
+  beforeAll(async () => {
+    const app = await createAPI();
+    response = await request(app)
+      .get(`/publications/111`)
+  });
+
+
+  test(`Return publication by id status 404`, () => expect(response.statusCode).toBe(ResponseStatus.NOT_FOUND));
+});
+
+describe(`API create publication`, () => {
+  let response;
+
+  beforeAll(async () => {
+    const app = await createAPI();
+    response = await request(app)
+      .post(`/publications`)
       .send({
-        title: "new article",
-        author: "ibabushkin",
-        text: "new my comment"
+        title: `Lorem ipsum dolor sit amet, consectetur adipiscing elit`,
+        announce: `tLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt`,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt`,
+        userId: 1,
+        categories: [1, 2]
       })
   });
 
-  test(`Status code 201`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS_CREATE));
+
+  test(`Return create status 201`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS_CREATE));
 });
 
-test(`API returns code 400 bad request in create comment`, () => {
-    const app = createAPI();
-
-    return request(app)
-      .post(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments`)
-      .send({})
-      .expect(ResponseStatus.BAD_REQUEST)
-  }
-);
-
-/**
- * Testing delete comment by article id
- */
-
-describe(`API delete comment by article id`, () => {
-  const app = createAPI();
-
+describe(`API create publication negative scenario`, () => {
   let response;
 
   beforeAll(async () => {
+    const app = await createAPI();
     response = await request(app)
-      .delete(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments/b9OI6FfegJXfnHP0fefJk`)
-  });
-
-  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
-});
-
-test(`API returns code 404 not found comment`, () => {
-    const app = createAPI();
-
-    return request(app)
-      .delete(`/articles/W1FLyUKWnoUsfm8nUxRjj/comments/b9OI6FfegJXfnHP0fefJR`)
-      .expect(ResponseStatus.NOT_FOUND)
-  }
-);
-
-/**
- * Testing get all
- */
-describe(`API returns articles list`, () => {
-  const app = createAPI();
-
-  let response;
-
-  beforeAll(async () => {
-    response = await request(app)
-      .get(`/articles`)
-  });
-
-  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
-  test(`1 article found`, () => expect(response.body.length).toBe(1));
-  test(`Article has correct id`, () => expect(response.body[0].id).toBe(`W1FLyUKWnoUsfm8nUxRjj`));
-});
-
-/**
- * Testing get by id
- */
-describe(`API returns article by id`, () => {
-  const app = createAPI();
-
-  let response;
-
-  beforeAll(async () => {
-    response = await request(app)
-      .get(`/articles/W1FLyUKWnoUsfm8nUxRjj`)
-  });
-
-  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
-});
-
-
-/**
- * Testing get by id
- */
-test(`API refuses to delete non-existent comment`, () => {
-  const app = createAPI();
-
-  return request(app)
-    .get(`/articles/MsDDjTD-Ac1CHeVZJqAh6`)
-    .expect(ResponseStatus.NOT_FOUND)
-});
-
-/**
- * Testing create new article
- */
-describe(`API create article`, () => {
-  const app = createAPI();
-  let response;
-
-  const newArticle = {
-    title: "My article",
-    description: "This is my new article"
-  };
-
-  beforeAll(async () => {
-    response = await request(app)
-      .post(`/articles`)
-      .send(newArticle)
-  });
-
-  test(`Status code 201`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS_CREATE));
-});
-
-
-test(`API returns code 400 bad request`, () => {
-    const app = createAPI();
-
-    return request(app)
-      .post(`/articles`)
-      .send({})
-      .expect(ResponseStatus.BAD_REQUEST)
-  }
-);
-
-/**
- * Testing delete article by id
- */
-describe(`API delete article`, () => {
-  const app = createAPI();
-
-  let response;
-
-  beforeAll(async () => {
-    response = await request(app)
-      .delete(`/articles/W1FLyUKWnoUsfm8nUxRjj`)
-  });
-
-  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
-});
-
-test(`API returns code 404 if not found article`, () => {
-    const app = createAPI();
-
-    return request(app)
-      .get(`/articles/MsDDjTD-Ac1CHeVZJqAh6`)
-      .expect(ResponseStatus.NOT_FOUND)
-  }
-);
-
-/**
- * Update article by id
- */
-describe(`API delete article`, () => {
-  const app = createAPI();
-
-  let response;
-
-  beforeAll(async () => {
-    response = await request(app)
-      .put(`/articles/W1FLyUKWnoUsfm8nUxRjj`)
+      .post(`/publications`)
       .send({
-        title: "New title for article"
+        title: `Lorem ipsum dolor sit amet, consectetur adipiscing elit`,
+        announce: `tLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt`,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt`
       })
   });
 
-  test(`Status code 200`, () => expect(response.statusCode).toBe(ResponseStatus.NOT_FOUND));
+
+  test(`Return create status 400`, () => expect(response.statusCode).toBe(ResponseStatus.BAD_REQUEST));
 });
-
-
-test(`API returns code 400 bad request`, () => {
-    const app = createAPI();
-
-    return request(app)
-      .put(`/articles/W1FLyUKWnoUsfm8nUxRjj`)
-      .send({})
-      .expect(ResponseStatus.BAD_REQUEST)
-  }
-);
-
-test(`API returns code 404 if not found article`, () => {
-    const app = createAPI();
-
-    return request(app)
-      .get(`/articles/MsDDjTD-Ac1CHeVZJqAh6`)
-      .expect(ResponseStatus.NOT_FOUND)
-  }
-);
 
 

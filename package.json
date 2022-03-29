@@ -10,6 +10,7 @@
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "express": "4.17.1",
+    "joi": "17.6.0",
     "multer": "1.4.4",
     "nanoid": "3.1.30",
     "pg": "8.7.3",
@@ -24,16 +25,17 @@
     "jest": "27.4.5",
     "nodemon": "2.0.5",
     "pino-pretty": "7.3.0",
+    "sqlite3": "5.0.2",
     "supertest": "6.1.6"
   },
   "scripts": {
-    "test": "npm run eslint && npm run jest",
-    "jest": "jest",
+    "test": "npm run eslint && cross-env npm run jest",
+    "jest": "jest --setupFiles dotenv/config",
     "eslint": "eslint --ext .js src/",
     "start": "cross-env NODE_ENV=production node -r dotenv/config ./src/service/service.js --server",
     "start::debug": "cross-env NODE_ENV=development nodemon -r dotenv/config ./src/service/service.js --server",
     "dev": "nodemon ./src/express/express.js",
-    "filldb": "cross-env NODE_ENV=development node -r dotenv/config ./src/service/service.js --filldb"
+    "filldb": "cross-env NODE_ENV=development node -r dotenv/config ./src/service/service.js --filldb 10"
   },
   "repository": {
     "type": "git",

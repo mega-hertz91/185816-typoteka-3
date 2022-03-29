@@ -21,7 +21,7 @@ block content
             .form__wrapper.form__wrapper--intro
               .form__field
                 label
-                  input(type='text' name='title' placeholder='Заголовок' value='' required='')
+                  input(type='text' name='title' placeholder='Заголовок' value=article ? article.title:'')
               .form__field.form__field--post-image
                 label
                   input#image-name-field(type='text' name='photo' value='moya_mashinka.jpg' placeholder='Фотография' readonly='')
@@ -32,16 +32,20 @@ block content
                 button.button.button--transparent Удалить
               .new-publication__category-wrapper
                 .new-publication__checkbox.new-publication__checkbox--auto
-                  input#checkbox-auto(type='checkbox' name='categories[]' value='Автомобили')
+                  input#checkbox-auto(type='checkbox' name='categories[]' value='2')
                   label(for='checkbox-auto') Автомобили
                 .new-publication__checkbox.new-publication__checkbox--auto
-                  input#checkbox-music(type='checkbox' name='categories[]' value='Музыка')
+                  input#checkbox-music(type='checkbox' name='categories[]' value='1')
                   label(for='checkbox-music') Музыка
                 a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
             .form__wrapper.form__wrapper--text
               .form__field.form__field--publication-text
                 label
-                  textarea(rows='5' name='announce' placeholder='Анонс публикации')
+                  textarea(rows='5' name='announce' placeholder='Анонс публикации') #{article ? article.announce:''}
               .form__field.form__field--publication-text
                 label
-                  textarea(rows='10' name='description' placeholder='Полный текст публикации')
+                  textarea(rows='10' name='description' placeholder='Полный текст публикации') #{article ? article.description:''}
+          if errorMessages
+            ul
+              each msg in errorMessages
+                li #{msg}

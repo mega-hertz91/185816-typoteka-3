@@ -5,8 +5,12 @@ const {
 } = require(`../../constants`);
 const {Router} = require(`express`);
 
+const validateMiddleware = require(`../middlewares/validated-entitties`);
+const publicationsSchema = require(`../validators/publication`);
+const commentSchema = require(`../validators/comment`);
 
-module.exports = (app, PublicationDataService) => {
+
+module.exports = (app, PublicationDataService, CommentService) => {
   const router = new Router();
   app.use(`/publications`, router);
 
@@ -61,7 +65,7 @@ module.exports = (app, PublicationDataService) => {
    * Create item
    * @return {object|string}
    */
-  router.post(`/`, async (req, res) => {
+  router.post(`/`, validateMiddleware(publicationsSchema), async (req, res) => {
     try {
       const item = await PublicationDataService.create(req.body);
 
@@ -79,8 +83,7 @@ module.exports = (app, PublicationDataService) => {
    * Update item
    * @return {object}
    */
-
-  router.put(`/:id`, async (req, res) => {
+  router.put(`/:id`, validateMiddleware(publicationsSchema), async (req, res) => {
     try {
       await PublicationDataService.update(req.params.id, req.body);
 
@@ -99,6 +102,26 @@ module.exports = (app, PublicationDataService) => {
       await PublicationDataService.drop(req.params.id);
 
       res.send({success: true});
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send({success: false, error: e.message});
+    }
+  });
+
+  /**
+   * Add comment by publicationID
+   */
+  router.post(`/:id/comment`, validateMiddleware(commentSchema), async (req, res) => {
+    const data = req.body;
+    data.publicationId = req.params.id;
+
+    try {
+      const item = await CommentService.create(data);
+
+      res
+        .status(ResponseStatus.SUCCESS_CREATE)
+        .send(item);
     } catch (e) {
       res
         .status(ResponseStatus.INTERNAL_ERROR)

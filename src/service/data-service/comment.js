@@ -23,6 +23,14 @@ class CommentDataService {
   }
 
   /**
+   * @param {object} data
+   * @return {Promise}
+   */
+  create(data) {
+    return this._Comment.create(data);
+  }
+
+  /**
    * @param {int} id
    * @param {object} data
    * @return {Promise}
@@ -35,6 +43,7 @@ class CommentDataService {
 
   /**
    * @param {int} id
+   * @return {Promise}
    */
   drop(id) {
     return this._Comment.destroy({

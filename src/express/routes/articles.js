@@ -25,7 +25,7 @@ module.exports = (app) => {
       announce: body.announce,
       description: body.description,
       preview: file ? file.filename : ``,
-      userId: 3,
+      userId: 1,
       categories: ensureArray(body.categories)
     };
 
@@ -33,7 +33,7 @@ module.exports = (app) => {
       await api.createArticle(data);
       res.redirect(`/my`);
     } catch (e) {
-      res.redirect(`back`);
+      res.render(`articles/add`, {errorMessages: e.response.data.message, article: req.body});
     }
   });
 
@@ -66,7 +66,7 @@ module.exports = (app) => {
       await api.updateArticle(req.params.id, data);
       res.redirect(`/articles/edit/${req.params.id}`);
     } catch (e) {
-      res.redirect(`/404`);
+      res.render(`articles/edit`, {errorMessages: e.response.data.message, article: req.body});
     }
   });
 
