@@ -5,6 +5,7 @@ const FILE_NAME = `mock.json`;
 const DEFAULT_COMMAND = `--help`;
 const DEFAULT_ENCODING = `utf8`;
 const DEFAULT_PORT = 3000;
+const DEFAULT_ROLE = 2;
 const ResponseStatus = {
   SUCCESS: 200,
   SUCCESS_CREATE: 201,
@@ -67,5 +68,6 @@ module.exports = {
   ResponseStatus,
   Env,
   Method,
-  MULTIPLIER
+  MULTIPLIER,
+  DEFAULT_ROLE
 };
