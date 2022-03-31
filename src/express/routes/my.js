@@ -11,7 +11,7 @@ module.exports = (app) => {
   router.get(`/`, async (req, res) => {
     const articles = await api.getAPI().getArticles({limit: null, offset: null});
 
-    res.render(`my/my`, {articles});
+    res.render(`my/my`, {articles, user: req.session.user});
   });
 
   router.get(`/comments`, async (req, res) => {

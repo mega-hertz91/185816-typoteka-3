@@ -10,6 +10,7 @@ block content
       h2.popup__title &Rcy;&iecy;&gcy;&icy;&scy;&tcy;&rcy;&acy;&tscy;&icy;&yacy;
       .popup__form.popup__form--active.form.form--register
         form(action='' method='post' enctype='multipart/form-data')
+          input(type="hidden" name="_csrf" value=csrfToken)
           .form__field
             label
               input(type='email' name='email' placeholder='Электронная почта' value=user ? user.email:'')

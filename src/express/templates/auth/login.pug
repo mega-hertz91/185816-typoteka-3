@@ -9,12 +9,19 @@ block content
         | &ocy;&kcy;&ncy;&ocy;
       h2.popup__title &Vcy;&ocy;&jcy;&tcy;&icy;
       .popup__form.form.form--log-in
-        form(action='#' method='get')
+        form(action='' method='post')
+          input(type="hidden" name="_csrf" value=csrfToken)
           .form__field
             label
-              input(type='email' name='email' placeholder='Электронная почта' required='')
+              input(type='email' name='email' placeholder='Электронная почта' required='' value=user? user.email : '')
           .form__field
             label
               input(type='password' name='password' placeholder='Пароль' required='')
-          p.form__error-message &Ncy;&iecy;&kcy;&ocy;&tcy;&ocy;&rcy;&acy;&yacy; &ocy;&shcy;&icy;&bcy;&kcy;&acy; &pcy;&rcy;&ocy;&icy;&zcy;&ocy;&shcy;&lcy;&acy;, &bcy;&iecy;&dcy;&acy;!
+          if errorMessages
+            .form__validation-error
+              p.form__error-message &Pcy;&rcy;&icy; &rcy;&iecy;&gcy;&icy;&scy;&tcy;&rcy;&acy;&tscy;&icy;&icy; &pcy;&rcy;&ocy;&icy;&zcy;&ocy;&shcy;&lcy;&icy; &ocy;&shcy;&icy;&bcy;&kcy;&icy;:
+
+              ul.form__errors
+                each msg in errorMessages
+                  li.form__error #{msg}
           button.form__submit-btn.form__submit-btn--log-in.button.button--colored(type='submit') &Vcy;&ocy;&jcy;&tcy;&icy;

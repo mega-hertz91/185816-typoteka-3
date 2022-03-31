@@ -57,6 +57,13 @@ class API {
     });
   }
 
+  auth(data) {
+    return this._load(`/user/auth`, {
+      method: Method.POST,
+      data
+    });
+  }
+
   search(query) {
     return this._load(`/search?query=${query}`);
   }

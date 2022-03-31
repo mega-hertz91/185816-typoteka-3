@@ -27,17 +27,16 @@ module.exports = (app) => {
         api.getAPI().getArticles({limit, offset}),
         api.getAPI().getCategories(true)
       ]);
-      console.log(publications, limit, offset);
-      // количество страниц — это общее количество объявлений, поделённое на количество объявлений на странице (с округлением вверх)
+
       const totalPages = Math.ceil(count / PUBLICATIONS_PER_PAGE);
 
-      res.render(`index/main`, {articles: publications, page, totalPages, categories});
+      res.render(`index/main`, {articles: publications, page, totalPages, categories, user: req.session.user});
     } catch (e) {
       res.send(e);
     }
   });
 
   router.get(`/404`, (req, res) => {
-    res.render(`error/404`);
+    res.render(`error/404`, {user: req.session.user});
   });
 };
