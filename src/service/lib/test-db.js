@@ -6,7 +6,7 @@ module.exports = async (sequelize, {categories}) => {
   const {Category, Role, User, Publication} = defineModels(sequelize);
   await sequelize.sync({force: true});
 
-  await Role.create({name: `admin`});
+  await Role.bulkCreate([{name: `admin`}, {name: `registered`}, {name: `blocked`}]);
   await User.create({
     firstName: `test`,
     lastName: `test`,

@@ -50,6 +50,13 @@ class API {
     });
   }
 
+  createUser(data) {
+    return this._load(`/user`, {
+      method: Method.POST,
+      data
+    });
+  }
+
   search(query) {
     return this._load(`/search?query=${query}`);
   }
