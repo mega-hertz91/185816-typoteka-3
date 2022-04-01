@@ -44,6 +44,7 @@ module.exports = (app, UserDataService) => {
     const {email, password} = req.body;
 
     const user = await UserDataService.getByEmail(email);
+
     if (user) {
       try {
         const correct = await compareSync(password, user.password);
@@ -58,7 +59,7 @@ module.exports = (app, UserDataService) => {
         }
       } catch (e) {
         res
-          .status(ResponseStatus.INTERNAL_ERROR)
+          .status(ResponseStatus.BAD_REQUEST)
           .send(e.message);
       }
     } else {
