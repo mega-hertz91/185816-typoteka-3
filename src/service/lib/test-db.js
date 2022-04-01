@@ -1,6 +1,7 @@
 'use strict';
 
 const defineModels = require(`../models/index`);
+const {hashSync} = require(`../lib/password`);
 
 module.exports = async (sequelize, {categories}) => {
   const {Category, Role, User, Publication} = defineModels(sequelize);
@@ -11,7 +12,7 @@ module.exports = async (sequelize, {categories}) => {
     firstName: `test`,
     lastName: `test`,
     email: `test@t.ru`,
-    password: `pswd`,
+    password: hashSync(`pswd`),
     avatar: `default.jpg`,
     roleId: 1
   });

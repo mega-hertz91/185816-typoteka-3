@@ -82,3 +82,53 @@ describe(`API returns create user unique email`, () => {
   test(`Return create status 400`, () => expect(response.statusCode).toBe(ResponseStatus.BAD_REQUEST));
 });
 
+describe(`API returns auth bad request`, () => {
+  let response;
+
+  beforeAll(async () => {
+    const app = await createAPI();
+    response = await request(app)
+      .post(`/user/auth`)
+      .send({
+        email: `test@t.ru`
+      });
+  });
+
+
+  test(`Return auth status 400`, () => expect(response.statusCode).toBe(ResponseStatus.BAD_REQUEST));
+});
+
+describe(`API returns auth user`, () => {
+  let response;
+
+  beforeAll(async () => {
+    const app = await createAPI();
+    response = await request(app)
+      .post(`/user/auth`)
+      .send({
+        email: `test@t.ru`,
+        password: `pswd`
+      });
+  });
+
+
+  test(`Return auth status 200`, () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS));
+});
+
+describe(`API returns unauthorized`, () => {
+  let response;
+
+  beforeAll(async () => {
+    const app = await createAPI();
+    response = await request(app)
+      .post(`/user/auth`)
+      .send({
+        email: `test@t.ru`,
+        password: `pswdBlabla`
+      });
+  });
+
+
+  test(`Return auth status 401`, () => expect(response.statusCode).toBe(ResponseStatus.UNAUTHORIZED));
+});
+
