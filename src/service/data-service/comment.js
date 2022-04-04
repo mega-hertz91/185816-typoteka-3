@@ -3,13 +3,18 @@
 class CommentDataService {
   constructor(sequelize) {
     this._Comment = sequelize.models.Comment;
+    this._User = sequelize.models.User;
   }
 
   /**
    * @return {Promise}
    */
   getAll() {
-    return this._Comment.findAll();
+    return this._Comment.findAll({
+      include: this._User,
+      order: [[`id`, `DESC`]],
+      limit: 5
+    });
   }
 
   /**

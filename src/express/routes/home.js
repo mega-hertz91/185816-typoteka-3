@@ -2,7 +2,7 @@
 
 const {PUBLICATIONS_PER_PAGE} = require(`../constants`);
 const {Router} = require(`express`);
-const api = require(`../api`);
+const api = require(`../api`).getAPI();
 
 module.exports = (app) => {
   const router = new Router();
@@ -22,15 +22,30 @@ module.exports = (app) => {
       const offset = (page - 1) * PUBLICATIONS_PER_PAGE;
       const [
         {count, publications},
-        categories
+        categories,
+        comments
       ] = await Promise.all([
-        api.getAPI().getArticles({limit, offset}),
-        api.getAPI().getCategories(true)
+        api.getArticles({limit, offset}),
+        api.getCategories(true),
+        api.getComments()
       ]);
+
+      const hotArticles = publications.slice(0, 4).sort((a, b) => {
+        return b.comments.length - a.comments.length;
+      });
 
       const totalPages = Math.ceil(count / PUBLICATIONS_PER_PAGE);
 
-      res.render(`index/main`, {articles: publications, page, totalPages, categories, user: req.session.user});
+      res.render(`index/main`, {
+        articles: publications,
+        hotArticles,
+        comments,
+        page,
+        totalPages,
+        categories,
+        user: req.session.user,
+        currentCategory: Number(req.query.category_id)
+      });
     } catch (e) {
       res.send(e);
     }

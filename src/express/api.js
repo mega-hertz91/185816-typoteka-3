@@ -40,6 +40,10 @@ class API {
     return this._load(`/categories`);
   }
 
+  getComments() {
+    return this._load(`/comments`);
+  }
+
   createArticle(data) {
     return this._load(`/publications`, {
       method: Method.POST,
