@@ -10,7 +10,7 @@ block content
     ul.themes
       each category in categories
         li.themes__item
-          a.themes__item-link(href='/?category_id=' + category.id class=currentCategory === category.id ? 'themes__item-link--active': false)
+          a.themes__item-link(href='/?category=' + category.id class=currentCategory === category.id ? 'themes__item-link--active': false)
             | #{category.name}
             sup #{category.publications.length}
   .main-page__section-flex
@@ -18,12 +18,15 @@ block content
       h2.hot__name
         | &Scy;&acy;&mcy;&ocy;&iecy; &ocy;&bcy;&scy;&ucy;&zhcy;&dcy;&acy;&iecy;&mcy;&ocy;&iecy;
         span.hot__icon.hot__icon--fire
-      ul.hot__list
-        each hotArticle in hotArticles
-          li.hot__list-item
-            a.hot__list-link(href='/articles/' + hotArticle.id)
-              | #{hotArticle.announce}
-              sup.hot__link-sup #{hotArticle.comments.length}
+      if hotArticles.length > 0
+        ul.hot__list
+          each hotArticle in hotArticles
+            li.hot__list-item
+              a.hot__list-link(href='/articles/' + hotArticle.id)
+                | #{hotArticle.announce}
+                sup.hot__link-sup #{hotArticle.comments.length}
+      else
+        p Здесь пока ничего нет...
     section.main-page__last.last
       h2.last__name
         | &Pcy;&ocy;&scy;&lcy;&iecy;&dcy;&ncy;&icy;&iecy; &kcy;&ocy;&mcy;&mcy;&iecy;&ncy;&tcy;&acy;&rcy;&icy;&icy;
@@ -34,7 +37,7 @@ block content
             img.last__list-image(src='img/avatar-small-1.png' width='20' height='20' alt='Аватар пользователя')
             b.last__list-name #{comment.User.firstName} #{comment.User.lastName}
             a.last__list-link(href='/articles/' + comment.publicationId) #{comment.message}
-  if articles
+  if articles.length > 0
     section.main-page__list.preview
       h2.visually-hidden &Scy;&pcy;&icy;&scy;&ocy;&kcy; &pcy;&rcy;&iecy;&vcy;&softcy;&yucy; &scy;&tcy;&acy;&tcy;&iecy;&jcy;
       ul.preview__list

@@ -15,14 +15,17 @@ class API {
     });
   }
 
-  async getArticles({limit, offset}) {
+  async getArticles({limit, offset, category}) {
     let options = {};
     if (limit || offset) {
       options = {
         limit,
-        offset
+        offset,
+        category
       };
     }
+
+    console.log(options);
     return this._load(`/publications`, {
       params: options
     });

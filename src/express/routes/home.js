@@ -15,6 +15,8 @@ module.exports = (app) => {
       let {page = 1} = req.query;
       page = +page;
 
+      const {category} = req.query;
+
       // количество запрашиваемых объявлений равно количеству объявлений на странице
       const limit = PUBLICATIONS_PER_PAGE;
 
@@ -25,7 +27,7 @@ module.exports = (app) => {
         categories,
         comments
       ] = await Promise.all([
-        api.getArticles({limit, offset}),
+        api.getArticles({limit, offset, category}),
         api.getCategories(true),
         api.getComments()
       ]);
@@ -44,7 +46,7 @@ module.exports = (app) => {
         totalPages,
         categories,
         user: req.session.user,
-        currentCategory: Number(req.query.category_id)
+        currentCategory: Number(req.query.category)
       });
     } catch (e) {
       res.send(e);

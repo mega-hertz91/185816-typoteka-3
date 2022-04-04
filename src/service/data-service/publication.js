@@ -6,6 +6,9 @@ class PublicationService {
   constructor(sequelize) {
     this._Publication = sequelize.models.Publication;
     this._PC = sequelize.models.PublicationCategories;
+    this._Category = sequelize.models.Category;
+    this._Comment = sequelize.models.Comment;
+    this._User = sequelize.models.User;
   }
 
   /**
@@ -34,7 +37,18 @@ class PublicationService {
    */
   getById(id) {
     return this._Publication.findByPk(id, {
-      include: [Aliases.CATEGORIES]
+      include: [
+        {
+          model: this._Category,
+          as: Aliases.CATEGORIES,
+          include: Aliases.PUBLICATIONS
+        },
+        {
+          model: this._Comment,
+          as: Aliases.COMMENTS,
+          include: this._User
+        }
+      ]
     });
   }
 
@@ -85,13 +99,27 @@ class PublicationService {
   /**
    * @param {int} limit
    * @param {int} offset
+   * @param {int} category
    * @return {Promise}
    */
-  async findPage({limit, offset}) {
+  async findPage({limit, offset, category}) {
+    let categoryOptions = false;
+    if (category) {
+      categoryOptions = {
+        id: category
+      };
+    }
     const {count, rows} = await this._Publication.findAndCountAll({
       limit,
       offset,
-      include: [Aliases.CATEGORIES, Aliases.COMMENTS],
+      include: [
+        {
+          model: this._Category,
+          as: Aliases.CATEGORIES,
+          where: categoryOptions ? categoryOptions : false
+        },
+        Aliases.COMMENTS
+      ],
       order: [
         [`createdAt`, `DESC`]
       ],

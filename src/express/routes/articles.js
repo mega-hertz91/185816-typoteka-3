@@ -2,7 +2,6 @@
 
 const {Router} = require(`express`);
 const {
-  getRequestPath,
   ensureArray
 } = require(`../utils`);
 const api = require(`../api`).getAPI();
@@ -59,7 +58,17 @@ module.exports = (app) => {
   });
 
   router.get(`/:id`, async (req, res) => {
-    res.send(`articles id`);
+    try {
+      const article = await api.getArticleById(req.params.id);
+
+      if (article) {
+        res.render(`articles/by-id`, {article, user: req.session.user});
+      } else {
+        res.redirect(`/404`);
+      }
+    } catch (e) {
+      res.redirect(`/error`);
+    }
   });
 
   router.get(`/edit/:id`, authMiddleware, csrfProtection, async (req, res) => {
@@ -110,5 +119,7 @@ module.exports = (app) => {
     }
   });
 
-  router.get(`/category/:id`, getRequestPath);
+  router.get(`/category/:id`, (req, res) => {
+    res.send(`category`);
+  });
 };

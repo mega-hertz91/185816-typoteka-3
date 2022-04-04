@@ -12,22 +12,25 @@ module.exports = (app) => {
 
     try {
       if (query) {
-        const result = await api.search(encodeURI(req.query.query));
+        const articles = await api.search(encodeURI(req.query.query));
 
         res.render(`search/search`, {
           query,
-          result
+          articles,
+          user: req.session.user
         });
       } else {
         res.render(`search/search`, {
           query: `Запрос пуст`,
-          result: false
+          articles: false,
+          user: req.session.user
         });
       }
     } catch (e) {
       res.render(`search/search`, {
         query,
-        result: false
+        articles: false,
+        user: req.session.user
       });
     }
   });
