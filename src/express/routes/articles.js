@@ -66,11 +66,17 @@ module.exports = (app) => {
     try {
       const article = await api.getArticleById(req.params.id);
       const categories = await api.getCategories();
-      res.render(`articles/edit`, {
-        article,
-        categories,
-        user: req.session.user,
-        csrfToken: req.csrfToken()});
+
+      if (article.userId === req.session.user.id) {
+        res.render(`articles/edit`, {
+          article,
+          categories,
+          user: req.session.user,
+          csrfToken: req.csrfToken()
+        });
+      } else {
+        res.redirect(`/404`);
+      }
     } catch (e) {
       res.redirect(`/404`);
     }
@@ -83,9 +89,10 @@ module.exports = (app) => {
       title: body.title,
       announce: body.announce,
       description: body.description,
-      preview: file ? file.filename : ``,
-      userId: 3,
-      categories: ensureArray(body.categories)
+      preview: file ? file.filename : false,
+      userId: req.user.id,
+      categories: ensureArray(body.categories),
+      createdAt: body.createdAt
     };
 
     try {

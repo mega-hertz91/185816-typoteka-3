@@ -5,7 +5,7 @@ const Aliases = require(`../models/alias`);
 class PublicationService {
   constructor(sequelize) {
     this._Publication = sequelize.models.Publication;
-    this._PB = sequelize.models.PublicationCategories;
+    this._PC = sequelize.models.PublicationCategories;
   }
 
   /**
@@ -33,7 +33,9 @@ class PublicationService {
    * @return {Promise}
    */
   getById(id) {
-    return this._Publication.findByPk(id);
+    return this._Publication.findByPk(id, {
+      include: [Aliases.CATEGORIES]
+    });
   }
 
   /**
@@ -51,7 +53,7 @@ class PublicationService {
    */
   async create(data) {
     const publication = await this._Publication.create(data);
-    return this._PB.bulkCreate(data.categories.map((id) => ({CategoryId: Number(id), PublicationId: publication.id})));
+    return this._PC.bulkCreate(data.categories.map((id) => ({CategoryId: Number(id), PublicationId: publication.id})));
   }
 
   /**
@@ -61,12 +63,13 @@ class PublicationService {
    * @return {Promise}
    */
   async update(id, data) {
-    await this._PB.destroy({where: {PublicationId: id}});
-    await this._Publication.update(data, {
+    await this._PC.destroy({where: {PublicationId: id}});
+    console.log(data.categories);
+    await this._PC.bulkCreate(data.categories.map((itemId) => ({CategoryId: Number(itemId), PublicationId: id})));
+
+    return this._Publication.update(data, {
       where: {id}
     });
-
-    return this._PB.bulkCreate(data.categories.map((itemId) => ({CategoryId: Number(itemId), PublicationId: id})));
   }
 
   /**

@@ -10,7 +10,7 @@ const publicationsRouter = require(`./publications`);
 const searchRouter = require(`./search`);
 const categoriesRouter = require(`./categories`);
 const commentsRouter = require(`./comments`);
-const usersRoter = require(`./user`);
+const usersRouter = require(`./user`);
 
 /**
  * Include services
@@ -40,7 +40,7 @@ const defineModels = require(`../models/index`);
   searchRouter(app, new SearchDataService(sequelize));
   categoriesRouter(app, new CategoryDataService(sequelize));
   commentsRouter(app, new CommentDataService(sequelize));
-  usersRoter(app, new UserDataService(sequelize));
+  usersRouter(app, new UserDataService(sequelize));
 })();
 
 module.exports = app;
