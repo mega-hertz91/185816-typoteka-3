@@ -32,6 +32,10 @@ class API {
     return this._load(`/publications/${id}`);
   }
 
+  getArticleByUserId(id) {
+    return this._load(`/publications/user/${id}`);
+  }
+
   getCategories() {
     return this._load(`/categories`);
   }

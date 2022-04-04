@@ -39,4 +39,8 @@ module.exports = (app) => {
   router.get(`/404`, (req, res) => {
     res.render(`error/404`, {user: req.session.user});
   });
+
+  router.get(`/error`, (req, res) => {
+    res.render(`error/500`, {user: req.session.user});
+  });
 };

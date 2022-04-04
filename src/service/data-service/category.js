@@ -1,5 +1,7 @@
 'use strict';
 
+const Aliases = require(`../models/alias`);
+
 class CategoryDataService {
   constructor(sequelize) {
     this._Category = sequelize.models.Category;
@@ -9,7 +11,9 @@ class CategoryDataService {
    * @return {Promise}
    */
   getAll() {
-    return this._Category.findAll();
+    return this._Category.findAll({
+      include: [Aliases.PUBLICATIONS]
+    });
   }
 
   /**

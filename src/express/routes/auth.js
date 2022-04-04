@@ -39,14 +39,16 @@ module.exports = (app) => {
         res
           .render(`auth/register`, {
             errorMessages: e.response.data.message,
-            user: req.body
+            user: req.body,
+            csrfToken: req.csrfToken()
           });
       }
     } else {
       res
         .render(`auth/register`, {
           errorMessages: [`Passwords do not match`],
-          user: req.body
+          user: req.body,
+          csrfToken: req.csrfToken()
         });
     }
   });
@@ -66,7 +68,11 @@ module.exports = (app) => {
       });
     } catch (e) {
       res
-        .render(`auth/login`, {errorMessages: e.response.data.messages, user: req.body});
+        .render(`auth/login`, {
+          errorMessages: e.response.data.messages,
+          data: req.body,
+          csrfToken: req.csrfToken()
+        });
     }
   });
 

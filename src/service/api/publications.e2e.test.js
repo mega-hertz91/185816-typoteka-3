@@ -75,7 +75,7 @@ describe(`API create publication`, () => {
         announce: `tLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt`,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt`,
         userId: 1,
-        categories: [1, 2]
+        categories: [1]
       })
   });
 

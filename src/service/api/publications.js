@@ -62,6 +62,26 @@ module.exports = (app, PublicationDataService, CommentService) => {
   });
 
   /**
+   * get by user id
+   */
+  router.get(`/user/:id`, async (req, res) => {
+    try {
+      const item = await PublicationDataService.getByAuthorId(req.params.id);
+      if (item) {
+        res.send(item);
+      } else {
+        res
+          .status(ResponseStatus.NOT_FOUND)
+          .send({success: true, message: `not found`});
+      }
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send({success: false, error: e.message});
+    }
+  });
+
+  /**
    * Create item
    * @return {object|string}
    */
@@ -73,6 +93,7 @@ module.exports = (app, PublicationDataService, CommentService) => {
         .status(ResponseStatus.SUCCESS_CREATE)
         .send(item);
     } catch (e) {
+      console.log(e);
       res
         .status(ResponseStatus.INTERNAL_ERROR)
         .send({success: false, error: e.message});

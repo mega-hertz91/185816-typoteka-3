@@ -17,7 +17,13 @@ module.exports = (app) => {
   app.use(`/articles`, router);
 
   router.get(`/add`, authMiddleware, csrfProtection, async (req, res) => {
-    res.render(`articles/add`, {csrfToken: req.csrfToken()});
+    try {
+      const categories = await api.getCategories();
+
+      res.render(`articles/add`, {categories, csrfToken: req.csrfToken()});
+    } catch (e) {
+      res.redirect(`/error`);
+    }
   });
 
   router.post(`/add`, authMiddleware, upload.single(`upload`), csrfProtection, async (req, res) => {
@@ -27,15 +33,28 @@ module.exports = (app) => {
       announce: body.announce,
       description: body.description,
       preview: file ? file.filename : ``,
-      userId: 1,
+      userId: req.session.user.id,
       categories: ensureArray(body.categories)
     };
+
+    console.log(data);
 
     try {
       await api.createArticle(data);
       res.redirect(`/my`);
     } catch (e) {
-      res.render(`articles/add`, {errorMessages: e.response.data.message, article: req.body, user: req.session.user, csrfToken: req.csrfToken()});
+      try {
+        const categories = await api.getCategories();
+        res.render(`articles/add`, {
+          errorMessages: e.response.data.message,
+          article: req.body,
+          categories,
+          user: req.session.user,
+          csrfToken: req.csrfToken()
+        });
+      } catch (err) {
+        res.redirect(`/error?message${err.message}`);
+      }
     }
   });
 
@@ -46,7 +65,12 @@ module.exports = (app) => {
   router.get(`/edit/:id`, authMiddleware, csrfProtection, async (req, res) => {
     try {
       const article = await api.getArticleById(req.params.id);
-      res.render(`articles/edit`, {article, user: req.session.user, csrfToken: req.csrfToken()});
+      const categories = await api.getCategories();
+      res.render(`articles/edit`, {
+        article,
+        categories,
+        user: req.session.user,
+        csrfToken: req.csrfToken()});
     } catch (e) {
       res.redirect(`/404`);
     }
@@ -68,7 +92,14 @@ module.exports = (app) => {
       await api.updateArticle(req.params.id, data);
       res.redirect(`/articles/edit/${req.params.id}`);
     } catch (e) {
-      res.render(`articles/edit`, {errorMessages: e.response.data.message, article: req.body, user: req.session.user, csrfToken: req.csrfToken()});
+      const categories = await api.getCategories();
+      res.render(`articles/edit`, {
+        errorMessages: e.response.data.message,
+        categories,
+        article: req.body,
+        user: req.session.user,
+        csrfToken: req.csrfToken()
+      });
     }
   });
 

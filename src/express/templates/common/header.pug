@@ -18,3 +18,7 @@ header.header
           p #{user.firstName} #{user.lastName}
         li.header__list-item
           a.header__exit(href='/logout') Выйти
+    a.header__avatar.avatar
+      img(src=user.avatar ? '/img/' + user.avatar : '/img/default.png' alt=user.firstName)
+    a.header__search.button.button--search(href='/search/' aria-label='поиск по сайту')
+

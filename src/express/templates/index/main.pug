@@ -8,34 +8,11 @@ block content
   section.main-page__theme-list
     h2.visually-hidden &Scy;&pcy;&icy;&scy;&ocy;&kcy; &tcy;&iecy;&mcy;
     ul.themes
-      li.themes__item
-        a.themes__item-link(href='#')
-          | &Acy;&vcy;&tcy;&ocy;&mcy;&ocy;&bcy;&icy;&lcy;&icy;
-          sup 88
-      li.themes__item
-        a.themes__item-link(href='#')
-          | &Ucy;&dcy;&acy;&lcy;&iecy;&ncy;&ncy;&acy;&yacy; &rcy;&acy;&bcy;&ocy;&tcy;&acy;
-          sup 13
-      li.themes__item
-        a.themes__item-link(href='#')
-          | &Bcy;&icy;&zcy;&ncy;&iecy;&scy;
-          sup 13
-      li.themes__item
-        a.themes__item-link(href='#')
-          | &Pcy;&ucy;&tcy;&iecy;&shcy;&iecy;&scy;&tcy;&vcy;&icy;&yacy;
-          sup 13
-      li.themes__item
-        a.themes__item-link.themes__item-link--padding(href='#')
-          | &Dcy;&icy;&zcy;&acy;&jcy;&ncy; &icy; &ocy;&bcy;&ucy;&scy;&tcy;&rcy;&ocy;&jcy;&scy;&tcy;&vcy;&ocy;
-          sup 13
-      li.themes__item
-        a.themes__item-link(href='#')
-          | &Pcy;&rcy;&ocy;&icy;&zcy;&vcy;&ocy;&dcy;&scy;&tcy;&vcy;&ocy; &icy;&gcy;&rcy;&ucy;&shcy;&iecy;&kcy;
-          sup 22
-      li.themes__item
-        a.themes__item-link(href='#')
-          | UX &amp; UI
-          sup 22
+      each category in categories
+        li.themes__item
+          a.themes__item-link(href='/?category_id=' + category.id)
+            | #{category.name}
+            sup #{category.publications.length}
   .main-page__section-flex
     section.main-page__hot.hot
       h2.hot__name
@@ -88,25 +65,31 @@ block content
           a.last__list-link(href='#')
             | &CHcy;&tcy;&ocy;-&tcy;&ocy; &vcy;&scy;&iecy; &ecy;&lcy;&iecy;&kcy;&tcy;&rcy;&ocy;&kcy;&acy;&rcy;&ycy; &vcy; &pcy;&ocy;&scy;&lcy;&iecy;&dcy;&ncy;&iecy;&iecy; &vcy;&rcy;&iecy;&mcy;&yacy; &vcy;&scy;&iecy; &ncy;&acy; &ocy;&dcy;&ncy;&ocy; &lcy;&icy;&tscy;&ocy;
             | &dcy;&iecy;&lcy;&acy;&yucy;&tcy;&scy;&yacy;))
-  section.main-page__list.preview
-    h2.visually-hidden &Scy;&pcy;&icy;&scy;&ocy;&kcy; &pcy;&rcy;&iecy;&vcy;&softcy;&yucy; &scy;&tcy;&acy;&tcy;&iecy;&jcy;
-    ul.preview__list
-      each article in articles
-        li.preview__item
-          ul.preview__breadcrumbs
-            if article.categories
-              each category in article.categories
-                li.preview__breadcrumbs-item
-                  a.preview__breadcrumbs-link(href='#') #{category.name}
-          .preview__background
-            img.preview__background-image(src='img/skyscraper@1x.jpg' width='460' height='240' srcset='../src/express/public/img/../src/express/public/imgscraper@1x.jpg 1x, img/skyscraper@2x.jpg 2x' alt='Фотография небоскреба')
-          time.preview__time(datetime='#{article.createDate}') #{article.createDate}
-          h3.preview__name
-            a.preview__name-link(href='#') #{article.title}
-          p.preview__text #{article.announce}
-          if article.comments
-            a.preview__comment(href='#')
-              | &Kcy;&ocy;&mcy;&mcy;&iecy;&ncy;&tcy;&acy;&rcy;&icy;&icy;
-              span.preview__cloud
-              b.preview__comment-count #{article.comments.length}
-  +pagination(page, totalPages, 2, `?`)
+  if articles
+    section.main-page__list.preview
+      h2.visually-hidden &Scy;&pcy;&icy;&scy;&ocy;&kcy; &pcy;&rcy;&iecy;&vcy;&softcy;&yucy; &scy;&tcy;&acy;&tcy;&iecy;&jcy;
+      ul.preview__list
+        each article in articles
+          li.preview__item
+            ul.preview__breadcrumbs
+              if article.categories
+                each category in article.categories
+                  li.preview__breadcrumbs-item
+                    a.preview__breadcrumbs-link(href='#') #{category.name}
+            if article.preview
+              .preview__background
+                img.preview__background-image(src='img/'+article.preview width='460' height='240' alt=article.title)
+            time.preview__time(datetime='#{article.createDate}') #{article.createDate}
+            h3.preview__name
+              a.preview__name-link(href='/articles/'+article.id) #{article.title}
+            p.preview__text #{article.announce}
+            if article.comments
+              a.preview__comment(href='#')
+                | &Kcy;&ocy;&mcy;&mcy;&iecy;&ncy;&tcy;&acy;&rcy;&icy;&icy;
+                span.preview__cloud
+                b.preview__comment-count #{article.comments.length}
+    +pagination(page, totalPages, 2, `?`)
+  else
+    .main-page__empty-wrapper
+      p.main-page__empty-text Здесь пока пусто!
+

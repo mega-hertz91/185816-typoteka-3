@@ -24,7 +24,8 @@ const define = (sequelize) => {
   PublicationCategories.init({}, {
     sequelize,
     modelName: `PublicationCategories`,
-    tableName: `publication_categories`
+    tableName: `publication_categories`,
+    timestamps: false
   });
 
   /**

@@ -1,15 +1,16 @@
 'use strict';
 
 const {Router} = require(`express`);
-const api = require(`../api`);
+const api = require(`../api`).getAPI();
+const authMiddleware = require(`../middlewares/auth`);
 
 module.exports = (app) => {
   const router = new Router();
 
   app.use(`/my`, router);
 
-  router.get(`/`, async (req, res) => {
-    const articles = await api.getAPI().getArticles({limit: null, offset: null});
+  router.get(`/`, authMiddleware, async (req, res) => {
+    const articles = await api.getArticleByUserId(req.session.user.id);
 
     res.render(`my/my`, {articles, user: req.session.user});
   });
@@ -17,7 +18,7 @@ module.exports = (app) => {
   router.get(`/comments`, async (req, res) => {
     const limit = 1;
     const offset = 8;
-    const articles = await api.getAPI().getArticles({limit, offset});
+    const articles = await api.getArticles({limit, offset});
     const comments = articles.map((item) => {
       return item.comments.map((commentItem) => {
         return {
