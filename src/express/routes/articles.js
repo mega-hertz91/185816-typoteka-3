@@ -10,6 +10,7 @@ const {storage} = require(`../services/multer`);
 const upload = multer({storage});
 const authMiddleware = require(`../middlewares/auth`);
 const csrfProtection = require(`../services/csrf`);
+const urlParser = require(`../services/url-encoder-parser`);
 
 module.exports = (app) => {
   const router = new Router();
@@ -18,8 +19,13 @@ module.exports = (app) => {
   router.get(`/add`, authMiddleware, csrfProtection, async (req, res) => {
     try {
       const categories = await api.getCategories();
+      const {user} = req.session;
 
-      res.render(`articles/add`, {categories, csrfToken: req.csrfToken()});
+      res.render(`articles/add`, {
+        categories,
+        csrfToken: req.csrfToken(),
+        user
+      });
     } catch (e) {
       res.redirect(`/error`);
     }
@@ -27,16 +33,15 @@ module.exports = (app) => {
 
   router.post(`/add`, authMiddleware, upload.single(`upload`), csrfProtection, async (req, res) => {
     const {body, file} = req;
+    const {user} = req.session;
     const data = {
       title: body.title,
       announce: body.announce,
       description: body.description,
       preview: file ? file.filename : ``,
-      userId: req.session.user.id,
+      userId: user.id,
       categories: ensureArray(body.categories)
     };
-
-    console.log(data);
 
     try {
       await api.createArticle(data);
@@ -62,12 +67,37 @@ module.exports = (app) => {
       const article = await api.getArticleById(req.params.id);
 
       if (article) {
-        res.render(`articles/by-id`, {article, user: req.session.user});
+        res.render(`articles/by-id`, {
+          article,
+          user: req.session.user,
+        });
       } else {
         res.redirect(`/404`);
       }
     } catch (e) {
       res.redirect(`/error`);
+    }
+  });
+
+  router.post(`/:id`, authMiddleware, urlParser, async (req, res) => {
+    try {
+      await api.createComment({
+        userId: req.session.user.id,
+        publicationId: req.params.id,
+        message: req.body.message
+      });
+
+      res
+        .redirect(`/articles/${req.params.id}`);
+    } catch (e) {
+      const article = await api.getArticleById(req.params.id);
+      res
+        .render(`articles/by-id`, {
+          article,
+          user: req.session.user,
+          errorMessages: e.response.data.message,
+          comment: req.body.message
+        });
     }
   });
 
@@ -99,7 +129,7 @@ module.exports = (app) => {
       announce: body.announce,
       description: body.description,
       preview: file ? file.filename : false,
-      userId: req.user.id,
+      userId: req.session.user.id,
       categories: ensureArray(body.categories),
       createdAt: body.createdAt
     };

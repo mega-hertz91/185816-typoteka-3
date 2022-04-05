@@ -54,24 +54,24 @@ module.exports = (app) => {
   });
 
   router.get(`/login`, userSessionMiddleware, csrfProtection, (req, res) => {
-    res.render(`auth/login`, {csrfToken: req.csrfToken()});
+    res.render(`auth/login`, {csrfToken: req.csrfToken(), redirect: req.header(`referer`)});
   });
 
   router.post(`/login`, userSessionMiddleware, urlEncodeParser, csrfProtection, async (req, res) => {
-    console.log(req.body);
     const {email, password} = req.body;
     try {
       req.session.user = await api.auth({email, password});
       req.session.save(() => {
         res
-          .redirect(`/`);
+          .redirect(req.query.redirect);
       });
     } catch (e) {
       res
         .render(`auth/login`, {
           errorMessages: e.response.data.messages,
           data: req.body,
-          csrfToken: req.csrfToken()
+          csrfToken: req.csrfToken(),
+          redirect: req.query.redirect
         });
     }
   });

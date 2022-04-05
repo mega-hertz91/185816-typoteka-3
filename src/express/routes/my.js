@@ -16,19 +16,11 @@ module.exports = (app) => {
   });
 
   router.get(`/comments`, async (req, res) => {
-    const limit = 1;
-    const offset = 8;
-    const articles = await api.getArticles({limit, offset});
-    const comments = articles.map((item) => {
-      return item.comments.map((commentItem) => {
-        return {
-          title: item.title,
-          date: item.createDate,
-          text: commentItem.text
-        };
-      });
-    });
-
-    res.render(`my/comments`, {comments: comments.shift()});
+    try {
+      const comments = await api.getCommentByUserId(req.session.user.id);
+      res.render(`my/comments`, {comments, user: req.session.user});
+    } catch (e) {
+      res.redirect(`/error`);
+    }
   });
 };

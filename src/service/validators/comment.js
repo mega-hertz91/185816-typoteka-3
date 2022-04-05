@@ -12,7 +12,8 @@ const schema = Joi.object({
     'string.max': ErrorMessage.MAX,
     'string.min': ErrorMessage.MIN
   }),
-  userId: Joi.number().required()
+  userId: Joi.number().required(),
+  publicationId: Joi.number().required()
 });
 
 module.exports = schema;

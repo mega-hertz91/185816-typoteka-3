@@ -47,6 +47,17 @@ class API {
     return this._load(`/comments`);
   }
 
+  getCommentByUserId(id) {
+    return this._load(`/comments/user/${id}`);
+  }
+
+  createComment(data) {
+    return this._load(`/comments`, {
+      method: `POST`,
+      data
+    });
+  }
+
   createArticle(data) {
     return this._load(`/publications`, {
       method: Method.POST,

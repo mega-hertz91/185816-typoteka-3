@@ -11,7 +11,29 @@ header.header
           a.header__enter(href='/register') Регистрация
     a.header__search.button.button--search(href='/search' aria-label='поиск по сайту')
 
-  else
+  else if user.roleId === 2
+    nav.header__nav
+      ul.header__nav-list
+        li.header__list-item
+          p #{user.firstName} #{user.lastName}
+        li.header__list-item
+          a.header__exit(href='/logout') Выйти
+    a.header__avatar.avatar
+      img(src=user.avatar ? '/img/' + user.avatar : '/img/default.png' alt=user.firstName)
+    a.button.button--colored.header__button-new(href='/articles/add') Новая запись
+    div.header__dropdown
+      a.button.button--burger.header__burger(href='#') Открыть меню
+      ul.navigation.header__navigation
+        li.navigation__item
+          a(href='/my/comments') Мои комментарии
+        li.navigation__item
+          a(href='/my') Мои публикации
+        li.navigation__item
+          a(href='/my/categories') Мои категории
+    a.header__search.button.button--search(href='#' aria-label='поиск по сайту')
+
+
+  else if user.roleId === 1
     nav.header__nav
       ul.header__nav-list
         li.header__list-item

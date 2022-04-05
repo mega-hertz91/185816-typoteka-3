@@ -9,7 +9,7 @@ block content
         | &ocy;&kcy;&ncy;&ocy;
       h2.popup__title &Vcy;&ocy;&jcy;&tcy;&icy;
       .popup__form.form.form--log-in
-        form(action='' method='post')
+        form(action='?redirect='+redirect method='post')
           input(type="hidden" name="_csrf" value=csrfToken)
           .form__field
             label
