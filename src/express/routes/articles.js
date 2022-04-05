@@ -49,6 +49,7 @@ module.exports = (app) => {
     } catch (e) {
       try {
         const categories = await api.getCategories();
+
         res.render(`articles/add`, {
           errorMessages: e.response.data.message,
           article: req.body,
@@ -62,7 +63,7 @@ module.exports = (app) => {
     }
   });
 
-  router.get(`/:id`, async (req, res) => {
+  router.get(`/:id`, csrfProtection, async (req, res) => {
     try {
       const article = await api.getArticleById(req.params.id);
 
@@ -70,6 +71,7 @@ module.exports = (app) => {
         res.render(`articles/by-id`, {
           article,
           user: req.session.user,
+          csrfToken: req.csrfToken()
         });
       } else {
         res.redirect(`/404`);
@@ -79,7 +81,7 @@ module.exports = (app) => {
     }
   });
 
-  router.post(`/:id`, authMiddleware, urlParser, async (req, res) => {
+  router.post(`/:id`, authMiddleware, urlParser, csrfProtection, async (req, res) => {
     try {
       await api.createComment({
         userId: req.session.user.id,
@@ -96,7 +98,8 @@ module.exports = (app) => {
           article,
           user: req.session.user,
           errorMessages: e.response.data.message,
-          comment: req.body.message
+          comment: req.body.message,
+          csrfToken: req.csrfToken()
         });
     }
   });

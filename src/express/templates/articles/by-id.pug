@@ -44,6 +44,7 @@ block content
         if(user)
           .comments__footer.comments__footer--user
             form(action='' method='POST')
+              input(type="hidden" name="_csrf" value=csrfToken)
               .comments__avatar.avatar
                 img(src='/img/'+user.avatar alt=user.firstName title=user.firstName + user.lastName)
               label

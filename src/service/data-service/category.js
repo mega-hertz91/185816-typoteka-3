@@ -5,6 +5,7 @@ const Aliases = require(`../models/alias`);
 class CategoryDataService {
   constructor(sequelize) {
     this._Category = sequelize.models.Category;
+    this._Publication = sequelize.models.Publication;
   }
 
   /**
@@ -12,7 +13,14 @@ class CategoryDataService {
    */
   getAll() {
     return this._Category.findAll({
-      include: [Aliases.PUBLICATIONS]
+      include: [
+        {
+          model: this._Publication,
+          as: Aliases.PUBLICATIONS,
+          attributes: [`id`, `title`]
+        }
+      ],
+      order: [[`id`, `DESC`]]
     });
   }
 
@@ -35,6 +43,14 @@ class CategoryDataService {
     return this._Category.update(data, {
       where: {id}
     });
+  }
+
+  /**
+   * @param {object} data
+   * @return {Promise}
+   */
+  create(data) {
+    return this._Category.create(data);
   }
 
   /**

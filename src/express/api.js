@@ -43,6 +43,20 @@ class API {
     return this._load(`/categories`);
   }
 
+  createCategory(data) {
+    return this._load(`/categories`, {
+      method: Method.POST,
+      data
+    });
+  }
+
+  updateCategory(id, data) {
+    return this._load(`/categories/${id}`, {
+      method: Method.PUT,
+      data
+    });
+  }
+
   getComments() {
     return this._load(`/comments`);
   }
@@ -53,7 +67,7 @@ class API {
 
   createComment(data) {
     return this._load(`/comments`, {
-      method: `POST`,
+      method: Method.POST,
       data
     });
   }
