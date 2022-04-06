@@ -44,7 +44,8 @@ class CommentDataService {
           model: this._Publication,
           attributes: [`title`]
         }
-      ]
+      ],
+      order: [[`createdAt`, `DESC`]]
     });
   }
 

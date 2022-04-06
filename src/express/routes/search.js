@@ -7,6 +7,10 @@ module.exports = (app) => {
   const router = new Router();
   app.use(`/search`, router);
 
+  /**
+   * Display result search
+   * @method GET
+   */
   router.get(`/`, async (req, res) => {
     const {query} = req.query;
 

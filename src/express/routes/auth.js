@@ -13,10 +13,23 @@ module.exports = (app) => {
   const router = new Router();
   app.use(`/`, router);
 
+
+  /**
+   * Display form for register new User
+   * @method GET
+   */
   router.get(`/register`, userSessionMiddleware, csrfProtection, (req, res) => {
     res.render(`auth/register`, {csrfToken: req.csrfToken()});
   });
 
+  /**
+   * Register new User
+   * @method POST
+   * @schema: {
+   *   email: String,
+   *   password: String
+   * }
+   */
   router.post(`/register`, userSessionMiddleware, upload.single(`avatar`), csrfProtection, async (req, res) => {
     const {body, file} = req;
 
@@ -53,18 +66,37 @@ module.exports = (app) => {
     }
   });
 
+  /**
+   * Display form for authenticate user
+   * @method GET
+   */
   router.get(`/login`, userSessionMiddleware, csrfProtection, (req, res) => {
     res.render(`auth/login`, {csrfToken: req.csrfToken(), redirect: req.header(`referer`)});
   });
 
+  /**
+   * Authenticate user
+   * @method POST
+   * @schema: {
+   *   email: String,
+   *   password: String
+   * }
+   */
   router.post(`/login`, userSessionMiddleware, urlEncodeParser, csrfProtection, async (req, res) => {
     const {email, password} = req.body;
+    const {redirect} = req.query;
     try {
       req.session.user = await api.auth({email, password});
-      req.session.save(() => {
+
+      if (redirect) {
+        req.session.save(() => {
+          res
+            .redirect(req.query.redirect);
+        });
+      } else {
         res
-          .redirect(req.query.redirect);
-      });
+          .redirect(`/`);
+      }
     } catch (e) {
       res
         .render(`auth/login`, {
@@ -76,6 +108,9 @@ module.exports = (app) => {
     }
   });
 
+  /**
+   * Logout user
+   */
   router.get(`/logout`, (req, res) => {
     delete req.session.user;
 

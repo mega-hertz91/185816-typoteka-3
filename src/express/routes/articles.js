@@ -9,6 +9,7 @@ const multer = require(`multer`);
 const {storage} = require(`../services/multer`);
 const upload = multer({storage});
 const authMiddleware = require(`../middlewares/auth`);
+const authOwnerMiddleware = require(`../middlewares/auth-owner`);
 const csrfProtection = require(`../services/csrf`);
 const urlParser = require(`../services/url-encoder-parser`);
 
@@ -16,7 +17,12 @@ module.exports = (app) => {
   const router = new Router();
   app.use(`/articles`, router);
 
-  router.get(`/add`, authMiddleware, csrfProtection, async (req, res) => {
+
+  /**
+   * Display form for add new Article
+   * @method GET
+   */
+  router.get(`/add`, authMiddleware, authOwnerMiddleware, csrfProtection, async (req, res) => {
     try {
       const categories = await api.getCategories();
       const {user} = req.session;
@@ -31,7 +37,20 @@ module.exports = (app) => {
     }
   });
 
-  router.post(`/add`, authMiddleware, upload.single(`upload`), csrfProtection, async (req, res) => {
+
+  /**
+   * Add new article only auth user
+   * @method POST
+   * @schema {
+   *   title: String,
+   *   announce: String,
+   *   description: String,
+   *   preview: String,
+   *   categories: Array,
+   *   userId: Integer
+   * }
+   */
+  router.post(`/add`, authMiddleware, authOwnerMiddleware, upload.single(`upload`), csrfProtection, async (req, res) => {
     const {body, file} = req;
     const {user} = req.session;
     const data = {
@@ -63,6 +82,12 @@ module.exports = (app) => {
     }
   });
 
+
+  /**
+   * Display Article by id
+   * @method GET
+   * @query id
+   */
   router.get(`/:id`, csrfProtection, async (req, res) => {
     try {
       const article = await api.getArticleById(req.params.id);
@@ -81,6 +106,15 @@ module.exports = (app) => {
     }
   });
 
+  /**
+   * Create comments by Article id
+   * @method POST
+   * @schema {
+   *   userId: Integer,
+   *   publicationId: Integer,
+   *   message: String
+   * }
+   */
   router.post(`/:id`, authMiddleware, urlParser, csrfProtection, async (req, res) => {
     try {
       await api.createComment({
@@ -104,7 +138,11 @@ module.exports = (app) => {
     }
   });
 
-  router.get(`/edit/:id`, authMiddleware, csrfProtection, async (req, res) => {
+  /**
+   * Display form update Article by id
+   * @method GET
+   */
+  router.get(`/edit/:id`, authMiddleware, authOwnerMiddleware, csrfProtection, async (req, res) => {
     try {
       const article = await api.getArticleById(req.params.id);
       const categories = await api.getCategories();
@@ -124,7 +162,20 @@ module.exports = (app) => {
     }
   });
 
-  router.post(`/edit/:id`, authMiddleware, upload.single(`upload`), csrfProtection, async (req, res) => {
+  /**
+   * Update Article by id
+   * @method POST
+   * @schema {
+   *   title: String,
+   *   announce: String,
+   *   description: String,
+   *   preview: String,
+   *   userId: Integer,
+   *   categories: Array,
+   *   createdAt: String
+   * }
+   */
+  router.post(`/edit/:id`, authMiddleware, authOwnerMiddleware, upload.single(`upload`), csrfProtection, async (req, res) => {
     const {body, file} = req;
 
     const data = {
@@ -150,9 +201,5 @@ module.exports = (app) => {
         csrfToken: req.csrfToken()
       });
     }
-  });
-
-  router.get(`/category/:id`, (req, res) => {
-    res.send(`category`);
   });
 };
