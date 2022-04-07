@@ -33,6 +33,7 @@ module.exports = (app, CommentDataService) => {
       await CommentDataService.create(data);
 
       res
+        .status(ResponseStatus.SUCCESS_CREATE)
         .send(`success`);
     } catch (e) {
       console.log(e);
