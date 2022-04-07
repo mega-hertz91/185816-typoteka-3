@@ -62,3 +62,19 @@ describe(`API request undefined category`, () => {
 
   test(`Return status 404`, async () => expect(response.statusCode).toBe(ResponseStatus.NOT_FOUND));
 });
+
+describe(`API create new category`, () => {
+  let response;
+
+  beforeAll(async () => {
+    const app = await createAPI();
+    response = await request(app)
+      .post(`/categories/`)
+      .send({
+        name: `New category`
+      })
+  });
+
+
+  test(`Return status 201`, async () => expect(response.statusCode).toBe(ResponseStatus.SUCCESS_CREATE));
+});

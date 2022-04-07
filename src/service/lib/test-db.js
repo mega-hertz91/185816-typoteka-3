@@ -4,7 +4,7 @@ const defineModels = require(`../models/index`);
 const {hashSync} = require(`../lib/password`);
 
 module.exports = async (sequelize, {categories}) => {
-  const {Category, Role, User, Publication} = defineModels(sequelize);
+  const {Category, Role, User, Publication, Comment} = defineModels(sequelize);
   await sequelize.sync({force: true});
 
   await Role.bulkCreate([{name: `admin`}, {name: `registered`}, {name: `blocked`}]);
@@ -23,4 +23,14 @@ module.exports = async (sequelize, {categories}) => {
     description: `test`,
     userId: 1
   });
+
+  await Comment.bulkCreate([
+    {
+      message: `test message`,
+      userId: 1,
+      publicationId: 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ]);
 };
