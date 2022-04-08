@@ -2,10 +2,19 @@
 
 const {Method} = require(`../constants`);
 const axios = require(`axios`);
-const TIMEOUT = 1000;
+
+const {API_HOST, API_TIMEOUT_REQUEST} = process.env;
+
+const somethingIsNotDefined = [API_HOST, API_TIMEOUT_REQUEST].some((it) => it === undefined);
+
+if (somethingIsNotDefined) {
+  throw new Error(`One or more environmental variables are not defined API`);
+}
+
+const TIMEOUT = 1000 || API_TIMEOUT_REQUEST;
 
 const port = process.env.API_PORT || 3000;
-const defaultUrl = `http://localhost:${port}/api/`;
+const defaultUrl = `http://localhost:${port}/api/` || API_HOST;
 
 class API {
   constructor(baseURL, timeout) {
@@ -15,14 +24,17 @@ class API {
     });
   }
 
-  async getArticles({limit, offset}) {
+  async getArticles({limit, offset, category}) {
     let options = {};
     if (limit || offset) {
       options = {
         limit,
-        offset
+        offset,
+        category
       };
     }
+
+    console.log(options);
     return this._load(`/publications`, {
       params: options
     });
@@ -32,8 +44,41 @@ class API {
     return this._load(`/publications/${id}`);
   }
 
+  getArticleByUserId(id) {
+    return this._load(`/publications/user/${id}`);
+  }
+
   getCategories() {
     return this._load(`/categories`);
+  }
+
+  createCategory(data) {
+    return this._load(`/categories`, {
+      method: Method.POST,
+      data
+    });
+  }
+
+  updateCategory(id, data) {
+    return this._load(`/categories/${id}`, {
+      method: Method.PUT,
+      data
+    });
+  }
+
+  getComments() {
+    return this._load(`/comments`);
+  }
+
+  getCommentByUserId(id) {
+    return this._load(`/comments/user/${id}`);
+  }
+
+  createComment(data) {
+    return this._load(`/comments`, {
+      method: Method.POST,
+      data
+    });
   }
 
   createArticle(data) {

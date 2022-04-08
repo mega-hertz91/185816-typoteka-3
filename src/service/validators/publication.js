@@ -29,7 +29,8 @@ const schema = Joi.object({
     'string.max': ErrorMessage.DESCRIPTION_MAX
   }),
   preview: Joi.string().allow(null, ``),
-  userId: Joi.number()
+  userId: Joi.number(),
+  createdAt: Joi.string()
 });
 
 module.exports = schema;

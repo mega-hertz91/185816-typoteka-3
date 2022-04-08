@@ -7,11 +7,13 @@ block content
       each comment in comments
         li.publication__list-item
           .publication__header
-            img.publication__list-image(src='/img/avatar-small-2.png' width='20' height='20' alt='Аватар пользователя')
-            b.publication__list-name &Acy;&lcy;&iecy;&kcy;&scy;&acy;&ncy;&dcy;&rcy; &Pcy;&iecy;&tcy;&rcy;&ocy;&vcy;
-            time.publication__item-time(datetime='#{comment.date}') #{comment.date}
-          a.publication__item-text(href='#') #{comment.title}
-          p.publication__text-strong #{comment.text}
+            -
+              const date = new Date(comment.createdAt);
+            img.publication__list-image(src='/img/'+comment.User.avatar width='20' height='20' alt=comment.User.firstName)
+            b.publication__list-name #{comment.User.firstName} #{comment.User.lastName}
+            time.publication__item-time(datetime='#{comment.date.toISOString()}') #{date.toLocaleDateString()} #{date.toLocaleTimeString()}
+          a.publication__item-text(href='/articles/'+comment.publicationId) #{comment.Publication.title}
+          p.publication__text-strong #{comment.message}
           button.publication__button.button.button--close-item(type='button')
             span.visually-hidden &Zcy;&acy;&kcy;&rcy;&ycy;&tcy;&softcy; &scy;&tcy;&rcy;&ocy;&kcy;&ucy; &scy;&pcy;&icy;&scy;&kcy;&acy;
 

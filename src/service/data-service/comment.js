@@ -3,13 +3,19 @@
 class CommentDataService {
   constructor(sequelize) {
     this._Comment = sequelize.models.Comment;
+    this._User = sequelize.models.User;
+    this._Publication = sequelize.models.Publication;
   }
 
   /**
    * @return {Promise}
    */
   getAll() {
-    return this._Comment.findAll();
+    return this._Comment.findAll({
+      include: this._User,
+      order: [[`id`, `DESC`]],
+      limit: 5
+    });
   }
 
   /**
@@ -19,6 +25,27 @@ class CommentDataService {
   getById(id) {
     return this._Comment.findOne({
       where: {id}
+    });
+  }
+
+  /**
+   * @param {int} id
+   * @return {Promise}
+   */
+  getByUserId(id) {
+    return this._Comment.findAll({
+      include: [
+        {
+          model: this._User,
+          where: {id},
+          attributes: [`firstName`, `lastName`, `avatar`]
+        },
+        {
+          model: this._Publication,
+          attributes: [`title`]
+        }
+      ],
+      order: [[`createdAt`, `DESC`]]
     });
   }
 

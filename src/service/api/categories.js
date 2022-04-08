@@ -43,4 +43,34 @@ module.exports = (app, CategoryDataService) => {
         .send(e.message);
     }
   });
+
+  router.post(`/`, async (req, res) => {
+    try {
+      const category = await CategoryDataService.create(req.body);
+
+      res
+        .status(ResponseStatus.SUCCESS_CREATE)
+        .send(category);
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
+    }
+  });
+
+  router.put(`/:id`, async (req, res) => {
+    const {id} = req.params;
+
+    try {
+      const category = await CategoryDataService.update(id, req.body);
+
+      res
+        .status(ResponseStatus.SUCCESS_CREATE)
+        .send(category);
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
+    }
+  });
 };

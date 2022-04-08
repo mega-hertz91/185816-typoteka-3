@@ -1,0 +1,58 @@
+extends ../layout
+
+block content
+  section.post
+    h1.visually-hidden Пост
+    section.post__content
+      h2.visually-hidden Основное содержание
+      .post__wrapper
+        .post__head
+          a.post__backwards.button.button--backwards(href='/') Назад
+          time.post__date(datetime=article.createdAt) #{new Date(article.createdAt).toLocaleDateString()}
+          h2.post__title.title.title--main #{article.title}
+          ul.post__themes.themes
+            each category in article.categories
+              li.themes__item
+                a.themes__item-link(href='/?category='+category.id) #{category.name}
+                  sup #{category.publications.length}
+                button.themes__remove-btn(type='button') Удалить категорию
+        if (article.preview)
+          .post__picture
+            img(src='/img/'+article.preview alt=article.title style="width:100%")
+        .post__text
+          h3 #{article.title}
+          p #{article.announce}
+          p #{article.description}
+    .post__wrapper.post__wrapper--comments
+      section.post__comments.comments
+        h2.comments__title.title.title--middle Комментарии
+        ul.comments__list
+          if article.comments.length > 0
+            each comment in article.comments
+              li.comments__comment
+                .comments__avatar.avatar
+                  img(src='/img/'+comment.User.avatar alt=comment.User.firstName)
+                .comments__text
+                  .comments__head
+                    -
+                      const date = new Date(comment.createdAt);
+                    p #{comment.User.firstName}•
+                    time.comments__date(datetime=date.toISOString()) #{date.toLocaleDateString()}, #{date.toLocaleTimeString()}
+                  p.comments__message #{comment.message}
+          else
+            p Комментариев пока нет...
+        if(user)
+          .comments__footer.comments__footer--user
+            form(action='' method='POST')
+              input(type="hidden" name="_csrf" value=csrfToken)
+              .comments__avatar.avatar
+                img(src='/img/'+user.avatar alt=user.firstName title=user.firstName + user.lastName)
+              label
+                textarea(rows='1' name='message' placeholder='Присоединиться к обсуждению') #{comment ? comment : ''}
+              button.comments__button.button.button--colored(type='submit') Опубликовать
+
+            if errorMessages
+              each message in errorMessages
+                li #{message}
+
+

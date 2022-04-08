@@ -13,10 +13,23 @@ module.exports = (app) => {
   const router = new Router();
   app.use(`/`, router);
 
+
+  /**
+   * Display form for register new User
+   * @method GET
+   */
   router.get(`/register`, userSessionMiddleware, csrfProtection, (req, res) => {
     res.render(`auth/register`, {csrfToken: req.csrfToken()});
   });
 
+  /**
+   * Register new User
+   * @method POST
+   * @schema: {
+   *   email: String,
+   *   password: String
+   * }
+   */
   router.post(`/register`, userSessionMiddleware, upload.single(`avatar`), csrfProtection, async (req, res) => {
     const {body, file} = req;
 
@@ -39,37 +52,65 @@ module.exports = (app) => {
         res
           .render(`auth/register`, {
             errorMessages: e.response.data.message,
-            user: req.body
+            user: req.body,
+            csrfToken: req.csrfToken()
           });
       }
     } else {
       res
         .render(`auth/register`, {
           errorMessages: [`Passwords do not match`],
-          user: req.body
+          user: req.body,
+          csrfToken: req.csrfToken()
         });
     }
   });
 
+  /**
+   * Display form for authenticate user
+   * @method GET
+   */
   router.get(`/login`, userSessionMiddleware, csrfProtection, (req, res) => {
-    res.render(`auth/login`, {csrfToken: req.csrfToken()});
+    res.render(`auth/login`, {csrfToken: req.csrfToken(), redirect: req.header(`referer`)});
   });
 
+  /**
+   * Authenticate user
+   * @method POST
+   * @schema: {
+   *   email: String,
+   *   password: String
+   * }
+   */
   router.post(`/login`, userSessionMiddleware, urlEncodeParser, csrfProtection, async (req, res) => {
-    console.log(req.body);
     const {email, password} = req.body;
+    const {redirect} = req.query;
     try {
       req.session.user = await api.auth({email, password});
-      req.session.save(() => {
+
+      if (redirect) {
+        req.session.save(() => {
+          res
+            .redirect(req.query.redirect);
+        });
+      } else {
         res
           .redirect(`/`);
-      });
+      }
     } catch (e) {
       res
-        .render(`auth/login`, {errorMessages: e.response.data.messages, user: req.body});
+        .render(`auth/login`, {
+          errorMessages: e.response.data.messages,
+          data: req.body,
+          csrfToken: req.csrfToken(),
+          redirect: req.query.redirect
+        });
     }
   });
 
+  /**
+   * Logout user
+   */
   router.get(`/logout`, (req, res) => {
     delete req.session.user;
 

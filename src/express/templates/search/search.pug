@@ -4,17 +4,20 @@ block content
   section.search-page
     .search-page__wrapper
       h1 &Pcy;&ocy;&icy;&scy;&kcy;
-      .search.search-page__form
+      div.search.search-page__form
         form(action='/search' method='get')
           label
             input(type='text' name='query' placeholder='Что ищем?' value=query)
           button.search__button.button.button--transparent(type='submit') &Ncy;&acy;&jcy;&tcy;&icy;
 
-      section.main-page__publication.publication
-        if result
-          ul.publication__list
-            each item in result
-              li #{item.title}
+        if articles.length > 0
+          each article in articles
+            div.search__result
+              time.search__date(datetime=article.createdAt) #{article.createdAt}
+              a.search__link(href='/articles/' + article.id) #{article.title}
+
         else
-          p Результатов по вашему запросу нет :-(
+          div.search__result
+            p.search__link Результатов по вашему запросу нет :-(
+
 
