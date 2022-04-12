@@ -65,6 +65,12 @@ class API {
     });
   }
 
+  dropCategory(id) {
+    return this._load(`/categories/${id}`, {
+      method: Method.DELETE
+    });
+  }
+
   getComments() {
     return this._load(`/comments`);
   }

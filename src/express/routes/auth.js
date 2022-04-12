@@ -59,7 +59,7 @@ module.exports = (app) => {
     } else {
       res
         .render(`auth/register`, {
-          errorMessages: [`Passwords do not match`],
+          errorMessages: [`"password" пароли не совпадают`],
           user: req.body,
           csrfToken: req.csrfToken()
         });
@@ -100,10 +100,10 @@ module.exports = (app) => {
     } catch (e) {
       res
         .render(`auth/login`, {
-          errorMessages: e.response.data.messages,
+          errorMessages: e.response.data.message,
           data: req.body,
           csrfToken: req.csrfToken(),
-          redirect: req.query.redirect
+          redirect: redirect ? redirect : `/`
         });
     }
   });

@@ -16,8 +16,8 @@ module.exports = (app, PublicationDataService, CommentService) => {
 
   /**
    * Get all items
-   *
-   * @return {Array}
+   * @method GET
+   * @return {array|string}
    */
   router.get(`/`, async (req, res) => {
     const {categories, comments, offset, limit, category} = req.query;
@@ -33,16 +33,16 @@ module.exports = (app, PublicationDataService, CommentService) => {
 
       res.send(items);
     } catch (e) {
-      console.log(e);
       res
         .status(ResponseStatus.INTERNAL_ERROR)
-        .send({success: false, error: e.message});
+        .send(e.message);
     }
   });
 
   /**
    * Get by ID
    *
+   * @method GET
    * @return {object|string}
    */
   router.get(`/:id`, async (req, res) => {
@@ -58,12 +58,15 @@ module.exports = (app, PublicationDataService, CommentService) => {
     } catch (e) {
       res
         .status(ResponseStatus.INTERNAL_ERROR)
-        .send({success: false, error: e.message});
+        .send(e.message);
     }
   });
 
   /**
-   * get by user id
+   * Get publications by User ID
+   *
+   * @method GET
+   * @return {object|string}
    */
   router.get(`/user/:id`, async (req, res) => {
     try {
@@ -78,12 +81,22 @@ module.exports = (app, PublicationDataService, CommentService) => {
     } catch (e) {
       res
         .status(ResponseStatus.INTERNAL_ERROR)
-        .send({success: false, error: e.message});
+        .send(e.message);
     }
   });
 
   /**
-   * Create item
+   * Create new publication
+   *
+   * @method POST
+   * @schema {
+   *   userId: Integer,
+   *   title: String,
+   *   announce: String,
+   *   description: String,
+   *   preview: String,
+   *   categories: Array
+   * }
    * @return {object|string}
    */
   router.post(`/`, validateMiddleware(publicationsSchema), async (req, res) => {
@@ -102,37 +115,58 @@ module.exports = (app, PublicationDataService, CommentService) => {
   });
 
   /**
-   * Update item
+   * Update publication
+   *
+   * @method PUT
+   * @schema {
+   *   userId: Integer,
+   *   title: String,
+   *   announce: String,
+   *   description: String,
+   *   preview: String,
+   *   categories: Array
+   * }
    * @return {object}
    */
   router.put(`/:id`, validateMiddleware(publicationsSchema), async (req, res) => {
     try {
-      await PublicationDataService.update(req.params.id, req.body);
+      const publication = await PublicationDataService.update(req.params.id, req.body);
 
-      console.log({success: true});
-
-      res.send({success: true});
+      res.send(publication);
     } catch (e) {
       res
         .status(ResponseStatus.INTERNAL_ERROR)
-        .send({success: false, error: e.message});
-    }
-  });
-
-  router.delete(`/:id`, async (req, res) => {
-    try {
-      await PublicationDataService.drop(req.params.id);
-
-      res.send({success: true});
-    } catch (e) {
-      res
-        .status(ResponseStatus.INTERNAL_ERROR)
-        .send({success: false, error: e.message});
+        .send(e.message);
     }
   });
 
   /**
-   * Add comment by publicationID
+   * Delete publication by ID
+   *
+   * @method DELETE
+   * @return {string}
+   */
+  router.delete(`/:id`, async (req, res) => {
+    try {
+      await PublicationDataService.drop(req.params.id);
+
+      res.send(`Delete success`);
+    } catch (e) {
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send(e.message);
+    }
+  });
+
+  /**
+   * Create comment by Publication ID
+   *
+   * @method POST
+   * @schema {
+   *   userId: Integer,
+   *   publicationId: Integer,
+   *   message: String
+   * }
    */
   router.post(`/:id/comment`, validateMiddleware(commentSchema), async (req, res) => {
     const data = req.body;

@@ -3,8 +3,8 @@
 const Joi = require(`joi`);
 
 const Limit = {
-  MIN: 10,
-  MAX: 150
+  MIN: 5,
+  MAX: 30
 };
 
 const ErrorMessage = {
@@ -14,14 +14,12 @@ const ErrorMessage = {
 };
 
 const schema = Joi.object({
-  message: Joi.string().required().min(Limit.MIN).max(Limit.MAX).messages({
+  name: Joi.string().required().min(Limit.MIN).max(Limit.MAX).messages({
+    'string.base': ErrorMessage.EMPTY,
+    'string.empty': ErrorMessage.EMPTY,
     'string.max': ErrorMessage.MAX,
     'string.min': ErrorMessage.MIN,
-    'string.base': ErrorMessage.EMPTY,
-    'string.empty': ErrorMessage.EMPTY
-  }),
-  userId: Joi.number().required(),
-  publicationId: Joi.number().required()
+  })
 });
 
 module.exports = schema;

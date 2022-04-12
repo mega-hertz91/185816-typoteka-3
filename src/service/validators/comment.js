@@ -4,7 +4,7 @@ const Joi = require(`joi`);
 
 const Limit = {
   MIN: 10,
-  MAX: 150
+  MAX: 1000
 };
 
 const ErrorMessage = {
