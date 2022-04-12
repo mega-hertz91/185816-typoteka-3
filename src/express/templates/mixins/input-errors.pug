@@ -1,0 +1,10 @@
+mixin inputErrors(errorMessages, inputName)
+
+  - const errors = Array.isArray(errorMessages) ? errorMessages.filter((error) => error.match(`"${inputName}"`)) : [];
+
+  if (errors.length > 0)
+    ul(style="list-style: none; margin: 0; padding: 0")
+      each error in errors
+        li
+          p.form__error-message
+            | #{error.replace(`"${inputName}"`, "")}

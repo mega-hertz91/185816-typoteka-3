@@ -48,7 +48,7 @@ module.exports = (app) => {
         comments,
         page,
         totalPages,
-        categories,
+        categories: categories.filter((category) => category.publications.length > 0),
         user: req.session.user,
         currentCategory: Number(req.query.category)
       });

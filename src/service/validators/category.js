@@ -8,9 +8,9 @@ const Limit = {
 };
 
 const ErrorMessage = {
-  MIN: `"message" Минимальное количество символов ${Limit.MIN}`,
-  MAX: `"message" Максимальное количество символов ${Limit.MAX}`,
-  EMPTY: `"message" Поле обязательно к заполнению`
+  MIN: `"name" Минимальное количество символов ${Limit.MIN}`,
+  MAX: `"name" Максимальное количество символов ${Limit.MAX}`,
+  EMPTY: `"name" Поле обязательно к заполнению`
 };
 
 const schema = Joi.object({

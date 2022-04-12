@@ -14,7 +14,7 @@ class CommentDataService {
     return this._Comment.findAll({
       include: this._User,
       order: [[`id`, `DESC`]],
-      limit: 5
+      limit: 4
     });
   }
 

@@ -13,8 +13,7 @@ if (somethingIsNotDefined) {
 
 const TIMEOUT = 1000 || API_TIMEOUT_REQUEST;
 
-const port = process.env.API_PORT || 3000;
-const defaultUrl = `http://localhost:${port}/api/` || API_HOST;
+const defaultUrl = `${API_HOST}/api/`;
 
 class API {
   constructor(baseURL, timeout) {
