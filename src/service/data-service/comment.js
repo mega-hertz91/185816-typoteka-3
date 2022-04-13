@@ -24,7 +24,13 @@ class CommentDataService {
    */
   getById(id) {
     return this._Comment.findOne({
-      where: {id}
+      where: {id},
+      include: [
+        {
+          model: this._User,
+          attributes: [`avatar`, `firstName`, `lastName`]
+        }
+      ]
     });
   }
 

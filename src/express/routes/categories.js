@@ -27,17 +27,20 @@ module.exports = (app) => {
       const [
         {count, publications},
         categories,
-        comments
+        comments,
+        hotPublications
       ] = await Promise.all([
         api.getArticles({limit, offset, category}),
         api.getCategories(true),
-        api.getComments()
+        api.getComments(),
+        api.getArticles({}, true)
       ]);
 
-      const hotArticles = publications
+      const hotArticles = hotPublications
         .sort((a, b) => {
           return b.comments.length - a.comments.length;
         })
+        .slice(0, 4)
         .filter((article) => article.comments.length > 0);
 
       const totalPages = Math.ceil(count / PUBLICATIONS_PER_PAGE);
