@@ -2,6 +2,7 @@
 
 const {PUBLICATIONS_PER_PAGE} = require(`../constants`);
 const {Router} = require(`express`);
+const {ResponseStatus} = require("../../constants");
 const api = require(`../api`).getAPI();
 
 module.exports = (app) => {
@@ -49,7 +50,9 @@ module.exports = (app) => {
         currentCategory: Number(req.query.category)
       });
     } catch (e) {
-      res.send(e);
+      res
+        .status(ResponseStatus.INTERNAL_ERROR)
+        .send();
     }
   });
 

@@ -44,7 +44,7 @@
     "frontend": "nodemon -r dotenv/config ./src/express/express.js",
     "filldb": "cross-env NODE_ENV=development node -r dotenv/config ./src/service/service.js --filldb 10",
     "dev": "concurrently --name \"API,FRONTEND\" --prefix-colors \"blue, green\"  \"npm run backend::debug\" \"npm run frontend\"",
-    "start": ""
+    "start": "concurrently --name \"API,FRONTEND\" --prefix-colors \"blue, green\"  \"npm run backend\" \"npm run frontend\""
   },
   "repository": {
     "type": "git",
