@@ -2,7 +2,6 @@
 
 const {PUBLICATIONS_PER_PAGE} = require(`../constants`);
 const {Router} = require(`express`);
-const {ResponseStatus} = require("../../constants");
 const api = require(`../api`).getAPI();
 
 module.exports = (app) => {
