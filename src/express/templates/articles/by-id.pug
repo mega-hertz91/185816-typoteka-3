@@ -1,4 +1,6 @@
 extends ../layout
+include ../mixins/date
+include ../mixins/input-errors
 
 block content
   section.post
@@ -8,7 +10,8 @@ block content
       .post__wrapper
         .post__head
           a.post__backwards.button.button--backwards(href='/') Назад
-          time.post__date(datetime=article.createdAt) #{new Date(article.createdAt).toLocaleDateString()}
+          time.post__date(datetime=article.createdAt)
+            +date(article.createdAt)
           h2.post__title.title.title--main #{article.title}
           ul.post__themes.themes
             each category in article.categories
@@ -36,8 +39,9 @@ block content
                   .comments__head
                     -
                       const date = new Date(comment.createdAt);
-                    p #{comment.User.firstName}•
-                    time.comments__date(datetime=date.toISOString()) #{date.toLocaleDateString()}, #{date.toLocaleTimeString()}
+                    p #{comment.User.firstName} •
+                    time.comments__date(datetime=date.toISOString())
+                    +date(article.createdAt, true)
                   p.comments__message #{comment.message}
           else
             p Комментариев пока нет...
@@ -49,10 +53,11 @@ block content
                 img(src='/img/'+user.avatar alt=user.firstName title=user.firstName + user.lastName)
               label
                 textarea(rows='1' name='message' placeholder='Присоединиться к обсуждению') #{comment ? comment : ''}
-              button.comments__button.button.button--colored(type='submit') Опубликовать
-
-            if errorMessages
-              each message in errorMessages
-                li #{message}
+              div(style="width: 100%")
+                br
+                +inputErrors(errorMessages, "message")
+              div(style="width: 100%")
+                br
+                button.comments__button.button.button--colored(type='submit') Опубликовать
 
 

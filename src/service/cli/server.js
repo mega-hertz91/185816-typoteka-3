@@ -13,6 +13,7 @@ const {getLogger} = require(`../lib/logger`);
 const logger = getLogger({name: `api`});
 const sequelize = require(`../lib/sequelize`);
 const defineModels = require(`../models/index`);
+const socket = require(`../lib/socket`);
 
 /**
  * Initialize models

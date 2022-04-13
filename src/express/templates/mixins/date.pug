@@ -1,0 +1,21 @@
+mixin date(string, time)
+ -
+   const DEFAULT_LOCALE = 'ru-RU';
+   const dateParams = {
+     year: 'numeric',
+     month: 'numeric',
+     day: 'numeric'
+   };
+
+   const timeParams = {
+     year: 'numeric',
+     month: 'numeric',
+     day: 'numeric',
+     hour: 'numeric',
+     minute: 'numeric'
+   };
+
+   const date = time ? new Date(string).toLocaleString(DEFAULT_LOCALE, timeParams) : new Date(string).toLocaleString(DEFAULT_LOCALE, dateParams);
+
+ span
+  | #{date}

@@ -58,17 +58,73 @@ module.exports = (app) => {
    *   name: String
    * }
    */
-  router.post(`/categories`, authMiddleware, authOwnerMiddleware, csrfProtection, urlParser, async (req, res) => {
+  router.post(`/categories`, authMiddleware, authOwnerMiddleware, urlParser, csrfProtection, async (req, res) => {
     try {
-      await api.createCategory(req.body);
+      const {name} = req.body;
+      await api.createCategory({name});
 
       res
         .redirect(`/my/categories`);
     } catch (e) {
+      const categories = await api.getCategories();
+
       res
         .render(`my/categories`, {
+          categories,
           user: req.session.user,
-          csrfToken: req.csrfToken()
+          csrfToken: req.csrfToken(),
+          errorMessages: e.response.data.message,
+        });
+    }
+  });
+
+  /**
+   * Update category by ID
+   * @method POST
+   * @schema: {
+   *   name: String
+   * }
+   */
+  router.post(`/categories/:id`, authMiddleware, authOwnerMiddleware, urlParser, csrfProtection, async (req, res) => {
+    try {
+      const {id} = req.params;
+      const {name} = req.body;
+      await api.updateCategory(id, {name});
+
+      res
+        .redirect(`/my/categories`);
+    } catch (e) {
+      const categories = await api.getCategories();
+      res
+        .render(`my/categories`, {
+          categories,
+          user: req.session.user,
+          csrfToken: req.csrfToken(),
+          errorMessages: e.response.data.message,
+        });
+    }
+  });
+
+  /**
+   * Delete category by ID
+   * @method GET
+   */
+  router.get(`/categories/:id/delete`, authMiddleware, authOwnerMiddleware, urlParser, csrfProtection, async (req, res) => {
+    try {
+      const {id} = req.params;
+      await api.dropCategory(id);
+
+      res
+        .redirect(`/my/categories`);
+    } catch (e) {
+      const categories = await api.getCategories();
+      console.log(e.response.data.message);
+      res
+        .render(`my/categories`, {
+          categories,
+          user: req.session.user,
+          csrfToken: req.csrfToken(),
+          errorMessages: e.response.data.message,
         });
     }
   });
