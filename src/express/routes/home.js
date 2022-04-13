@@ -13,28 +13,29 @@ module.exports = (app) => {
    */
   router.get(`/`, async (req, res) => {
     try {
-      // получаем номер страницы
       let {page = 1} = req.query;
       page = +page;
 
-      // количество запрашиваемых объявлений равно количеству объявлений на странице
       const limit = PUBLICATIONS_PER_PAGE;
 
-      // количество объявлений, которое нам нужно пропустить - это количество объявлений на предыдущих страницах
       const offset = (page - 1) * PUBLICATIONS_PER_PAGE;
+
       const [
         {count, publications},
         categories,
-        comments
+        comments,
+        hotPublications,
       ] = await Promise.all([
         api.getArticles({limit, offset}),
         api.getCategories(true),
-        api.getComments()
+        api.getComments(),
+        api.getArticles({}, true)
       ]);
 
-      const hotArticles = publications.slice(0, 4).sort((a, b) => {
-        return b.comments.length - a.comments.length;
-      });
+      const hotArticles = hotPublications
+        .sort((a, b) => b.comments.length - a.comments.length)
+        .slice(0, 4)
+        .filter((item) => item.comments.length > 0);
 
       const totalPages = Math.ceil(count / PUBLICATIONS_PER_PAGE);
 

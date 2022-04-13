@@ -42,8 +42,13 @@ module.exports = (app, CommentDataService) => {
     data.createdAt = Date.now();
     data.updatedAt = Date.now();
 
+    const io = req.app.locals.socketio;
+
     try {
-      await CommentDataService.create(data);
+      const comment = await CommentDataService.create(data);
+      const ioComment = await CommentDataService.getById(comment.id);
+
+      io.emit(`comment:create`, ioComment);
 
       res
         .status(ResponseStatus.SUCCESS_CREATE)

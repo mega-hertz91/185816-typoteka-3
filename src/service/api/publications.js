@@ -102,6 +102,9 @@ module.exports = (app, PublicationDataService, CommentService) => {
   router.post(`/`, validateMiddleware(publicationsSchema), async (req, res) => {
     try {
       const item = await PublicationDataService.create(req.body);
+      const io = req.app.locals.socketio;
+      const publication = await PublicationDataService.getById(item.id);
+      io.emit(`publication:create`, publication);
 
       res
         .status(ResponseStatus.SUCCESS_CREATE)
