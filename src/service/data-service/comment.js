@@ -14,7 +14,7 @@ class CommentDataService {
     return this._Comment.findAll({
       include: this._User,
       order: [[`id`, `DESC`]],
-      limit: 5
+      limit: 4
     });
   }
 
@@ -24,7 +24,13 @@ class CommentDataService {
    */
   getById(id) {
     return this._Comment.findOne({
-      where: {id}
+      where: {id},
+      include: [
+        {
+          model: this._User,
+          attributes: [`avatar`, `firstName`, `lastName`]
+        }
+      ]
     });
   }
 

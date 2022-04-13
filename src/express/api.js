@@ -13,8 +13,7 @@ if (somethingIsNotDefined) {
 
 const TIMEOUT = 1000 || API_TIMEOUT_REQUEST;
 
-const port = process.env.API_PORT || 3000;
-const defaultUrl = `http://localhost:${port}/api/` || API_HOST;
+const defaultUrl = `${API_HOST}/api/`;
 
 class API {
   constructor(baseURL, timeout) {
@@ -24,17 +23,21 @@ class API {
     });
   }
 
-  async getArticles({limit, offset, category}) {
+  async getArticles({limit, offset}, includes = false) {
     let options = {};
+
     if (limit || offset) {
       options = {
         limit,
-        offset,
-        category
+        offset
       };
     }
 
-    console.log(options);
+    if (includes) {
+      options.categories = true;
+      options.comments = true;
+    }
+
     return this._load(`/publications`, {
       params: options
     });
@@ -63,6 +66,12 @@ class API {
     return this._load(`/categories/${id}`, {
       method: Method.PUT,
       data
+    });
+  }
+
+  dropCategory(id) {
+    return this._load(`/categories/${id}`, {
+      method: Method.DELETE
     });
   }
 

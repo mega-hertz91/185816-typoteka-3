@@ -12,6 +12,10 @@ module.exports = (app, CommentDataService) => {
   const router = new Router();
   app.use(`/comments`, router);
 
+  /**
+   * Gat all comment with limit 4
+   * @method GET
+   */
   router.get(`/`, async (req, res) => {
     try {
       const items = await CommentDataService.getAll();
@@ -24,13 +28,27 @@ module.exports = (app, CommentDataService) => {
     }
   });
 
+  /**
+   * Create new comment
+   * @method POST
+   * @schema {
+   *   userId: Integer,
+   *   publicationId: Integer,
+   *   message: String
+   * }
+   */
   router.post(`/`, validateMiddleware(commentSchema), async (req, res) => {
     const data = req.body;
     data.createdAt = Date.now();
     data.updatedAt = Date.now();
 
+    const io = req.app.locals.socketio;
+
     try {
-      await CommentDataService.create(data);
+      const comment = await CommentDataService.create(data);
+      const ioComment = await CommentDataService.getById(comment.id);
+
+      io.emit(`comment:create`, ioComment);
 
       res
         .status(ResponseStatus.SUCCESS_CREATE)
@@ -43,6 +61,10 @@ module.exports = (app, CommentDataService) => {
     }
   });
 
+  /**
+   * Get comment by ID
+   * @method GET
+   */
   router.get(`/:id`, async (req, res) => {
     try {
       const item = await CommentDataService.getById(req.params.id);
@@ -60,6 +82,10 @@ module.exports = (app, CommentDataService) => {
     }
   });
 
+  /**
+   * Get comment by User ID
+   * @method GET
+   */
   router.get(`/user/:id`, async (req, res) => {
     try {
       const item = await CommentDataService.getByUserId(req.params.id);

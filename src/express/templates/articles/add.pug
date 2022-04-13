@@ -1,4 +1,5 @@
 extends ../layout
+include ../mixins/input-errors
 
 block content
   section
@@ -23,6 +24,7 @@ block content
               .form__field
                 label
                   input(type='text' name='title' placeholder='Заголовок' value=article ? article.title:'')
+              +inputErrors(errorMessages, "title")
               .form__field.form__field--post-image
                 label
                   input#image-name-field(type='text' name='photo' value='moya_mashinka.jpg' placeholder='Фотография' readonly='')
@@ -36,15 +38,15 @@ block content
                   .new-publication__checkbox.new-publication__checkbox--auto
                     input(type='checkbox' name='categories[]' value=category.id id=category.id)
                     label(for=category.id) #{category.name}
-                a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
+                .new-publication__checkbox.new-publication__checkbox--auto
+                  a.new-publication__form-link.button.button--transparent(href='/my/categories' style="margin: 0; color: #0057ff; border-color: #0057ff") Добавить категорию
+              +inputErrors(errorMessages, "categories")
             .form__wrapper.form__wrapper--text
               .form__field.form__field--publication-text
                 label
                   textarea(rows='5' name='announce' placeholder='Анонс публикации') #{article ? article.announce:''}
+              +inputErrors(errorMessages, "announce")
               .form__field.form__field--publication-text
                 label
                   textarea(rows='10' name='description' placeholder='Полный текст публикации') #{article ? article.description:''}
-          if errorMessages
-            ul
-              each msg in errorMessages
-                li #{msg}
+              +inputErrors(errorMessages, "description")

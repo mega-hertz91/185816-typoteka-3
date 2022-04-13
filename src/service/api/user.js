@@ -7,12 +7,25 @@ const {
 const {Router} = require(`express`);
 const validateMiddleware = require(`../middlewares/validated-entitties`);
 const userSchema = require(`../validators/user`);
+const loginSchema = require(`../validators/login`);
 const {hashSync, compareSync} = require(`../lib/password`);
 
 module.exports = (app, UserDataService) => {
   const router = new Router();
   app.use(`/user`, router);
 
+  /**
+   * Registration user
+   *
+   * @method POST
+   * @schema {
+   *   firstName: String,
+   *   lastName: String,
+   *   email: String,
+   *   password: String,
+   *   avatar: String
+   * }
+   */
   router.post(`/`, validateMiddleware(userSchema), async (req, res) => {
     try {
       const unique = await UserDataService.getByEmail(req.body.email);
@@ -40,7 +53,16 @@ module.exports = (app, UserDataService) => {
     }
   });
 
-  router.post(`/auth`, async (req, res) => {
+  /**
+   * Authenticate user by email
+   *
+   * @method POST
+   * @schema {
+   *   email: String,
+   *   password: String
+   * }
+   */
+  router.post(`/auth`, validateMiddleware(loginSchema), async (req, res) => {
     const {email, password} = req.body;
 
     const user = await UserDataService.getByEmail(email);
@@ -55,7 +77,7 @@ module.exports = (app, UserDataService) => {
         } else {
           res
             .status(ResponseStatus.UNAUTHORIZED)
-            .send({messages: [`password incorrect`]});
+            .send({message: [`"password" Пароль не верный`]});
         }
       } catch (e) {
         res
@@ -65,7 +87,7 @@ module.exports = (app, UserDataService) => {
     } else {
       res
         .status(ResponseStatus.UNAUTHORIZED)
-        .send({messages: [`user is not authenticate`]});
+        .send({message: [`"email" Такого пользователя не сущуствует`]});
     }
   });
 };

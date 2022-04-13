@@ -1,5 +1,6 @@
 extends ../layout
 include ../mixins/paginator
+include ../mixins/announce
 
 block content
   h1.visually-hidden &Gcy;&lcy;&acy;&vcy;&ncy;&acy;&yacy; &scy;&tcy;&rcy;&acy;&ncy;&icy;&tscy;&acy; &lcy;&icy;&chcy;&ncy;&ocy;&gcy;&ocy; &bcy;&lcy;&ocy;&gcy;&acy; &Tcy;&icy;&pcy;&ocy;&tcy;&iecy;&kcy;&acy;
@@ -10,7 +11,7 @@ block content
     ul.themes
       each category in categories
         li.themes__item
-          a.themes__item-link(href='/category/' + category.id class=currentCategory === category.id ? 'themes__item-link--active': false)
+          a.themes__item-link(href='/category/' + category.id class=currentCategory === category.id ? 'themes__item-link--active': false data-category=category.id)
             | #{category.name}
             sup #{category.publications.length}
   .main-page__section-flex
@@ -23,7 +24,7 @@ block content
           each hotArticle in hotArticles
             li.hot__list-item
               a.hot__list-link(href='/articles/' + hotArticle.id)
-                | #{hotArticle.announce}
+                +announce(hotArticle.announce)
                 sup.hot__link-sup #{hotArticle.comments.length}
       else
         p Здесь пока ничего нет...
@@ -31,23 +32,24 @@ block content
       h2.last__name
         | &Pcy;&ocy;&scy;&lcy;&iecy;&dcy;&ncy;&icy;&iecy; &kcy;&ocy;&mcy;&mcy;&iecy;&ncy;&tcy;&acy;&rcy;&icy;&icy;
         span.last__icon.last__icon--cloud
-      ul.last__list
+      ul#comments.last__list
         each comment in comments
           li.last__list-item
-            img.last__list-image(src='/img/avatar-small-1.png' width='20' height='20' alt='Аватар пользователя')
+            img.last__list-image(src='/img/'+comment.User.avatar width='20' height='20' alt='Аватар пользователя')
             b.last__list-name #{comment.User.firstName} #{comment.User.lastName}
-            a.last__list-link(href='/articles/' + comment.publicationId) #{comment.message}
+            a.last__list-link(href='/articles/' + comment.publicationId)
+              +announce(comment.message)
   if articles.length > 0
     section.main-page__list.preview
       h2.visually-hidden &Scy;&pcy;&icy;&scy;&ocy;&kcy; &pcy;&rcy;&iecy;&vcy;&softcy;&yucy; &scy;&tcy;&acy;&tcy;&iecy;&jcy;
-      ul.preview__list
+      ul#publications.preview__list
         each article in articles
-          li.preview__item
+          li.preview__item(data-article=article.id)
             ul.preview__breadcrumbs
               if article.categories
                 each category in article.categories
                   li.preview__breadcrumbs-item
-                    a.preview__breadcrumbs-link(href='#') #{category.name}
+                    a.preview__breadcrumbs-link(href='/category/'+category.id) #{category.name}
             if article.preview
               .preview__background
                 img.preview__background-image(src='/img/'+article.preview width='460' height='240' alt=article.title)

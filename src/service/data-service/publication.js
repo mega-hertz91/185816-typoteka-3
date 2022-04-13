@@ -46,7 +46,12 @@ class PublicationService {
         {
           model: this._Comment,
           as: Aliases.COMMENTS,
-          include: this._User
+          include: [
+            {
+              model: this._User,
+              attributes: [`avatar`, `firstName`, `lastName`]
+            }
+          ]
         }
       ]
     });
@@ -67,7 +72,8 @@ class PublicationService {
    */
   async create(data) {
     const publication = await this._Publication.create(data);
-    return this._PC.bulkCreate(data.categories.map((id) => ({CategoryId: Number(id), PublicationId: publication.id})));
+    await this._PC.bulkCreate(data.categories.map((id) => ({CategoryId: Number(id), PublicationId: publication.id})));
+    return publication;
   }
 
   /**

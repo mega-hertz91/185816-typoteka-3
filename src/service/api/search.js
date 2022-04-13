@@ -10,6 +10,12 @@ module.exports = (app, SearchDataService) => {
   const router = new Router();
   app.use(`/search`, router);
 
+  /**
+   * Search publications by Title
+   *
+   * @method GET
+   * @return {array|string}
+   */
   router.get(`/`, checkQueryMiddleware, async (req, res) => {
     try {
       const items = await SearchDataService.search(req.query.query);

@@ -1,4 +1,5 @@
 extends ../layout
+include ../mixins/date
 
 block content
   section
@@ -13,7 +14,7 @@ block content
               .new-publication__date-form-division
                 .new-publication__date-block
                   label(for='new-publication-date' aria-label='Календарь')
-                  input#new-publication-date(type='text' name='createdAt' placeholder=new Date(article.createdAt).toLocaleDateString() value=new Date(article.createdAt).toLocaleDateString())
+                  input#new-publication-date(type='text' name='createdAt' placeholder="07.04.2021" value=article.createdAt.split('T')[0])
             button.new-publication__button.button.button--colored(type='submit') Опубликовать
           a.popup__button.button.button--popup-close(aria-label='Закрыть окно')
             | Закрыть
@@ -38,7 +39,8 @@ block content
                   .new-publication__checkbox.new-publication__checkbox--auto
                       input(type='checkbox' name='categories[]' value=category.id id=category.id checked=defineCategories.includes(category.id) ? 'checked' : false)
                       label(for=category.id) #{category.name}
-                a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
+                .new-publication__checkbox.new-publication__checkbox--auto
+                  a.new-publication__form-link.button.button--transparent(href='/my/categories' style="margin: 0; color: #0057ff; border-color: #0057ff") Добавить категорию
             .form__wrapper.form__wrapper--text
               .form__field.form__field--publication-text
                 label

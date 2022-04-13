@@ -5,8 +5,21 @@ const {
   Prefix
 } = require(`../../constants`);
 
+/**
+ * Include global server
+ */
 const express = require(`express`);
 const app = express();
+const http = require(`http`);
+const socket = require(`../lib/socket`);
+
+/**
+ * Define socket.io
+ */
+const server = http.createServer(app);
+const io = socket(server);
+app.locals.socketio = io;
+
 const bodyParser = require(`body-parser`);
 const apiRoutes = require(`../api/index`);
 const {getLogger} = require(`../lib/logger`);
@@ -59,7 +72,7 @@ module.exports = {
        */
       app.use(Prefix.API, apiRoutes);
 
-      app.listen(port, (e) => {
+      server.listen(port, (e) => {
         if (e) {
           return logger.err(`An error occurred on server creation: ${e.message}`);
         }

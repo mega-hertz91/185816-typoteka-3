@@ -1,0 +1,10 @@
+mixin announce(announce)
+
+  -
+    const TEXT_LIMITER = 100;
+    const end = ['.', '.', '.'];
+    let text = Object.values(String(announce));
+    text = text.length > TEXT_LIMITER ? text.slice(0, TEXT_LIMITER).concat(end).join('') : text.join('');
+
+  span
+    | #{text}
